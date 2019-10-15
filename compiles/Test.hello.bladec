@@ -1,0 +1,8 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('content'); ?>
+ <?php $__currentLoopData = $users; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <p><?php echo static::e($user['name']); ?></p>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+<?php $this->stopSection(); ?>
+<?php if (@$_shouldextend[1]) { echo $this->runChild('includes.temp_default'); } ?>
