@@ -2,8 +2,6 @@
 
     /* LOAD CONFIG */
     require_once('config/config.php');
-    echo "skladfjlksad";
-
 
     /* LOAD CORE */ 
     foreach($LOAD_CORE as $core){
