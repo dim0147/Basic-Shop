@@ -2,7 +2,7 @@
 
     /* LOAD CONFIG */
     require_once('config/config.php');
-
+s
 
     /* LOAD CORE */ 
     foreach($LOAD_CORE as $core){
