@@ -1,7 +1,7 @@
 <?php
 
     /* LOAD CONFIG */
-    require_once('config/config.php123');
+    require_once('config/config.php');
 
 
     /* LOAD CORE */ 
