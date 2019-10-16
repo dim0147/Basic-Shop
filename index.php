@@ -2,7 +2,6 @@
 
     /* LOAD CONFIG */
     require_once('config/config.php');
-    echo 'thay doi'
 
     /* LOAD CORE */ 
     foreach($LOAD_CORE as $core){
