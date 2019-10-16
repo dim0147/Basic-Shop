@@ -2,6 +2,7 @@
 
     /* LOAD CONFIG */
     require_once('config/config.php');
+    echo "thu nghiem";
 
     /* LOAD CORE */ 
     foreach($LOAD_CORE as $core){
