@@ -4,6 +4,7 @@
     function route($url, Closure $callback){
         global $routes;
         $url = trim(DEVELOP_FOLDER . $url, '/');
+        echo $url;
         $routes[$url] = $callback;
     }
 
