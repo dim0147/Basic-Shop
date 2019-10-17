@@ -6,6 +6,7 @@
         }
 
         function index(){
+           
             if($this->model != NULL){
                 $products = $this->model->getAll();
                 foreach($products as $key => $value){

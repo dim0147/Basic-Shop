@@ -22,6 +22,7 @@
     foreach($LOAD_ROUTE as $route){
         require_once('route/' . $route . '.php');
     }
+     echo "awd";
 
     /* TRIGGERED ROUTE CALLBACK */
     dispathRoute($_SERVER['REQUEST_URI']);
