@@ -3,9 +3,10 @@
     define('DB_NAME', 'shop');
     define('DB_USER', 'root');
     define('DB_PASSWORD', '');
-    define('DEVELOP_PATH', 'WEBASSIGNMENT2');
+    define('DEVELOP_FOLDER', 'MVCProject');
     
     $LOAD_CORE = [
+        'helper',
         'blade_template',
         'controller',
         'database',
@@ -13,8 +14,11 @@
     ];
 
     $LOAD_MODEL = [
-        'product',
-        'user'
+        'products',
+        'users',
+        'categorys',
+        'categorys_link_products',
+        'images'
     ];
 
     $LOAD_CONTROLLER = [
