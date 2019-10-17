@@ -5,6 +5,7 @@
     define('DB_PASSWORD', '');
     
     $LOAD_CORE = [
+        'helper',
         'blade_template',
         'controller',
         'database',
@@ -12,8 +13,11 @@
     ];
 
     $LOAD_MODEL = [
-        'product',
-        'user'
+        'products',
+        'users',
+        'categorys',
+        'categorys_link_products',
+        'images'
     ];
 
     $LOAD_CONTROLLER = [
