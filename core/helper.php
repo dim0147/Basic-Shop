@@ -25,7 +25,8 @@ function mergeResult($arrOrigin, $arrMerge, $keyToValidate, $data){
             }
         }
     }
-    printb($arrResult);
+
+    return $arrResult;
 }
 
 
