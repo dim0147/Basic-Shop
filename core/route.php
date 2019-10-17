@@ -3,7 +3,7 @@
 
     function route($url, Closure $callback){
         global $routes;
-        $url = trim('/MVCProject' . $url, '/');
+        $url = trim(DEVELOP_FOLDER . $url, '/');
         $routes[$url] = $callback;
     }
 
