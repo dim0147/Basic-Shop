@@ -7,41 +7,42 @@ div {
 	display: inline-block;
 }
 
-
+.main {
+	text-align: center;
+	width: 100%;
+	/*background-color: rgb(200,200,200);*/
+}
 
 .head {
-	width: 100%;
-	background-color: red;
-	
-	/*
+	width: 100vw;
+	height: 450px;
 	filter: blur(13px);
 	background-size: cover; 
 	background-repeat: no-repeat; 
 	background-position: center;
-	background-image: url("https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg");*/
 }
 
 .checked {
 	color: yellow;
 }
 .imgFixed{
-	width: 800px;
-	height: 400px;
+	height: 450px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+  	bottom: 0;
+  	margin-left: auto;
+	margin-right: auto;
 }
-/*
+
 .itemImage{
-	width: 253px;
-	height: 152px;
 }
-*/
 
 
 
-.main {
-	text-align: center;
-	width: 100%;
-	/*background-color: rgb(200,200,200);*/
-}
+
+
 
 .body {
 	width: 100%;
