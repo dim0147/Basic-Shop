@@ -6,6 +6,8 @@ function printB($arr){
 
 function mergeResult($arrOrigin, $arrMerge, $keyToValidate, $data){
     $arrResult = [];  
+    if(count($data) <= 0)
+        return $arrResult;
     foreach($data as $e){ 
         $idProduct = $e[$keyToValidate];  
 
