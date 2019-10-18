@@ -1,46 +1,70 @@
-body,html {
+* {
 	-webkit-text-size-adjust: none;
 	text-size-adjust: none
 }
+
 div {
 	display: inline-block;
 }
 
-.checked {
-  color: yellow;
+
+
+.head {
+	width: 100%;
+	background-color: red;
+	
+	/*
+	filter: blur(13px);
+	background-size: cover; 
+	background-repeat: no-repeat; 
+	background-position: center;
+	background-image: url("https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg");*/
 }
+
+.checked {
+	color: yellow;
+}
+.imgFixed{
+	width: 800px;
+	height: 400px;
+}
+/*
+.itemImage{
+	width: 253px;
+	height: 152px;
+}
+*/
+
 
 
 .main {
 	text-align: center;
 	width: 100%;
-	background-color: rgb(200,200,200);
+	/*background-color: rgb(200,200,200);*/
+}
+
+.body {
+	width: 100%;
 	background-image: url("flower.jpg");
 }
+
 .parentContainer {
-	width: 1212px;
+	width: 1177px;
 	background-color: rgb(248,230,248);
 	box-shadow: 2px 2px 2px grey;
 	/*background-color: rgb(248,248,248);*/
    	opacity: 0.9;
 }
 
-.childContainer {
-	box-shadow: 2px 2px 2px grey;
-	/*border: 1px solid black;*/
-	padding: 1px;
-}
-
-.container {
-	box-shadow: 2px 2px 2px grey;
+.header {
 	width: 100%;
+	box-shadow: 2px 2px 2px grey;
 }
 
 
 
 
 .ch {
-	padding: 3px;
 	margin: 3px;
 	float:left;
 	width: 190px;
@@ -49,10 +73,9 @@ div {
 	box-shadow: 1px 1px 1px lightgrey;
 }
 .ch div {
-	width: 100%;
-
-	word-wrap: break-word;
+	box-sizing: border-box;
     overflow: hidden;
+
     display: -webkit-box;
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
@@ -60,10 +83,7 @@ div {
 
 
 .product {
-	box-sizing: border-box;
-	float: bottom;
-	overflow: hidden;
-	margin: 2px;
+	margin: 6px;
 }
 .product .title {
     font-size: 1em;
@@ -83,7 +103,7 @@ div {
 	margin-top: -.5em;
 	font-size: 1em;
 	line-height: 1em;
-	height:4em;
+	height:3em;
     -webkit-line-clamp: 3;
 }
 .product .rating {
@@ -101,8 +121,9 @@ a {
 	background-color: orange;
 }
 .im {
-	width: 188px;
-	height:188px;
+	padding: 3px;
+	width: 190px;
+	height:190px;
 	text-align: left;
 }
 
