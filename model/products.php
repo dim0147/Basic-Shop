@@ -9,10 +9,10 @@
             if(is_null($this->pdo))
                 return NULL;
             $stmt = $this->pdo->prepare("SELECT products.*, images.name, images.product_id, cp.category_name FROM products 
-                                        INNER JOIN categorys_link_products cp 
-                                        ON cp.product_id = products.id
-                                        INNER JOIN images
-                                        on images.product_id = products.id
+                                        LEFT JOIN categorys_link_products cp 
+                                        ON products.id = cp.product_id
+                                        LEFT JOIN images
+                                        on products.id = images.product_id
                                         ");
             $stmt->execute();
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
