@@ -4,6 +4,7 @@
         private $categoryModel;
         private $categoryLinkProductM;
         private $imageModel;
+        private $cartModel;
         private $fileRender = [
             'index' => 'product.index',
             'detail' => 'product.detail'
@@ -11,9 +12,6 @@
 
         function __construct(){
            $this->model = new ProductModel();
-           $this->categoryModel = new CategoryModel();  //  Get All category
-           $this->categoryLinkProductM= new CategoryLinkProductModel(); //  Get Category Link To Product
-           $this->imageModel = new ImageModel();    //  Get Image Product
         }
 
         public function index(){
@@ -36,7 +34,7 @@
         public function detail(){
             if (!empty($_GET['q'])){    //  If query not emtpy
                 $id = $_GET['q'];
-                $result = $this->model->getSingleProduct($id); //  Query Product
+                $result = $this->model->getSingleProduct($id, ''); //  Query Product
                 $result = mergeResult(['name'], ['image_list'], 'id', $result); // Merge to one 
                 if(count($result) <= 0) //  If not have
                     return $this->renderNotFound();

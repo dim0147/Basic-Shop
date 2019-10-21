@@ -8,6 +8,7 @@
     $LOAD_CORE = [
         'helper',
         'blade_template',
+        'session',
         'controller',
         'database',
         'route'
@@ -18,16 +19,19 @@
         'users',
         'categorys',
         'categorys_link_products',
-        'images'
+        'images',
+        'cart'
     ];
 
     $LOAD_CONTROLLER = [
         'product',
-        'user'
+        'user',
+        'api/cart'
     ];
 
     $LOAD_ROUTE = [
         'product',
-        'user'
+        'user',
+        'api'
     ];
 ?>

@@ -31,5 +31,10 @@ function mergeResult($arrOrigin, $arrMerge, $keyToValidate, $data){
     return $arrResult;
 }
 
-
+function setHTTPCode($code, $message){
+    http_response_code($code);
+    if($message != NULL)
+        echo $message;
+    return;
+}
 ?>
