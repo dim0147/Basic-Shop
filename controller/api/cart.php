@@ -11,7 +11,7 @@ class CartAPIController extends Controller{
 
         public function navigate(){
             if(empty($_SESSION['cart']) || empty($_POST['action'])){
-                echo 'No have Cart';
+                setHTTPCode(500, "Invalid cart or action");
                 return;
             }
             
@@ -32,7 +32,7 @@ class CartAPIController extends Controller{
 
         public function removeProd($keyItem){
             if ( empty($_SESSION['cart']) || empty($_POST['id']) ){
-                echo 'No have cart';
+                setHTTPCode(500, "Invalid cart or ID");
                 return;
             }
             if ($keyItem == NULL)   //  If not pass parameter searching item in list items
@@ -55,7 +55,7 @@ class CartAPIController extends Controller{
         // *** DECREASE QUANTITY PRODUCT  
         public function decreaseProd(){
             if (empty($_SESSION['cart']) || empty($_POST['id']) || empty($_POST['quantity'])){
-                echo 'No have cart';
+                setHTTPCode(500, "Invalid cart or ID or quantity");
                 return;
             }
 
@@ -87,7 +87,7 @@ class CartAPIController extends Controller{
         // **** ADD PRODUCT ***
         public function addToCart(){
             if (empty($_SESSION['cart']) || empty($_POST['id']) || empty($_POST['quantity'])){
-                echo 'No have cart';
+                setHTTPCode(500, "Invalid cart or ID or quantity");
                 return;
             }
             
