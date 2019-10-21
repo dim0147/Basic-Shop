@@ -6,6 +6,7 @@
 @endsection
 
 @section('content')
+
 	<div class="main">
 
         <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
@@ -29,7 +30,7 @@
      				<div class="head" 
      				style="background-image: url(https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg)">
          			</div>
-        	      	<img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt	="Second slide">
+        	      	<img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt="Second slide">
         	    </div>
 			</div>
 
@@ -64,26 +65,24 @@
 				</div>
 				<div>
 					@foreach ($products as $product)
-					<a href="#">
-						<div class="ch">
-							<img class="im" src="@asset('views/public/image/' . $product['image'])" alt="">
-							<div class="product">
-								<div class="title">
-									<b>{{$product['title']}}</b>
-								</div>
-								<div class="price">
-									<h3>${{$product['price']}}</h3>
-								</div>
-								<div class="description">
-									<p>{{$product['description']}}</p>
-								</div>
-								<div class="rating">
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star"></span>
-									<span class="fa fa-star"></span>
-								</div>
+					<a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" title="{{$product['title']}}" image="views/public/image/{{$product['image']}}">
+						<img class="im" src="@asset('views/public/image/'.$product['image'])" alt="">
+						<div class="product">
+							<div class="title">
+								<b>{{$product['title']}}</b>
+							</div>
+							<div class="price">
+								<h3>${{$product['price']}}</h3>
+							</div>
+							<div class="description">
+								<p>{{$product['description']}}</p>
+							</div>
+							<div class="rating">
+								<span class="fa fa-star checked"></span>
+								<span class="fa fa-star checked"></span>
+								<span class="fa fa-star checked"></span>
+								<span class="fa fa-star"></span>
+								<span class="fa fa-star"></span>
 							</div>
 						</div>
 					</a>
@@ -93,9 +92,33 @@
 		</div>
 
 		<div class="footer">
-			fdsalkflksdjflks
+			fsdaf
 		</div>
 
 
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="demo"></h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">x</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<img id="modalImageID" class="modalImage" alt="blk">
+						<!--<p id="das" class="modalImage" alt="blk"></p>-->
+					</div>
+					<div class="modal-footer">
+		        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        		<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+		    	</div>
+			</div>
+		</div>
 	</div>
-@endsection
+
+		@endsection
+		@section('javascript')
+		<script src="@asset('views/product/js/js.js')"></script>
+	@endsection

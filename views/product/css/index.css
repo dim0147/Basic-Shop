@@ -36,8 +36,7 @@ div {
 	margin-right: auto;
 }
 
-.itemImage{
-}
+
 
 
 
@@ -114,11 +113,14 @@ div {
 
 
 
-a {
+
+.ch {
 	color: inherit;
 	text-decoration: none;
 }
 .ch:hover {
+	color: inherit;
+	text-decoration: none;
 	background-color: orange;
 }
 .im {
@@ -131,4 +133,11 @@ a {
 .footer {
 	background-color: darkgrey;
 	width: 100%;
+}
+
+.modalImage {
+	border: 1px solid black;
+	padding: 10px;
+	width: 500px;
+	height: 500px;
 }

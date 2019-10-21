@@ -13,10 +13,10 @@
 @include('layouts.partials.header')
 @yield('content')
 
-@include('layouts.partials.footer')-->
+@include('layouts.partials.footer')
 <script src="@asset('views/public/js/jquery.min.js')"></script>
 <script src="@asset('views/public/js/bootstrap.min.js')"></script>
 <script src="@asset('views/public/js/bootstrap.bundle.min.js')"></script>
-
+@yield('javascript')
 </body>
 </html>
