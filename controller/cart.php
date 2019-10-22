@@ -1,6 +1,6 @@
 <?php 
 
-class CartAPIController extends Controller{
+class CartController extends Controller{
 
         private $prodModel;
 
@@ -9,7 +9,7 @@ class CartAPIController extends Controller{
             $this->prodModel = new ProductModel();
         }
 
-        public function navigate(){
+        public function action(){
             if(empty($_SESSION['cart']) || empty($_POST['action'])){
                 setHTTPCode(500, "Invalid cart or action");
                 return;
@@ -25,9 +25,21 @@ class CartAPIController extends Controller{
                 case "remove":
                     $this->removeProd(NULL);
                     break;
+                case "show":
+                    $this->showCart();
+                    break;
                 default:
                     setHTTPCode(500, "Invalid action");
             }
+        }
+
+        public function showCart(){
+            if(!empty($_SESSION['cart'])){
+                printB($_SESSION['cart']);
+                setHTTPCode(200);
+                return;
+            }
+            setHTTPCode(500, 'Not Found!');
         }
 
         public function removeProd($keyItem){
@@ -37,7 +49,7 @@ class CartAPIController extends Controller{
             }
             if ($keyItem == NULL)   //  If not pass parameter searching item in list items
                 $keyItem = $this->itemInCart($_SESSION['cart'], $_POST['id']);
-            if($keyItem){  
+            if($keyItem || $keyItem === 0){  
                 $cart = $_SESSION['cart'];
                 $priceDec = $cart['items'][$keyItem]['priceTotal']; 
                 $qTy = $cart['items'][$keyItem]['quantity'];
@@ -93,11 +105,10 @@ class CartAPIController extends Controller{
             
             $cart = $_SESSION['cart'];
             $checkItem = $this->itemInCart($cart, $_POST['id']);
-            if($checkItem){
+            if($checkItem || $checkItem === 0){
                 $this->increaseProd($checkItem, $_POST['quantity']); //  Check if item exist on cart
                 return;
             }
-
             $this->addProdToCart(); //  if not add new product
             return;
         }
@@ -142,8 +153,6 @@ class CartAPIController extends Controller{
             setHTTPCode(200, "Add product success!");
             return;
         }
-
-
 
         public function itemInCart($cart, $idItem){ //  Check item exist in cart
             foreach($cart['items'] as $key => $item){   

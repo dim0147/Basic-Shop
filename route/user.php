@@ -5,5 +5,6 @@
         global $userController;
         $userController->index();
     });
+
     
 ?>

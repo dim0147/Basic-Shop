@@ -31,10 +31,25 @@ function mergeResult($arrOrigin, $arrMerge, $keyToValidate, $data){
     return $arrResult;
 }
 
-function setHTTPCode($code, $message){
+function setHTTPCode($code, $message = NULL){
     http_response_code($code);
     if($message != NULL)
         echo $message;
     return;
 }
+
+function createRanDomString($length = 24){
+    $characters = '_-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $randString = '';
+    for ($i = 0; $i < $length; $i++){
+        $randString .= $characters[rand(0, strlen($characters) -1)];
+    }
+    return $randString;
+}
+
+function getExtFile($file){
+        $infoFile = pathinfo($file);
+        return $infoFile['extension']; 
+}
+
 ?>

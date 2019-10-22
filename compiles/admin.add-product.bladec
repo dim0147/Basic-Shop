@@ -1,0 +1,10 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('content'); ?>
+<form enctype="multipart/form-data" action="post/add-product" method="POST">
+ <!-- Name of input element determines name in $_FILES array -->
+ Send this file: <input name="header" type="file" multiple />
+ <input type="submit" value="Send File" />
+</form>
+<?php $this->stopSection(); ?>
+<?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>
