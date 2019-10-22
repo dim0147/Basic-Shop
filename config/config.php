@@ -4,6 +4,7 @@
     define('DB_USER', 'root');
     define('DB_PASSWORD', '');
     define('DEVELOP_FOLDER', 'WEBASSIGNMENT2');
+    define('PATH_IMAGE_UPLOAD',  getcwd() . "/views/public/image");
     
     $LOAD_CORE = [
         'helper', // new
@@ -27,14 +28,14 @@
     $LOAD_CONTROLLER = [
         'product',
         'user',
-
-        'api/cart'
+        'cart',
+        'admin'
     ];
 
     $LOAD_ROUTE = [
         'product',
         'user',
-        
-        'api'
+        'cart',
+        'admin'
     ];
 ?>

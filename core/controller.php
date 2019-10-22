@@ -2,6 +2,7 @@
     class Controller{
         protected $model = NULL;
         protected $PathPageNotFound = '404Page';
+        protected $fileRender = NULL; 
 
         function render($filename, Array $data){
             global $blade;

@@ -19,7 +19,7 @@
             return $result;
         }
 
-        public function getSingleProduct($id, $fields){
+        public function getSingleProduct($id, $fields = ['products.*', 'images.name']){
             try{
             if(is_null($this->pdo))
                 return NULL;
@@ -33,8 +33,6 @@
                         $fieldQuery = $fieldQuery . $field . ', ';
                 }
             }
-            else
-                $fieldQuery = 'products.*, images.name';
 
             $stmt = $this->pdo->prepare("SELECT DISTINCT $fieldQuery
                                  FROM products 

@@ -3,14 +3,24 @@
         
         function __construct(){
                 $this->model = new UserModel();
+                $this->fileRender = [
+                    'index' => 'user.index'
+                ];
         }
 
-        function index(){
+        public function index(){
             if($this->model != NULL){
                 $users = $this->model->getAll();
-                $this->render('user.index', ['users' => $users, 'name' => "Jonh", 'title' => "Hi" ]);
+                $this->render($this->fileRender['index'],
+                 [
+                     'users' => $users, 
+                     'name' => "Jonh", 
+                     'title' => "Hi" 
+                ]);
             }
         }
+
+        
         
 
     }
