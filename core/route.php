@@ -23,5 +23,7 @@
         if(isset($routes[$url]))
             call_user_func($routes[$url]);
     }
-
+    /*
+        call_user_func(
+    */
 ?>

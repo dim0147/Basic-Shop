@@ -21,28 +21,80 @@
 
         public function getSingleProduct($id, $fields = ['products.*', 'images.name']){
             try{
-            if(is_null($this->pdo))
-                return NULL;
-                
-            $fieldQuery = '';
-            if(!empty($fields)){    //  If not empty
-                foreach ($fields as $key => $field){
-                    if (end($fields) == $field) //  Check if reach last element
-                        $fieldQuery = $fieldQuery . $field ;
-                    else
-                        $fieldQuery = $fieldQuery . $field . ', ';
+                if(is_null($this->pdo))
+                    return NULL;
+                    
+                $fieldQuery = '';
+                if(!empty($fields)){    //  If not empty
+                    foreach ($fields as $key => $field){
+                        if (end($fields) == $field) //  Check if reach last element
+                            $fieldQuery = $fieldQuery . $field ;
+                        else
+                            $fieldQuery = $fieldQuery . $field . ', ';
+                    }
                 }
-            }
 
-            $stmt = $this->pdo->prepare("SELECT DISTINCT $fieldQuery
-                                 FROM products 
-                                 LEFT JOIN images ON images.product_id = products.id
-                                 WHERE products.id = $id");
-            $stmt->execute();
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                $stmt = $this->pdo->prepare("SELECT DISTINCT $fieldQuery
+                                    FROM products 
+                                    LEFT JOIN images ON images.product_id = products.id
+                                    WHERE products.id = $id");
+                $stmt->execute();
+                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
             }
             catch(PDOException $err){
                 return [];
+            }
+        }
+
+        public function addNewProduct($title, $descr, $price, $imageName, $stat, $rate){
+            try{
+                if(is_null($this->pdo))
+                    return false;
+
+                $stmt = $this->pdo->prepare("INSERT INTO products VALUES 
+                (null, :title, :descr, :price, :imageName, :stat, :rate)");
+                $stmt->bindParam(':title', $title);
+                $stmt->bindParam(':descr', $descr);
+                $stmt->bindParam(':price', $price);
+                $stmt->bindParam(':imageName', $imageName);
+                $stmt->bindParam(':stat', $stat);
+                $stmt->bindParam(':rate', $rate);
+                $stmt->execute();
+                return $this->pdo->lastInsertId();
+            }
+            catch(PDOException $err){
+                die($err);
+            }
+        }
+
+        public function addThumnailProduct($value){
+            try{
+                if(is_null($this->pdo))
+                    return false;
+                $stmt = $this->pdo->prepare("INSERT INTO images VALUES $value");
+                $stmt->execute();
+                return true;
+                
+            }
+            catch(PDOException $err){
+                die($err);
+            }
+        }
+
+        public function checkProduct($field, $value){
+            try{
+                if(is_null($this->pdo))
+                    return false;
+                $stmt = $this->pdo->prepare("SELECT title FROM products WHERE $field = '$value'");
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                if(!$result)
+                    return false;
+                else
+                    return true;
+            }
+            catch(PDOException $err){
+                die($err);
             }
         }
 

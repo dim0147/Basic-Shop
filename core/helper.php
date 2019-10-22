@@ -52,4 +52,19 @@ function getExtFile($file){
         return $infoFile['extension']; 
 }
 
+function checkEmpty($arr){
+    foreach($arr as $val){
+        if(empty($val) && $val !== 0)
+            return true;
+    }
+    return false;
+}
+
+function removeFiles($arrFileName, $path){
+    foreach($arrFileName as $file){
+        unlink($path. '/' . $file);
+    }
+    return true;
+}
+
 ?>
