@@ -1,7 +1,7 @@
 <?php 
     class ProductModel extends database{
 
-        function __construct(){
+        function __construct(){     //The constructor is called on an object after it has been created
             $this->connect('products');
         }
 

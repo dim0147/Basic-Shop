@@ -6,9 +6,9 @@
     define('DEVELOP_FOLDER', 'WEBASSIGNMENT2');
     
     $LOAD_CORE = [
-        'helper',
+        'helper', // new
         'blade_template',
-        'session',
+        'session', // new
         'controller',
         'database',
         'route'
@@ -17,6 +17,7 @@
     $LOAD_MODEL = [
         'products',
         'users',
+
         'categorys',
         'categorys_link_products',
         'images',
@@ -26,12 +27,14 @@
     $LOAD_CONTROLLER = [
         'product',
         'user',
+
         'api/cart'
     ];
 
     $LOAD_ROUTE = [
         'product',
         'user',
+        
         'api'
     ];
 ?>
