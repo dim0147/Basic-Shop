@@ -67,4 +67,18 @@ function removeFiles($arrFileName, $path){
     return true;
 }
 
+function createQuery($arrValue){
+    $arr = [];
+    foreach($arrValue as $value){
+            if ($value == 'NULL' || $value == 'DEFAULT' || is_numeric($value))
+                $arr[] =  $value;
+            else
+                $arr[] = '"' . $value .'"';
+    }
+    $arr = implode(',', $arr);
+    $arr = str_pad($arr, strlen($arr) + 1, "(", STR_PAD_LEFT);
+    $arr = str_pad($arr, strlen($arr) + 1, ")", STR_PAD_BOTH);
+    return $arr;
+}
+
 ?>

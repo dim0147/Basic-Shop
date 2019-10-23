@@ -36,7 +36,7 @@
                 return NULL;
             $stmt = $this->pdo->prepare("SELECT * FROM $this->table");
             $stmt->execute();
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         }
 
@@ -46,6 +46,37 @@
             $stmt = $this->pdo->prepare("SELECT * FROM $this->table WHERE id=$id");
             $stmt->execute();
             return $stmt->fetch();
+        }
+
+        function checkExist($field, $value){
+            try{
+                if(is_null($this->pdo))
+                    return false;
+                $stmt = $this->pdo->prepare("SELECT $field FROM $this->table WHERE $field = '$value'");
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                if(!$result)
+                    return false;
+                else
+                    return true;
+            }
+            catch(PDOException $err){
+                die($err);
+            }
+        }
+
+        function addMany($value, $table){
+            try{
+                if(is_null($this->pdo))
+                    return false;
+                $stmt = $this->pdo->prepare("INSERT INTO $table VALUES $value");
+                $stmt->execute();
+                return true;
+                
+            }
+            catch(PDOException $err){
+                die($err);
+            }
         }
 
         

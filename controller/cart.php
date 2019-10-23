@@ -77,7 +77,9 @@ class CartController extends Controller{
                 $key = $checkItem; //   Key of item in items list
                 $qTy = (int)$_POST['quantity'];
                 $priceDec = $cart['items'][$key]['price'] * $qTy;    //  price to decrease
-                if((int)$cart['items'][$key]['quantity']  <= 1){
+                if(( ($cart['items'][$key]['quantity'] -= $qTy) <= 0 )){
+                    $cart['totalPrice'] -= $cart['items'][$key]['priceTotal'];
+                    $cart['totalQty'] -= $cart['items'][$key]['quantity'];
                     $this->removeProd($key);
                     return;
                 }

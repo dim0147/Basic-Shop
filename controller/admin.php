@@ -2,75 +2,102 @@
     class AdminController extends Controller{
 
         private $prodModel;
+        private $cateModel;
         private $pathUpLoad = PATH_IMAGE_UPLOAD. '/';
 
         function __construct(){
             $this->prodModel = new ProductModel();
+            $this->cateModel = new CategoryModel();
             $this->fileRender = [
                 'add-product' => 'admin.add-product'
             ];
         }
 
         public function addProduct(){
+            $categorys = ($this->cateModel->getCategory());
             $this->render($this->fileRender['add-product'],
             [
-                'title' => 'Add Product'
+                'title' => 'Add Product',
+                'categorys' => $categorys
             ]);
             return;
         }
 
         public function upload(){
-            //  Check if any field is empty
-            if(checkEmpty([$_POST['title'], $_POST['description'], $_POST['price'], $_POST['status'], $_POST['rate']]))
-            {
-                setHTTPCode(500, 'Error while upload file');
-                return;
-            }
+            // *************  SET UP, VALIDATION DATA *********************//
 
-            if($this->prodModel->checkProduct('title', $_POST['title'])){   //  Check title if exist
-                setHTTPCode(500, 'Product exist!');
-                return;
-            }
+                //  Check if any field is empty
+                if(checkEmpty([$_POST['categorys'], $_POST['title'], $_POST['description'], $_POST['price'], $_POST['status'], $_POST['rate']]))
+                {
+                    setHTTPCode(500, 'Empty Field!');
+                    return;
+                }
 
-            $uploadHeader = $this->uploadHeader();  //  upload header image to storage, return name header image
-            if(!$uploadHeader){ //  Check if error remove header image from storage
-                removeFiles([$uploadHeader], PATH_IMAGE_UPLOAD);
-                setHTTPCode(500, 'Error while upload file');
-                return;
-            }
+                //  Convert categorys json get from client to array 
+                $categorys = json_decode($_POST['categorys']);
+                $categorys = (array)$categorys;
 
-            //  Create product to database, return the id of product when create finish
-            $idNewProduct = $this->prodModel->addNewProduct(
-                                                $_POST['title'], 
-                                                $_POST['description'], 
-                                                (float)$_POST['price'],
-                                                 $uploadHeader, 
-                                                 $_POST['status'], 
-                                                 $_POST['rate']);
-            if(!$idNewProduct && $idNewProduct !== 0){ // check if fail remove header image from storage
-                removeFiles([$uploadHeader], PATH_IMAGE_UPLOAD);
-                setHTTPCode(500, 'Error while create new Product');
-                return;
-            }
+                if($this->prodModel->checkExist('title', $_POST['title'])){   //  Check title if exist
+                    setHTTPCode(500, 'Product exist!');
+                    return;
+                }
 
-            //  upload thumbnail to storage , return list name image;
-            $uploadThumbnail = $this->uploadThumbnail();    
-            if(!$uploadThumbnail){  // if error
-                setHTTPCode(500, 'Error while upload file');
-                return;
-            }
-            //  create image thumbnail to database
-            $queryAddThumbnail = []; //  query to add many thumbnail image
-            foreach($uploadThumbnail as $image){    //  Loop array of storage image name return from above
-                $queryAddThumbnail[] = "(DEFAULT, " . $idNewProduct . ", 'thumbnail', '". $image . "', DEFAULT)"; 
-            }
-            $queryAddThumbnail = implode(',', $queryAddThumbnail);
-            $result = $this->prodModel->addThumnailProduct($queryAddThumbnail); //  Create thumbnails to db
-            if(!$result){   //  if fail delete thumbnail in storage
-                removeFiles($uploadThumbnail, PATH_IMAGE_UPLOAD);
-                setHTTPCode(500, "Error while save thumbnail");
-                return;
-            }
+            // ************* UPLOAD HEADER -> PRODUCT -> THUMBNAIL *********************//
+
+                $uploadHeader = $this->uploadHeader();  //  upload header image to storage, return name header image
+                if(!$uploadHeader){ //  Check if error remove header image from storage
+                    removeFiles([$uploadHeader], PATH_IMAGE_UPLOAD);
+                    setHTTPCode(500, 'Error while upload header image!');
+                    return;
+                }
+
+                //  Create product to database, return the id of product when create finish
+                $idNewProduct = $this->prodModel->addNewProduct(
+                                                    $_POST['title'], 
+                                                    $_POST['description'], 
+                                                    (float)$_POST['price'],
+                                                    $uploadHeader, 
+                                                    $_POST['status'], 
+                                                    $_POST['rate']);
+                if(!$idNewProduct && $idNewProduct !== 0){ // check if fail remove header image from storage
+                    removeFiles([$uploadHeader], PATH_IMAGE_UPLOAD);
+                    setHTTPCode(500, 'Error while create new Product');
+                    return;
+                }
+
+                //  upload thumbnail to storage , return list name image;
+                $uploadThumbnail = $this->uploadThumbnail();    
+                if(!$uploadThumbnail){  // if error
+                    setHTTPCode(500, 'Error while upload thumbnail image, ProductID: ' . $idNewProduct);
+                    return;
+                }
+                //  create image thumbnail to database
+                $queryThumbnail = []; //  query to add many thumbnail image
+                foreach($uploadThumbnail as $image){    //  Loop array of storage image name return from above
+                    $queryThumbnail[] = "(DEFAULT, " . $idNewProduct . ", 'thumbnail', '". $image . "', DEFAULT)"; 
+                }
+                $queryThumbnail = implode(',', $queryThumbnail);
+                $result = $this->prodModel->addThumnailProduct($queryThumbnail); //  Create thumbnails to db
+                if(!$result){   //  if fail delete thumbnail in storage
+                    removeFiles($uploadThumbnail, PATH_IMAGE_UPLOAD);
+                    setHTTPCode(500, "Error while save thumbnail, ProductID: " . $idNewProduct);
+                    return;
+                }
+
+             // ************* CREATE CATEGORY LINK PRODUCT  *********************//
+
+                // create category to category_link_product table
+                $queryCategory = [];//  query to add many category
+                foreach($categorys as $id=>$name){  //  Loop array of category get from client
+                    $queryCategory[] = createQuery(['DEFAULT', (int)$idNewProduct, (int)$id, $name, $_POST['title']]);
+                }
+                $queryCategory = implode(',', $queryCategory);
+                $finalResult = $this->cateModel->addMany($queryCategory, 'categorys_link_products');
+                if(!$finalResult){   //  if fail 
+                    setHTTPCode(500, "Error while save category, ProductID: " . $idNewProduct);
+                    return;
+                }
+
             setHTTPCode(200, "Create successful!");
         }
 

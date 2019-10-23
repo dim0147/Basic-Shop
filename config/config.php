@@ -19,8 +19,6 @@
         'products',
         'users',
         'categorys',
-        'categorys_link_products',
-        'images',
         'cart'
     ];
 

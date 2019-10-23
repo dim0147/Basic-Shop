@@ -81,22 +81,5 @@
             }
         }
 
-        public function checkProduct($field, $value){
-            try{
-                if(is_null($this->pdo))
-                    return false;
-                $stmt = $this->pdo->prepare("SELECT title FROM products WHERE $field = '$value'");
-                $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                if(!$result)
-                    return false;
-                else
-                    return true;
-            }
-            catch(PDOException $err){
-                die($err);
-            }
-        }
-
     }
 ?>
