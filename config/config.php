@@ -7,9 +7,9 @@
     define('PATH_IMAGE_UPLOAD',  getcwd() . "/views/public/image");
     
     $LOAD_CORE = [
-        'helper',
+        'helper', // new
         'blade_template',
-        'session',
+        'session', // new
         'controller',
         'database',
         'route'
@@ -18,6 +18,7 @@
     $LOAD_MODEL = [
         'products',
         'users',
+
         'categorys',
         'cart'
     ];

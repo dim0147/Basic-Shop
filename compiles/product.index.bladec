@@ -7,42 +7,43 @@
 
 <?php $this->startSection('content'); ?>
 
-	<div class="main">
+ <div class="main">
 
  <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
- 	<ol class="carousel-indicators">
- 	<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
- 	<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
- 	<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
- 	</ol>
+ <ol class="carousel-indicators">
+ <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+ <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+ <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+ </ol>
 
  <div class="carousel-item active">
- 		<div class="d-block img-fluid">
- 			<div class="head" 
- 			style="background-image: url(https://trak.in/wp-content/uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg)">
- 			</div>
- 			<img class="imgFixed" src="https://trak.in/wp-content/	uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg" alt="First slide">
- 		</div>
- 		</div>
-
- 		<div class="carousel-item">
- 			<div class="d-block img-fluid">
- 				<div class="head" 
- 				style="background-image: url(https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg)">
- 			</div>
- 	      	<img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt="Second slide">
- 	    </div>
+ <div class="d-block img-fluid">
+ <div class="head" 
+ style="background-image: url(https://trak.in/wp-content/uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg)">
+ </div>
+ <img class="imgFixed" src="https://trak.in/wp-content/  uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg" alt="First slide">
+ </div>
  </div>
 
- 		<div class="carousel-item">
- 			<div class="d-block img-fluid">
+ <div class="carousel-item">
+ <div class="d-block img-fluid">
+ <div class="head" 
+ style="background-image: url(https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg)">
+ </div>
+ <img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt="Second slide">
+ </div>
+ </div>
+
+ <div class="carousel-item">
+ <div class="d-block img-fluid">
  <div class="head" 
  style="background-image: url(https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop)">
- 			</div>
- 	      	<img class="imgFixed" src="https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop" alt="Third slide">
- 	    </div>
- 		</div>
- 		
+ </div>
+ <img class="imgFixed" src="https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop" alt="Third slide">
+ </div>
+ </div>
+ 
+
 
 
 
@@ -65,7 +66,8 @@
  </div>
  <div>
  <?php $__currentLoopData = $products; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
- <a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" title="<?php echo static::e($product['title']); ?>" image="views/public/image/<?php echo static::e($product['image']); ?>">
+ <a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" title="<?php echo static::e($product['title']); ?>" image="views/public/image/<?php echo static::e($product['image']); ?>" des="<?php echo static::e($product['description']); ?>">
+
  <img class="im" src="<?php  echo (isset($this->assetDict[('views/public/image/'.$product['image'])]))?$this->assetDict[('views/public/image/'.$product['image'])]:$this->baseUrl.'/'.('views/public/image/'.$product['image']); ?>" alt="">
  <div class="product">
  <div class="title">
@@ -76,6 +78,7 @@
  </div>
  <div class="description">
  <p><?php echo static::e($product['description']); ?></p>
+
  </div>
  <div class="rating">
  <span class="fa fa-star checked"></span>
@@ -85,6 +88,7 @@
  <span class="fa fa-star"></span>
  </div>
  </div>
+
  </a>
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  </div>
@@ -97,7 +101,7 @@
 
 
  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
- <div class="modal-dialog modal-dialog-centered" role="document">
+ <div class="modal-dialog modal-lg modal-dialog-centered">
  <div class="modal-content">
  <div class="modal-header">
  <h5 class="modal-title" id="demo"></h5>
@@ -106,20 +110,37 @@
  </button>
  </div>
  <div class="modal-body">
- <img id="modalImageID" class="modalImage" alt="blk">
+ <img id="modalImage" alt="blk">
+ <div class="modalContainer">
+ <h5>DESCRIPTION</h5>
+ <div id="modalDescription"></div>
+ </div>
  <!--<p id="das" class="modalImage" alt="blk"></p>-->
  </div>
  <div class="modal-footer">
-         		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         		<button type="button" class="btn btn-primary">Save changes</button>
- </div>
-     	</div>
- </div>
- </div>
-	</div>
+ <form action="/WEBASSIGNMENT2/cart" method="POST">
+ <!-- Name of input element determines name in $_FILES array -->
+ Send this file: <input type="text" name="action" list="ls"/>
+ <datalist id="ls">
+ <option value="add">
+ <option value="remove">
+ <option value="decrease">
+ </datalist>
 
+ <input name="id" value="4"  />
+ <input name="quantity" value="1"  />
+ <input type="submit" value="Send File" />
+ </form>
+ <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cart</button>
+ <button type="button" class="btn btn-primary">BUY</button>-->
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
  <?php $this->stopSection(); ?>
  <?php $this->startSection('javascript'); ?>
- <script src="<?php  echo (isset($this->assetDict[('views/product/js/js.js')]))?$this->assetDict[('views/product/js/js.js')]:$this->baseUrl.'/'.('views/product/js/js.js'); ?>"></script>
-	<?php $this->stopSection(); ?>
+ <script src="<?php  echo (isset($this->assetDict[('views/product/js/javascript.js')]))?$this->assetDict[('views/product/js/javascript.js')]:$this->baseUrl.'/'.('views/product/js/javascript.js'); ?>"></script>
+ <?php $this->stopSection(); ?>
+
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

@@ -6,8 +6,8 @@ function printB($arr){
 
 function mergeResult($arrOrigin, $arrMerge, $keyToValidate, $data){
     $arrResult = [];  
-    if(count($data) <= 0)
-        return $arrResult;
+    if(count($data) <= 0) // count: how many element in 1 array
+        return $arrResult; // NULL ???
     foreach($data as $e){ 
         $idProduct = $e[$keyToValidate];  
 
