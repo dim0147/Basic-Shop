@@ -26,5 +26,4 @@
             call_user_func($routes[$url]);
     }
 
-
 ?>

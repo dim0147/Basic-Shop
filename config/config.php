@@ -6,6 +6,7 @@
     define('DEVELOP_FOLDER', 'WEBASSIGNMENT2');
     define('PATH_IMAGE_UPLOAD',  getcwd() . "/views/public/image");
     
+
     $LOAD_CORE = [
         'helper', // new
         'blade_template',
