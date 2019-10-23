@@ -10,6 +10,7 @@ class CartController extends Controller{
         }
 
         public function action(){
+             printB($_SESSION['cart']);
             if(empty($_SESSION['cart']) || empty($_POST['action'])){
                 setHTTPCode(500, "Invalid cart or action");
                 return;
@@ -72,7 +73,7 @@ class CartController extends Controller{
             }
 
             $checkItem = $this->itemInCart($_SESSION['cart'], $_POST['id']);    //  Check item exist, return key if true
-            if($checkItem){ //  if exist
+            if($checkItem || $checkItem === 0){ //  if exist
                 $cart = $_SESSION['cart'];
                 $key = $checkItem; //   Key of item in items list
                 $qTy = (int)$_POST['quantity'];

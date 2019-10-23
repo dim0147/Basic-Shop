@@ -17,6 +17,6 @@
 <script src="<?php  echo (isset($this->assetDict[('views/public/js/jquery.min.js')]))?$this->assetDict[('views/public/js/jquery.min.js')]:$this->baseUrl.'/'.('views/public/js/jquery.min.js'); ?>"></script>
 <script src="<?php  echo (isset($this->assetDict[('views/public/js/bootstrap.min.js')]))?$this->assetDict[('views/public/js/bootstrap.min.js')]:$this->baseUrl.'/'.('views/public/js/bootstrap.min.js'); ?>"></script>
 <script src="<?php  echo (isset($this->assetDict[('views/public/js/bootstrap.bundle.min.js')]))?$this->assetDict[('views/public/js/bootstrap.bundle.min.js')]:$this->baseUrl.'/'.('views/public/js/bootstrap.bundle.min.js'); ?>"></script>
-
+<?php echo $this->yieldContent('javascript'); ?>
 </body>
 </html>

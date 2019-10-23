@@ -11,6 +11,7 @@
     function route($url, Closure $callback){
         global $routes;
         $urlWeb = DEVELOP_FOLDER . $url;
+
         $url = trim($urlWeb, '/');  //  Remove / left and right
         $url = removeParamURL($url);
         $routes[$url] = $callback;
@@ -19,9 +20,11 @@
     function dispathRoute($url){
         global $routes;
         $url = trim($url, '/');
+        echo $url;
         $url = removeParamURL($url);
         if(isset($routes[$url]))
             call_user_func($routes[$url]);
     }
+
 
 ?>
