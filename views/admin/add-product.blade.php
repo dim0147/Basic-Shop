@@ -2,12 +2,20 @@
 
 
 @section('content')
-<form action="/WEBASSIGNMENT2/cart" method="POST">
+<form method="POST">
     <!-- Name of input element determines name in $_FILES array -->
-    Send this file: <input name="action" value="add"  />
-     <input name="id" value="4"  />
-      <input name="quantity" value="1"  />
-    <input type="submit" value="Send File" />
+    Send this file:
+     <input name="header" value="4"  type="file"/>
+      <input name="thumbnail[]" value="1"  type="file" multiple>
+    <input id="sub" type="button" value="Send File" />
+    title: <input name="title" value="4"  />
+    description: <input name="description" value="4"  />
+    price: <input name="price" value="4"  />
+    status: <input name="status" value="4"  />
+    rate: <input name="rate" value="4"  />
+    @foreach ($categorys as $item)
+<input type="checkbox" id="{{$item['id']}}" value="{{$item['name']}}">{{$item['name']}}
+    @endforeach
 </form>
 @endsection
 
