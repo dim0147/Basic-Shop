@@ -88,7 +88,7 @@ class CartController extends Controller{
                 $cart['items'][$key]['quantity'] -= $qTy;
                 $cart['items'][$key]['priceTotal'] -= $priceDec;
                 // Edit total
-                $cart['totalPrice'] -= $priceDec;
+              //  $cart['totalPrice'] -= $priceDec;
                 $cart['totalQty'] -= $qTy;
 
                 $_SESSION['cart'] = $cart;

@@ -46,7 +46,6 @@
 
 
 
-
  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
  <span class="sr-only">Previous</span>
@@ -67,7 +66,6 @@
  <div>
  <?php $__currentLoopData = $products; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
  <a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" title="<?php echo static::e($product['title']); ?>" image="views/public/image/<?php echo static::e($product['image']); ?>" des="<?php echo static::e($product['description']); ?>">
-
  <img class="im" src="<?php  echo (isset($this->assetDict[('views/public/image/'.$product['image'])]))?$this->assetDict[('views/public/image/'.$product['image'])]:$this->baseUrl.'/'.('views/public/image/'.$product['image']); ?>" alt="">
  <div class="product">
  <div class="title">
@@ -78,7 +76,6 @@
  </div>
  <div class="description">
  <p><?php echo static::e($product['description']); ?></p>
-
  </div>
  <div class="rating">
  <span class="fa fa-star checked"></span>
@@ -88,7 +85,6 @@
  <span class="fa fa-star"></span>
  </div>
  </div>
-
  </a>
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  </div>
@@ -142,5 +138,4 @@
  <?php $this->startSection('javascript'); ?>
  <script src="<?php  echo (isset($this->assetDict[('views/product/js/javascript.js')]))?$this->assetDict[('views/product/js/javascript.js')]:$this->baseUrl.'/'.('views/product/js/javascript.js'); ?>"></script>
  <?php $this->stopSection(); ?>
-
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>
