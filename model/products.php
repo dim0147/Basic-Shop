@@ -36,6 +36,7 @@
 
                 $stmt = $this->pdo->prepare("SELECT DISTINCT $fieldQuery
                                     FROM products 
+                                    LEFT JOIN categorys_link_products cp ON products.id = cp.product_id
                                     LEFT JOIN images ON images.product_id = products.id
                                     WHERE products.id = $id");
                 $stmt->execute();

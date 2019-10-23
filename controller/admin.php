@@ -9,7 +9,8 @@
             $this->prodModel = new ProductModel();
             $this->cateModel = new CategoryModel();
             $this->fileRender = [
-                'add-product' => 'admin.add-product'
+                'add-product' => 'admin.add-product',
+                'edit-product' => 'admin.edit-product'
             ];
         }
 
@@ -25,17 +26,15 @@
 
         public function upload(){
             // *************  SET UP, VALIDATION DATA *********************//
-
+                //  Convert categorys json get from client to array 
+                $categorys = json_decode($_POST['categorys']);
+                $categorys = (array)$categorys;
                 //  Check if any field is empty
-                if(checkEmpty([$_POST['categorys'], $_POST['title'], $_POST['description'], $_POST['price'], $_POST['status'], $_POST['rate']]))
+                if(checkEmptyFile($_FILES['header'], 1) || checkEmptyFile($_FILES['thumbnail'], 2) || checkEmpty([ $_POST['categorys'], $_POST['title'], $_POST['description'], $_POST['price'], $_POST['status'], $_POST['rate']]))
                 {
                     setHTTPCode(500, 'Empty Field!');
                     return;
                 }
-
-                //  Convert categorys json get from client to array 
-                $categorys = json_decode($_POST['categorys']);
-                $categorys = (array)$categorys;
 
                 if($this->prodModel->checkExist('title', $_POST['title'])){   //  Check title if exist
                     setHTTPCode(500, 'Product exist!');
@@ -85,17 +84,18 @@
                 }
 
              // ************* CREATE CATEGORY LINK PRODUCT  *********************//
-
-                // create category to category_link_product table
-                $queryCategory = [];//  query to add many category
-                foreach($categorys as $id=>$name){  //  Loop array of category get from client
-                    $queryCategory[] = createQuery(['DEFAULT', (int)$idNewProduct, (int)$id, $name, $_POST['title']]);
-                }
-                $queryCategory = implode(',', $queryCategory);
-                $finalResult = $this->cateModel->addMany($queryCategory, 'categorys_link_products');
-                if(!$finalResult){   //  if fail 
-                    setHTTPCode(500, "Error while save category, ProductID: " . $idNewProduct);
-                    return;
+                if(!empty($categorys)){
+                    // create category to category_link_product table
+                    $queryCategory = [];//  query to add many category
+                    foreach($categorys as $id=>$name){  //  Loop array of category get from client
+                        $queryCategory[] = createQuery(['DEFAULT', (int)$idNewProduct, (int)$id, $name, $_POST['title']]);
+                    }
+                    $queryCategory = implode(',', $queryCategory);
+                    $finalResult = $this->cateModel->addMany($queryCategory, 'categorys_link_products');
+                    if(!$finalResult){   //  if fail 
+                        setHTTPCode(500, "Error while save category, ProductID: " . $idNewProduct);
+                        return;
+                    }
                 }
 
             setHTTPCode(200, "Create successful!");
@@ -138,6 +138,30 @@
                 $newName = createRanDomString() . '.' . getExtFile($file);
             }
             return $newName;
+        }
+
+        public function editProduct(){
+            if(!isset($_GET['id'])){ //  check if have param
+                setHTTPCode(500, "Please pass parameter!");
+                return;
+            }
+            // Get Product
+            $product = $this->prodModel->getSingleProduct($_GET['id'], ['products.*, images.name, images.image_id, cp.category_id, cp.category_name']);
+            if(!$product){  // if not found
+                setHTTPCode(500, "Product not found!");
+                return;
+            }
+            $product = mergeResult(['name', 'category_id', 'category_name'], ['listImage', 'categoryID', 'categoryName'], 'id', $product, ['name' => 'image_id']);
+            $this->render($this->fileRender['edit-product'], [
+                'product' => $product,
+                'title' => "Edit Product"
+            ]);
+            return;
+        }
+
+        public function postEditProduct(){
+            $arrRmvImg = json_decode($_POST['imgDel']);
+            $arrRmvImg = (array)$arrRmvImg;
         }
     }
     
