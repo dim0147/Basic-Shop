@@ -18,10 +18,10 @@
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  <br>
  <?php $__currentLoopData = $prod['categoryName']; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
- <input type="checkbox" value='<?php echo static::e($item); ?>' checked><?php echo static::e($item); ?><br>
+ <input class="category" idCategory="<?php echo static::e($id); ?>" type="checkbox" value='<?php echo static::e($item); ?>' checked><?php echo static::e($item); ?><br>
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  <?php $__currentLoopData = $category; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
- <input type="checkbox" value='<?php echo static::e($item['name']); ?>'><?php echo static::e($item['name']); ?><br>
+ <input class="category" idCategory="<?php echo static::e($id); ?>" type="checkbox" value='<?php echo static::e($item['name']); ?>'><?php echo static::e($item['name']); ?><br>
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  <br>
@@ -37,11 +37,18 @@
 <script>
  var imgIdDelete = [];
  var imgNameDelete = [];
+ var categoryDelete = ['3', '1'];
+ var categoryAdd = {
+ '2': 'Killing',
+ '4': 'Champions'
+ };
 $('.submit').click(function(e){
  e.preventDefault();
  var data = new FormData($(this).parents('form')[0]);
  data.append('imgDel', JSON.stringify(imgIdDelete));
  data.append('nameImgDel', JSON.stringify(imgNameDelete));
+ data.append('cateAdd', JSON.stringify(categoryAdd));
+ data.append('cateDel', JSON.stringify(categoryDelete));
  $.ajax({
  method: 'POST',
  url: 'post/edit-product',

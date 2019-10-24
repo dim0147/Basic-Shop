@@ -18,10 +18,10 @@
         @endforeach
         <br>
         @foreach ($prod['categoryName'] as $id => $item)
-            <input type="checkbox" value='{{$item}}' checked>{{$item}}<br>
+            <input class="category" idCategory="{{$id}}" type="checkbox" value='{{$item}}' checked>{{$item}}<br>
         @endforeach
         @foreach ($category as $id => $item)
-            <input type="checkbox" value='{{$item['name']}}'>{{$item['name']}}<br>
+            <input class="category" idCategory="{{$id}}" type="checkbox" value='{{$item['name']}}'>{{$item['name']}}<br>
         @endforeach
     @endforeach
     <br>
@@ -37,11 +37,18 @@
 <script>
     var imgIdDelete = [];
     var imgNameDelete = [];
+    var categoryDelete = ['3', '1'];
+    var categoryAdd = {
+        '2': 'Killing',
+        '4': 'Champions'
+    };
 $('.submit').click(function(e){
     e.preventDefault();
     var data = new FormData($(this).parents('form')[0]);
     data.append('imgDel', JSON.stringify(imgIdDelete));
     data.append('nameImgDel', JSON.stringify(imgNameDelete));
+    data.append('cateAdd', JSON.stringify(categoryAdd));
+    data.append('cateDel', JSON.stringify(categoryDelete));
     $.ajax({
         method: 'POST',
         url: 'post/edit-product',

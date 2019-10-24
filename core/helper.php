@@ -128,4 +128,15 @@ function addApostrophe($string){
     return '"' . $string . '"';
 }
 
+function getFirstKey($arr){
+    foreach($arr as $key => $val){
+        return $key;
+    }
+}
+
+function getArrFromJSON($JSON){
+    $arr = json_decode($JSON);
+    return (array)$arr;
+}
+
 ?>
