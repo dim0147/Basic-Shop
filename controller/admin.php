@@ -43,6 +43,7 @@
 
             // ************* UPLOAD HEADER -> PRODUCT -> THUMBNAIL *********************//
 
+                    // **      UPLOAD HEADER ** //
                 $uploadHeader = $this->uploadHeader();  //  upload header image to storage, return name header image
                 if(!$uploadHeader){ //  Check if error remove header image from storage
                     removeFiles([$uploadHeader], PATH_IMAGE_UPLOAD);
@@ -50,6 +51,7 @@
                     return;
                 }
 
+                     // **      UPLOAD PRODUCT ** //
                 //  Create product to database, return the id of product when create finish
                 $idNewProduct = $this->prodModel->addNewProduct(
                                                     $_POST['title'], 
@@ -64,6 +66,7 @@
                     return;
                 }
 
+                     // **      UPLOAD THUMBNAIL ** //
                 //  upload thumbnail to storage , return list name image;
                 $uploadThumbnail = $this->uploadThumbnail();    
                 if(!$uploadThumbnail){  // if error
@@ -76,7 +79,7 @@
                     $queryThumbnail[] = "(DEFAULT, " . $idNewProduct . ", 'thumbnail', '". $image . "', DEFAULT)"; 
                 }
                 $queryThumbnail = implode(',', $queryThumbnail);
-                $result = $this->prodModel->addThumnailProduct($queryThumbnail); //  Create thumbnails to db
+                $result = $this->prodModel->addThumbnailProduct($queryThumbnail); //  Create thumbnails to db
                 if(!$result){   //  if fail delete thumbnail in storage
                     removeFiles($uploadThumbnail, PATH_IMAGE_UPLOAD);
                     setHTTPCode(500, "Error while save thumbnail, ProductID: " . $idNewProduct);
@@ -128,16 +131,6 @@
                 return $listImage;
             }
                 return false;
-            }
-
-        
-        
-            public function createNameImg($file){
-            $newName = createRanDomString() .  '.' . getExtFile($file);
-            while (file_exists($this->pathUpLoad . $newName)){
-                $newName = createRanDomString() . '.' . getExtFile($file);
-            }
-            return $newName;
         }
 
         public function editProduct(){
@@ -147,21 +140,122 @@
             }
             // Get Product
             $product = $this->prodModel->getSingleProduct($_GET['id'], ['products.*, images.name, images.image_id, cp.category_id, cp.category_name']);
-            if(!$product){  // if not found
+            if(!$product){  // if product not found
                 setHTTPCode(500, "Product not found!");
                 return;
             }
-            $product = mergeResult(['name', 'category_id', 'category_name'], ['listImage', 'categoryID', 'categoryName'], 'id', $product, ['name' => 'image_id']);
+            $product = mergeResult(['name', 'category_name'], ['listImage', 'categoryName'], 'id', $product, ['name' => 'image_id', 'category_name' => 'category_id']);
+            //  Get All category
+            $categorys = $this->cateModel->getCategory();
+            $categoryOfProd = array_values($product)[0]['categoryName'];    //  Get category of product
+            foreach($categorys as $key => $cate){   //  Loop through all category
+                if (in_array($cate['name'], $categoryOfProd))   //  if product category exist in array category
+                    unset($categorys[$key]);    //  remove that category from array category
+            }
             $this->render($this->fileRender['edit-product'], [
                 'product' => $product,
+                'category' => $categorys,
                 'title' => "Edit Product"
             ]);
             return;
         }
 
         public function postEditProduct(){
+            //  Get name,id of image thumbnail need to del
             $arrRmvImg = json_decode($_POST['imgDel']);
             $arrRmvImg = (array)$arrRmvImg;
+
+            $arrNameRmvImg = json_decode($_POST['nameImgDel']);
+            $arrNameRmvImg = (array)$arrNameRmvImg;
+
+
+            /******** UPDATE HEADER IMAGE ***********/
+                //  update header image if have
+                $uploadHeader = false;
+                if(!checkEmptyFile($_FILES['header'], 1)){  //  If not empty
+                    $uploadHeader = $this->uploadHeader();
+                    if(!$uploadHeader){ //  Check if error then remove header image just upload from storage
+                        $this->errorUpload($uploadHeader, 1);
+                        return;
+                    }
+                }
+
+             /******** UPDATE PRODUCT WITH HEADER IMAGE ***********/
+                // Update field, eg: title,description,...  
+                $fieldUpdate = [
+                    'title' => addApostrophe($_POST['title']), 
+                    'price' => (float)$_POST['price'], 
+                    'status' => addApostrophe($_POST['status']), 
+                    'rate' => $_POST['rate'], 
+                    'description' => addApostrophe($_POST['description'])
+                    ];
+                //  If header is update
+                if ($uploadHeader !== false)
+                    $fieldUpdate['image'] = addApostrophe($uploadHeader);
+                $query = createQuery($fieldUpdate, true);
+                $result = $this->prodModel->updateProduct($query, $_POST['id']);
+                if(!$result){
+                    $this->errorUpload($uploadHeader, 1);
+                    return;
+                }
+
+         /******** UPDATE THUMBNAIL PRODUCT AND THEN REMOVE IF USER WANT REMOVE  ***********/
+                // Update thumbnail if have
+                if(!checkEmptyFile($_FILES['thumbnail'], 2)){
+                    $listImg = $this->uploadThumbnail();
+                    if(!$listImg){
+                        $this->errorUpload($listImg, 2);
+                        return;
+                    }
+                    $queryCategory = [];
+                    foreach($listImg as $nameImg){
+                        $queryCategory[] = createQuery(['DEFAULT', $_POST['id'], 'thumbnail', $nameImg, 'DEFAULT']);
+                    }
+                    $queryCategory = implode(',' ,$queryCategory);
+                    $uploadThumbnail = $this->prodModel->addThumbnailProduct($queryCategory);
+                    if(!$uploadThumbnail){
+                        $this->errorUpload($uploadThumbnail, 2);
+                        return;
+                    }
+                }
+                // Remove old thumbnail
+                if(!empty($arrRmvImg)){
+                    $queryDelImg = [];
+                    foreach($arrRmvImg as $idImg){
+                        $queryDelImg[] = (int)$idImg;
+                    }
+                    $queryDelImg = implode(',' , $queryDelImg);
+                    $delImg = $this->prodModel->deleteThumbnail($queryDelImg);
+                    if(!$delImg){
+                        setHTTPCode(500, "Error while remove from db!");
+                        return;
+                    }
+                    removeFiles($arrNameRmvImg, PATH_IMAGE_UPLOAD);
+                }
+    
+            /******** ALL IS SUCCESS  ***********/
+            echo "Success full!";
+        }
+
+        public function errorUpload($images, $type){
+            if($type === 1){
+                removeFiles([$images], PATH_IMAGE_UPLOAD);
+                setHTTPCode(500, 'Error while upload header image!');
+                return;
+            }
+            if($type === 2){
+                removeFiles($images, PATH_IMAGE_UPLOAD);
+                setHTTPCode(500, 'Error while upload thumbnail image!');
+                return;
+            }
+        }
+
+        public function createNameImg($file){
+            $newName = createRanDomString() .  '.' . getExtFile($file);
+            while (file_exists($this->pathUpLoad . $newName)){
+                $newName = createRanDomString() . '.' . getExtFile($file);
+            }
+            return $newName;
         }
     }
     

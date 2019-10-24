@@ -68,7 +68,7 @@
             }
         }
 
-        public function addThumnailProduct($value){
+        public function addThumbnailProduct($value){
             try{
                 if(is_null($this->pdo))
                     return false;
@@ -82,5 +82,32 @@
             }
         }
 
+        public function updateProduct($query, $id){
+            try{
+                if(is_null($this->pdo))
+                    return false;
+                $stmt = $this->pdo->prepare("UPDATE products SET $query WHERE products.id = $id");
+                $stmt->execute();
+                return true;
+            }
+            catch(PDOException $err){
+                die($err);
+            }
+        }
+
+        public function deleteThumbnail($listID){
+            try{
+                if(is_null($this->pdo))
+                    return false;
+                $stmt = $this->pdo->prepare("DELETE FROM images WHERE image_id IN ($listID)");
+                $stmt->execute();
+                return true;
+            }
+            catch(PDOException $err){
+                die($err);
+            }
+
+
+        }
     }
 ?>

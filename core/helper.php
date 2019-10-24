@@ -85,35 +85,47 @@ function removeFiles($arrFileName, $path){
     return true;
 }
 
-function createQuery($arrValue){
+function createQuery($arrValue, $arrUpdate = false){
     $arr = [];
-    foreach($arrValue as $value){
-            if ($value == 'NULL' || $value == 'DEFAULT' || is_numeric($value))
-                $arr[] =  $value;
-            else
-                $arr[] = '"' . $value .'"';
+    if($arrUpdate !== false){    //  QUERY FOR UPDATE FIELD
+        foreach ($arrValue as $field => $val){
+            $arr[] = $field . " = " . $val;
+        }
+        $arr = implode(',', $arr);
+        return $arr;
+    }else{
+        foreach($arrValue as $value){   //  QUERY FOR ADD VALUE
+                if ($value == 'NULL' || $value == 'DEFAULT' || is_numeric($value))
+                    $arr[] =  $value;
+                else
+                    $arr[] = '"' . $value .'"';
+        }
+        $arr = implode(',', $arr);
+        $arr = str_pad($arr, strlen($arr) + 1, "(", STR_PAD_LEFT);
+        $arr = str_pad($arr, strlen($arr) + 1, ")", STR_PAD_BOTH);
+        return $arr;
     }
-    $arr = implode(',', $arr);
-    $arr = str_pad($arr, strlen($arr) + 1, "(", STR_PAD_LEFT);
-    $arr = str_pad($arr, strlen($arr) + 1, ")", STR_PAD_BOTH);
-    return $arr;
 }
 
 function checkEmptyFile($file, $type){
-    if ($type === 1){
+    if ($type === 1){   //  single
         if($file['error'] === 0)
             return false;
         else
             return true;
     }
 
-    if($type === 2){
+    if($type === 2){    //  multipe
         if(empty($file['size'][0]))
             return true;
         else
             return false;
     }
         
+}
+
+function addApostrophe($string){
+    return '"' . $string . '"';
 }
 
 ?>
