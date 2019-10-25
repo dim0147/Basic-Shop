@@ -1,8 +1,13 @@
 <?php $_shouldextend[1]=1; ?>
 
+<?php $this->startSection('css'); ?>
+ <link rel="stylesheet" type="text/css" href='<?php  echo (isset($this->assetDict[('views/admin/css/index.css')]))?$this->assetDict[('views/admin/css/index.css')]:$this->baseUrl.'/'.('views/admin/css/index.css'); ?>'>
+<?php $this->stopSection(); ?>
 
 <?php $this->startSection('content'); ?>
-<form method="POST">
+
+<div>
+ <form method="POST">
  <!-- Name of input element determines name in $_FILES array -->
  Send this file:
  <input name="header" value="4"  type="file"/>
@@ -14,10 +19,12 @@
  status: <input name="status" value="4"  />
  rate: <input name="rate" value="4"  />
  <?php $__currentLoopData = $categorys; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
-<input type="checkbox" id="<?php echo static::e($item['id']); ?>" value="<?php echo static::e($item['name']); ?>"><?php echo static::e($item['name']); ?>
+ <input type="checkbox" id="<?php echo static::e($item['id']); ?>" value="<?php echo static::e($item['name']); ?>"><?php echo static::e($item['name']); ?>
 
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
-</form>
+ </form>
+</div>
+
 <?php $this->stopSection(); ?>
 
 <?php $this->startSection('javascript'); ?>

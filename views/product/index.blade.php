@@ -9,30 +9,30 @@
 
   <div class="main">
 
-        <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
-          <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-          </ol>
+    <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+      </ol>
 
       <div class="carousel-item active">
-            <div class="d-block img-fluid">
-              <div class="head" 
+        <div class="d-block img-fluid">
+          <div class="head" 
               style="background-image: url(https://trak.in/wp-content/uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg)">
-              </div>
-              <img class="imgFixed" src="https://trak.in/wp-content/  uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg" alt="First slide">
-              </div>
+          </div>
+            <img class="imgFixed" src="https://trak.in/wp-content/  uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg" alt="First slide">
+          </div>
         </div>
 
         <div class="carousel-item">
           <div class="d-block img-fluid">
             <div class="head" 
             style="background-image: url(https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg)">
-              </div>
-                  <img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt="Second slide">
-              </div>
-      </div>
+            </div>
+            <img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt="Second slide">
+          </div>
+        </div>
 
         <div class="carousel-item">
             <div class="d-block img-fluid">
@@ -116,12 +116,12 @@
           <div class="modal-footer">
             <form action="/WEBASSIGNMENT2/cart" method="POST">
             <!-- Name of input element determines name in $_FILES array -->
-                Send this file: <input type="text" name="action" list="ls"/>
-                <datalist id="ls">
-                    <option value="add">
-                    <option value="remove">
-                    <option value="decrease">
-                </datalist>
+                Send this file:
+                <select id="ls">
+                    <option value="add">add</option>
+                    <option value="remove">remove</option>
+                    <option value="decrease">decrease</option>
+                </select>
 
                 <input name="id" value="4"  />
                 <input name="quantity" value="1"  />
