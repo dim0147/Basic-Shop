@@ -44,14 +44,11 @@
         $.ajax({
             url: 'post/add-product',
             type: 'POST',
-            // xhr: function() {
-            //     var myXhr = $.ajaxSettings.xhr();
-            //     return myXhr;
-            // },
             success: function (data) {
                 alert("Data Uploaded: "+data);
             },
             error: function (err) {
+                console.log(err.responseText);
                 alert('err ' + err.responseText);
             },
             data: formData,

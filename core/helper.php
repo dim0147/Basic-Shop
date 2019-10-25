@@ -4,25 +4,43 @@ function printB($arr){
     print("<pre>".print_r($arr,true)."</pre>");
 }
 
-function mergeResult($arrOrigin, $arrMerge, $keyToValidate, $data){
+function mergeResult($arrOrigin, $arrMerge, $keyToValidate, $data, $keyOfElement = false){
     $arrResult = [];  
     if(count($data) <= 0) // count: how many element in 1 array
         return $arrResult; // NULL ???
     foreach($data as $e){ 
         $idProduct = $e[$keyToValidate];  
 
-        if(!isset($arrResult[$idProduct])){   //  if empty array don't have current id product
+        if(!isset($arrResult[$idProduct])){   //  if empty arrResult don't have current id product
             for($i = 0; $i < count($arrOrigin); $i++){
-                $e[$arrMerge[$i]] = [$e[$arrOrigin[$i]]]; //  create empty Caterogy list and add first value 
+                $nameKeyOrigin = $arrOrigin[$i];
+                $nameKeyMerge = $arrMerge[$i];
+                $valueOfKeyOrigin =  $e[$nameKeyOrigin];  //  get KEY origin of duplicate product, eg: $e['name']
+                if($keyOfElement && array_key_exists($nameKeyOrigin, $keyOfElement)){
+                    //  Get value from addition field, eg: $e['image_id'] = 3, 3 is assign to variable
+                    $keyMergeElement = $e[$keyOfElement[$nameKeyOrigin]]; 
+                    //  Add like this $e[listImage][idImage] = nameImage, listImage is arrMerge
+                    $e[$nameKeyMerge][$keyMergeElement] = $valueOfKeyOrigin;    
+                }
+                else
+                    $e[$nameKeyMerge] = [$valueOfKeyOrigin]; //  create empty Caterogy list and add first value 
                 $arrResult[$idProduct] = $e;  //  Add to empty array
             }
         }
 
         else{   //  Exist
             for($i = 0; $i < count($arrOrigin); $i++){
-                $categoryName =  $e[$arrOrigin[$i]];  //  get name origin of duplicate product
-                if (!in_array($categoryName, $arrResult[$idProduct][$arrMerge[$i]])){   //  Check if have already
-                    array_push($arrResult[$idProduct][$arrMerge[$i]], $categoryName);  // If not push to list category
+                $nameKeyOrigin = $arrOrigin[$i];
+                $nameKeyMerge = $arrMerge[$i];
+                $valueOfKeyOrigin =  $e[$nameKeyOrigin];  //  get KEY origin of duplicate product, eg: $e['name']
+                if (!in_array($valueOfKeyOrigin, $arrResult[$idProduct][$nameKeyMerge])){   //  Check if have already
+                     //  Check if addition key from specific origin field 
+                    if($keyOfElement && array_key_exists($nameKeyOrigin, $keyOfElement)){
+                        $keyMergeElement = $e[$keyOfElement[$nameKeyOrigin]];
+                        $arrResult[$idProduct][$nameKeyMerge][$keyMergeElement] = $valueOfKeyOrigin;
+                    }
+                    else
+                        array_push($arrResult[$idProduct][$nameKeyMerge], $valueOfKeyOrigin);  // If not push to list category
                 }
             }
         }
@@ -67,18 +85,58 @@ function removeFiles($arrFileName, $path){
     return true;
 }
 
-function createQuery($arrValue){
+function createQuery($arrValue, $arrUpdate = false){
     $arr = [];
-    foreach($arrValue as $value){
-            if ($value == 'NULL' || $value == 'DEFAULT' || is_numeric($value))
-                $arr[] =  $value;
-            else
-                $arr[] = '"' . $value .'"';
+    if($arrUpdate !== false){    //  QUERY FOR UPDATE FIELD
+        foreach ($arrValue as $field => $val){
+            $arr[] = $field . " = " . $val;
+        }
+        $arr = implode(',', $arr);
+        return $arr;
+    }else{
+        foreach($arrValue as $value){   //  QUERY FOR ADD VALUE
+                if ($value == 'NULL' || $value == 'DEFAULT' || is_numeric($value))
+                    $arr[] =  $value;
+                else
+                    $arr[] = '"' . $value .'"';
+        }
+        $arr = implode(',', $arr);
+        $arr = str_pad($arr, strlen($arr) + 1, "(", STR_PAD_LEFT);
+        $arr = str_pad($arr, strlen($arr) + 1, ")", STR_PAD_BOTH);
+        return $arr;
     }
-    $arr = implode(',', $arr);
-    $arr = str_pad($arr, strlen($arr) + 1, "(", STR_PAD_LEFT);
-    $arr = str_pad($arr, strlen($arr) + 1, ")", STR_PAD_BOTH);
-    return $arr;
+}
+
+function checkEmptyFile($file, $type){
+    if ($type === 1){   //  single
+        if($file['error'] === 0)
+            return false;
+        else
+            return true;
+    }
+
+    if($type === 2){    //  multipe
+        if(empty($file['size'][0]))
+            return true;
+        else
+            return false;
+    }
+        
+}
+
+function addApostrophe($string){
+    return '"' . $string . '"';
+}
+
+function getFirstKey($arr){
+    foreach($arr as $key => $val){
+        return $key;
+    }
+}
+
+function getArrFromJSON($JSON){
+    $arr = json_decode($JSON);
+    return (array)$arr;
 }
 
 ?>
