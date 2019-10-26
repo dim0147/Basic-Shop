@@ -8,6 +8,7 @@
         function __construct(){
             $this->prodModel = new ProductModel();
             $this->cateModel = new CategoryModel();
+            $this->model = new UserModel();
             $this->fileRender = [
                 'add-product' => 'admin.add-product',
                 'edit-product' => 'admin.edit-product'
@@ -15,22 +16,13 @@
         }
 
         public function addProduct(){
-            $categorys = ($this->cateModel->getCategory());
+            $categorys = $this->cateModel->getCategory();
             $this->render($this->fileRender['add-product'],
             [
                 'title' => 'Add Product',
                 'categorys' => $categorys
             ]);
             return;
-        }
-
-        public function addCategory($arrCate){
-                $queryCateAdd = [];
-                foreach($arrCate as $idCate => $nameCate){
-                    $queryCateAdd[] = createQuery(['DEFAULT', $_POST['id'], (int)$idCate, $nameCate, $_POST['title']]);
-                }
-                $queryCateAdd = implode(',' , $queryCateAdd);
-                $this->prodModel->addCategoryProduct($queryCateAdd);
         }
 
         public function upload(){
@@ -44,8 +36,8 @@
                     setHTTPCode(500, 'Empty Field!');
                     return;
                 }
-
-                if($this->prodModel->checkExist('title', $_POST['title'])){   //  Check title if exist
+                //  Check title if exist
+                if($this->prodModel->checkExist(['title' => $_POST['title']], ['id'])){   
                     setHTTPCode(500, 'Product exist!');
                     return;
                 }
@@ -53,64 +45,190 @@
             // ************* UPLOAD HEADER -> PRODUCT -> THUMBNAIL *********************//
 
                     // **      UPLOAD HEADER ** //
-                $uploadHeader = $this->uploadHeader();  //  upload header image to storage, return name header image
-                if(!$uploadHeader){ //  Check if error remove header image from storage
-                    removeFiles([$uploadHeader], PATH_IMAGE_UPLOAD);
+                $imageHeader = $this->uploadHeader();  //  upload header image to storage, return name header image
+                if(!$imageHeader){ //  Check if error remove header image from storage
                     setHTTPCode(500, 'Error while upload header image!');
                     return;
                 }
 
                      // **      UPLOAD PRODUCT ** //
                 //  Create product to database, return the id of product when create finish
-                $idNewProduct = $this->prodModel->addNewProduct(
-                                                    $_POST['title'], 
-                                                    $_POST['description'], 
-                                                    (float)$_POST['price'],
-                                                    $uploadHeader, 
-                                                    $_POST['status'], 
-                                                    $_POST['rate']);
-                if(!$idNewProduct && $idNewProduct !== 0){ // check if fail remove header image from storage
-                    removeFiles([$uploadHeader], PATH_IMAGE_UPLOAD);
-                    setHTTPCode(500, 'Error while create new Product');
-                    return;
-                }
+                $this->addField($imageHeader);
 
                      // **      UPLOAD THUMBNAIL ** //
                 //  upload thumbnail to storage , return list name image;
-                $uploadThumbnail = $this->uploadThumbnail();    
-                if(!$uploadThumbnail){  // if error
-                    setHTTPCode(500, 'Error while upload thumbnail image, ProductID: ' . $idNewProduct);
-                    return;
-                }
-                //  create image thumbnail to database
-                $queryThumbnail = []; //  query to add many thumbnail image
-                foreach($uploadThumbnail as $image){    //  Loop array of storage image name return from above
-                    $queryThumbnail[] = "(DEFAULT, " . $idNewProduct . ", 'thumbnail', '". $image . "', DEFAULT)"; 
-                }
-                $queryThumbnail = implode(',', $queryThumbnail);
-                $result = $this->prodModel->addThumbnailProduct($queryThumbnail); //  Create thumbnails to db
-                if(!$result){   //  if fail delete thumbnail in storage
-                    removeFiles($uploadThumbnail, PATH_IMAGE_UPLOAD);
-                    setHTTPCode(500, "Error while save thumbnail, ProductID: " . $idNewProduct);
-                    return;
+                if(!checkEmptyFile($_FILES['thumbnail'], 2)){
+                    $listImg = $this->uploadThumbnail();    // Upload to storage, not DB, return list name image
+                    if(!$listImg){
+                        setHTTPCode(500, "ERROR while update thumbnail!");
+                        return false;
+                    }
+                    $this->uploadThumbOnDB($listImg); // Query database
                 }
 
              // ************* CREATE CATEGORY LINK PRODUCT  *********************//
                 if(!empty($categorys)){
-                    // create category to category_link_product table
-                    $queryCategory = [];//  query to add many category
-                    foreach($categorys as $id=>$name){  //  Loop array of category get from client
-                        $queryCategory[] = createQuery(['DEFAULT', (int)$idNewProduct, (int)$id, $name, $_POST['title']]);
-                    }
-                    $queryCategory = implode(',', $queryCategory);
-                    $finalResult = $this->cateModel->addMany($queryCategory, 'categorys_link_products');
-                    if(!$finalResult){   //  if fail 
-                        setHTTPCode(500, "Error while save category, ProductID: " . $idNewProduct);
+                    $this->addCategory($categorys);
+                }
+
+            setHTTPCode(200, "Create successful!");
+        }
+
+        public function editProduct(){
+            if(!isset($_GET['id'])){ //  check if have param
+                setHTTPCode(500, "Please pass parameter!");
+                return;
+            }
+            // Get Product
+            $product = $this->prodModel->getSingleProduct($_GET['id'], ['products.*, images.name, images.image_id, cp.category_id, cp.category_name']);
+            if(!$product){  // if product not found
+                setHTTPCode(500, "Product not found!");
+                return;
+            }
+            $product = mergeResult(['name', 'category_name'], ['listImage', 'categoryName'], 'id', $product, ['name' => 'image_id', 'category_name' => 'category_id']);
+            //  Get All category product
+            $listCategoryProduct = array_values($product)[0]['categoryName'];
+            $categorys = $this->cateModel->getCategory();
+            if(!empty(array_values($listCategoryProduct)[0])){  //  If product category not empty
+                foreach($listCategoryProduct as $key => $cate){   //  Loop through all category
+                    if (in_array($cate, $listCategoryProduct))   //  if product category exist in array category
+                        unset($categorys[$key]);    //  remove that category from array category
+                }
+            }
+            else{  // product category is empty
+                $product[getFirstKey($product)]['categoryName'] = NULL;
+            }
+            $this->render($this->fileRender['edit-product'], [
+                'product' => $product,
+                'category' => $categorys,
+                'title' => "Edit Product"
+            ]);
+            return;
+        }
+
+        public function postEditProduct(){
+                //  Get array name & id of image thumbnail need to del
+                    $arrRmvImg = getArrFromJSON($_POST['imgDel']);
+                    $arrNameRmvImg = getArrFromJSON($_POST['nameImgDel']);
+
+                //  Get array category add & del
+                    $cateAdd = getArrFromJSON($_POST['cateAdd']);
+                    $cateDel = getArrFromJSON($_POST['cateDel']);
+
+             /******** UPDATE HEADER IMAGE ***********/
+                //  update header image if have
+                $imgHeader = false;
+                if(!checkEmptyFile($_FILES['header'], 1)){
+                    $imgHeader = $this->uploadHeader(); // save to storage, return name image header
+                    if(!$imgHeader){
+                        setHTTPCode(500, "Error while update header image!");
                         return;
                     }
                 }
 
-            setHTTPCode(200, "Create successful!");
+             /******** UPDATE PRODUCT AND HEADER IMAGE GET FROM ABOVE TO DB ***********/
+                // Update field, eg: title,description,...  
+                $this->editField($imgHeader);   //  Query database
+
+             /******** UPDATE THUMBNAIL AND REMOVE  ***********/
+                // P1:Update thumbnail if have
+                if(!checkEmptyFile($_FILES['thumbnail'], 2)){
+                    $listImg = $this->uploadThumbnail();    // Upload to storage, not DB, return list name image
+                    if(!$listImg){
+                        setHTTPCode(500, "ERROR while update thumbnail!");
+                        return false;
+                    }
+                    $this->uploadThumbOnDB($listImg); // Query database
+                }
+                    
+                // P2:Remove old thumbnail
+                    $this->deleteThumbOnDB($arrRmvImg, $arrNameRmvImg); // Query database
+
+             /******** UPDATE CATEGORY   ***********/
+                // P1:  Add Category if array add category send from client not empty
+                if(!empty($cateAdd))
+                    $this->addCategory($cateAdd);   //  Query database
+
+
+                //  P2: Delete Category if array delete category send from client not empty
+                if(!empty($cateDel)){
+                    $this->deleteCategory($cateDel); //  Query database
+                }
+        
+    
+            /******** ALL IS SUCCESS  ***********/
+            setHTTPCode(200, "Update success!");
+        }
+
+        public function postLogin(){
+            if(!empty($_POST['username']) && !empty($_POST['password']) && !isset($_SESSION['username'])){ 
+                $username = $_POST['username'];
+                $password = $_POST['password'];
+                $passwordQuery = $this->model->getUserPassword(["username" => $username,
+                                                                "type" => 'admin']);
+                if($passwordQuery && password_verify($password, $passwordQuery)){
+                    // $_SESSION['username'] = $username;
+                    setHTTPCode(200, "Sign In Success!");
+                    return;
+                }
+                else{
+                    setHTTPCode(500, "Username or Password Wrong!");
+                    return;
+                }
+            }
+            setHTTPCode(500, "Something wrong, please check again!");
+        }
+
+        public function postRegister(){
+            if(!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['name'])){
+                //  Assign variable
+                $username = $_POST['username'];
+                $password = $_POST['password'];
+                $name = $_POST['name'];
+
+                //  Check if username is exist
+                $checkExist = $this->model->checkExist(['username' => $username,
+                                                        'type' => 'admin']); 
+                if($checkExist){    //  If yes return
+                    setHTTPCode(500, "Username exist!");
+                    return;
+                }
+
+                // Insert new User
+                $password = password_hash($password, PASSWORD_DEFAULT); //  hash password
+                $values = createQuery(['DEFAULT', $username, $password, $name, 'Active', 'DEFAULT', 'admin']);
+                $this->model->insert($values);
+                setHTTPCode(200, "Register success!!");
+                return;
+            }
+            else
+                setHTTPCode(500, "Field Empty!!");
+        }
+
+        public function addField($imageHeader){
+            $idNewProduct = $this->prodModel->addNewProduct(
+                $_POST['title'], 
+                $_POST['description'], 
+                (float)$_POST['price'],
+                $imageHeader, 
+                $_POST['status'], 
+                $_POST['rate']);
+            if(!$idNewProduct && $idNewProduct !== 0){ // check if fail remove header image from storage
+            removeFiles([$imageHeader], PATH_IMAGE_UPLOAD);
+            setHTTPCode(500, 'Error while create new Product');
+            return;
+            }
+            $_POST['id'] = $idNewProduct;
+        }
+
+        public function addCategory($arrCate){
+            $queryCateAdd = [];
+            echo $_POST['id'];
+            foreach($arrCate as $idCate => $nameCate){
+                $queryCateAdd[] = createQuery(['DEFAULT', $_POST['id'], (int)$idCate, $nameCate, $_POST['title']]);
+            }
+            $queryCateAdd = implode(',' , $queryCateAdd);
+            $this->prodModel->addCategoryProduct($queryCateAdd);
         }
 
         public function uploadHeader(){
@@ -202,92 +320,6 @@
                 }
                 $queryCateDel = implode("," , $queryCateDel);
                 $this->prodModel->delCategoryProd($queryCateDel, $_POST['id']);
-        }
-
-        public function editProduct(){
-            if(!isset($_GET['id'])){ //  check if have param
-                setHTTPCode(500, "Please pass parameter!");
-                return;
-            }
-            // Get Product
-            $product = $this->prodModel->getSingleProduct($_GET['id'], ['products.*, images.name, images.image_id, cp.category_id, cp.category_name']);
-            if(!$product){  // if product not found
-                setHTTPCode(500, "Product not found!");
-                return;
-            }
-            $product = mergeResult(['name', 'category_name'], ['listImage', 'categoryName'], 'id', $product, ['name' => 'image_id', 'category_name' => 'category_id']);
-            //  Get All category product
-            $listCategoryProduct = array_values($product)[0]['categoryName'];
-            $categorys = $this->cateModel->getCategory();
-            if(!empty(array_values($listCategoryProduct)[0])){  //  If product category not empty
-                foreach($listCategoryProduct as $key => $cate){   //  Loop through all category
-                    if (in_array($cate, $listCategoryProduct))   //  if product category exist in array category
-                        unset($categorys[$key]);    //  remove that category from array category
-                }
-            }
-            else{  // product category is empty
-                $product[getFirstKey($product)]['categoryName'] = NULL;
-            }
-            $this->render($this->fileRender['edit-product'], [
-                'product' => $product,
-                'category' => $categorys,
-                'title' => "Edit Product"
-            ]);
-            return;
-        }
-
-        public function postEditProduct(){
-                //  Get array name & id of image thumbnail need to del
-                    $arrRmvImg = getArrFromJSON($_POST['imgDel']);
-                    $arrNameRmvImg = getArrFromJSON($_POST['nameImgDel']);
-
-                //  Get array category add & del
-                    $cateAdd = getArrFromJSON($_POST['cateAdd']);
-                    $cateDel = getArrFromJSON($_POST['cateDel']);
-
-             /******** UPDATE HEADER IMAGE ***********/
-                //  update header image if have
-                $imgHeader = false;
-                if(!checkEmptyFile($_FILES['header'], 1)){
-                    $imgHeader = $this->uploadHeader(); // save to storage, return name image header
-                    if(!$imgHeader){
-                        setHTTPCode(500, "Error while update header image!");
-                        return;
-                    }
-                }
-
-             /******** UPDATE PRODUCT AND HEADER IMAGE GET FROM ABOVE TO DB ***********/
-                // Update field, eg: title,description,...  
-                $this->editField($imgHeader);   //  Query database
-
-             /******** UPDATE THUMBNAIL AND REMOVE  ***********/
-                // P1:Update thumbnail if have
-                if(!checkEmptyFile($_FILES['thumbnail'], 2)){
-                    $listImg = $this->uploadThumbnail();    // Upload to storage, not DB, return list name image
-                    if(!$listImg){
-                        setHTTPCode(500, "ERROR while update thumbnail!");
-                        return false;
-                    }
-                    $this->uploadThumbOnDB($listImg); // Query database
-                }
-                    
-                // P2:Remove old thumbnail
-                    $this->deleteThumbOnDB($arrRmvImg, $arrNameRmvImg); // Query database
-
-             /******** UPDATE CATEGORY   ***********/
-                // P1:  Add Category if array add category send from client not empty
-                if(!empty($cateAdd))
-                    $this->addCategory($cateAdd);   //  Query database
-
-
-                //  P2: Delete Category if array delete category send from client not empty
-                if(!empty($cateDel)){
-                    $this->deleteCategory($cateDel); //  Query database
-                }
-        
-    
-            /******** ALL IS SUCCESS  ***********/
-            setHTTPCode(200, "Update success!");
         }
 
         public function errorUpload($images, $type){

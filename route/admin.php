@@ -7,6 +7,11 @@
         $adminController->addProduct();
     });
 
+    route('/admin/post/add-product', function(){
+        global $adminController;
+        $adminController->upload();
+    });
+
     route('/admin/edit-product?{id}', function(){
         global $adminController;
         $adminController->editProduct();
@@ -17,9 +22,14 @@
         $adminController->postEditProduct();
     });
 
-    route('/admin/post/add-product', function(){
-        global $adminController;
-        $adminController->upload();
+    route('/admin/post/login', function(){
+        global $adminController;;
+        $adminController->postLogin();
+    });
+
+    route('/admin/post/register', function(){
+        global $adminController;;
+        $adminController->postRegister();
     });
 
 ?>
