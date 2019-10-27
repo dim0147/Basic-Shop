@@ -48,11 +48,12 @@
             return $stmt->fetch();
         }
 
-        function checkExist($field, $value){
+        function checkExist($arr, $field = '*'){
             try{
                 if(is_null($this->pdo))
                     return false;
-                $stmt = $this->pdo->prepare("SELECT $field FROM $this->table WHERE $field = '$value'");
+                $value = createCheckQuery($arr);
+                $stmt = $this->pdo->prepare("SELECT $field FROM $this->table WHERE $value");
                 $stmt->execute();
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
                 if(!$result)
@@ -65,11 +66,11 @@
             }
         }
 
-        function addMany($value, $table){
+        function insert($value){
             try{
                 if(is_null($this->pdo))
                     return false;
-                $stmt = $this->pdo->prepare("INSERT INTO $table VALUES $value");
+                $stmt = $this->pdo->prepare("INSERT INTO $this->table VALUES $value");
                 $stmt->execute();
                 return true;
                 

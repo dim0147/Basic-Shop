@@ -78,6 +78,7 @@ function checkEmpty($arr){
     return false;
 }
 
+
 function removeFiles($arrFileName, $path){
     foreach($arrFileName as $file){
         unlink($path. '/' . $file);
@@ -105,6 +106,17 @@ function createQuery($arrValue, $arrUpdate = false){
         $arr = str_pad($arr, strlen($arr) + 1, ")", STR_PAD_BOTH);
         return $arr;
     }
+}
+
+function createCheckQuery($arr){
+    $values = [];
+    foreach($arr as $field => $val){
+        if(!is_numeric($val))
+            $val = addApostrophe($val);
+        $values[] = $field . "=" . $val;
+    }
+    $values = implode(' AND ', $values);
+    return $values;
 }
 
 function checkEmptyFile($file, $type){
