@@ -37,7 +37,7 @@
                     return;
                 }
                 //  Check title if exist
-                if($this->prodModel->checkExist(['title' => $_POST['title']], ['id'])){   
+                if($this->prodModel->select(['id'], ['title' => $_POST['title']])){   
                     setHTTPCode(500, 'Product exist!');
                     return;
                 }
@@ -164,9 +164,10 @@
             if(!empty($_POST['username']) && !empty($_POST['password']) && !isset($_SESSION['username'])){ 
                 $username = $_POST['username'];
                 $password = $_POST['password'];
-                $passwordQuery = $this->model->getUserPassword(["username" => $username,
+                $passwordQuery = $this->model->select(NULL, ["username" => $username,
                                                                 "type" => 'admin']);
-                if($passwordQuery && password_verify($password, $passwordQuery)){
+                $result = isset($passwordQuery[getFirstKey($passwordQuery)]['password']);
+                if($result && password_verify($password, $passwordQuery[getFirstKey($passwordQuery)]['password'])){
                     // $_SESSION['username'] = $username;
                     setHTTPCode(200, "Sign In Success!");
                     return;
@@ -187,7 +188,7 @@
                 $name = $_POST['name'];
 
                 //  Check if username is exist
-                $checkExist = $this->model->checkExist(['username' => $username,
+                $checkExist = $this->model->select(NULL, ['username' => $username,
                                                         'type' => 'admin']); 
                 if($checkExist){    //  If yes return
                     setHTTPCode(500, "Username exist!");
@@ -291,7 +292,7 @@
                 //  If header Image is update
                 if ($imgHeader !== false){
                     $fieldUpdate['image'] = addApostrophe($imgHeader);  //  Add character ["] on left and right Img header
-                    $oldImage = $this->prodModel->getSpecificField($_POST['id'], ['image']);//  get old image before update new one
+                    $oldImage = $this->prodModel->select(['image'], ['id' => $_POST['id']]);//  get old image before update new one
                 }
                 $query = createQuery($fieldUpdate, true);   //  True mean create update query
                 $this->prodModel->updateProduct($query, $_POST['id']); // If err will die immediately

@@ -40,30 +40,17 @@
             return $result;
         }
 
-        function getByID($id){
+        function select($field = NULL, $condition){
             if(is_null($this->pdo))
-                return NULL;
-            $stmt = $this->pdo->prepare("SELECT * FROM $this->table WHERE id=$id");
+                    return false;
+            if($field === NULL)
+                $field = ['*'];
+            $condition = createCheckQuery($condition);
+            $field = implode(',' , $field);
+            $stmt = $this->pdo->prepare("SELECT $field FROM $this->table WHERE $condition");
             $stmt->execute();
-            return $stmt->fetch();
-        }
-
-        function checkExist($arr, $field = '*'){
-            try{
-                if(is_null($this->pdo))
-                    return false;
-                $value = createCheckQuery($arr);
-                $stmt = $this->pdo->prepare("SELECT $field FROM $this->table WHERE $value");
-                $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                if(!$result)
-                    return false;
-                else
-                    return true;
-            }
-            catch(PDOException $err){
-                die($err);
-            }
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
         }
 
         function insert($value){

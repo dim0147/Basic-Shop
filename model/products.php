@@ -47,24 +47,6 @@
             }
         }
 
-        public function getSpecificField($id, $fields = NULL){
-            try{
-                if(is_null($this->pdo) || $fields === NULL)
-                    return NULL;
-                    
-                $fields = implode(',' , $fields);
-                $stmt = $this->pdo->prepare("SELECT $fields
-                                    FROM products 
-                                    WHERE id = $id");
-                $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $result;
-            }
-            catch(PDOException $err){
-                return [];
-            }
-        }
-
         public function addNewProduct($title, $descr, $price, $imageName, $stat, $rate){
             try{
                 if(is_null($this->pdo))

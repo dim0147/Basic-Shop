@@ -21,13 +21,14 @@
         }
 
         public function postLogin(){
-            if(!empty($_POST['username']) && !empty($_POST['password']) && !isset($_SESSION['username'])){ 
+            if(!empty($_POST['username']) && !empty($_POST['password']) && !isset($_SESSION['user'])){ 
                 $username = $_POST['username'];
                 $password = $_POST['password'];
-                $passwordQuery = $this->model->getUserPassword(["username" => $username,
+                $passwordQuery = $this->model->select(NULL, ["username" => $username,
                                                                 "type" => 'user']);
-                if($passwordQuery && password_verify($password, $passwordQuery)){
-                    // $_SESSION['username'] = $username;
+                $result = isset($passwordQuery[getFirstKey($passwordQuery)]['password']);
+                if($result && password_verify($password, $passwordQuery[getFirstKey($passwordQuery)]['password'])){
+                    $_SESSION['user'] = $passwordQuery[getFirstKey($passwordQuery)]['name'];
                     setHTTPCode(200, "Sign In Success!");
                     return;
                 }
@@ -40,14 +41,14 @@
         }
 
         public function postRegister(){
-            if(!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['name'])){
+            if(!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['name'] && !isset($_SESSION['user']))){
                 //  Assign variable
                 $username = $_POST['username'];
                 $password = $_POST['password'];
                 $name = $_POST['name'];
 
                 //  Check if username is exist
-                $checkExist = $this->model->checkExist(['username' => $username,
+                $checkExist = $this->model->select(NULL,['username' => $username,
                                                         'type' => 'user']); 
                 if($checkExist){    //  If yes return
                     setHTTPCode(500, "Username exist!");

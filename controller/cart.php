@@ -7,10 +7,33 @@ class CartController extends Controller{
         function __construct(){
             $this->model = new CartModel();
             $this->prodModel = new ProductModel();
+            $this->fileRender = [
+                'checkout' => 'cart.checkout'
+            ];
+        }
+
+        public function checkout(){
+            $this->render($this->fileRender['checkout'], [
+                'title' => 'Checkout'
+            ]);
+            return;
+        }
+
+        public function postCheckout(){ // TODO Later update
+            if(!empty($_SESSION['cart']) && isset($_SESSION['user'])){
+                $cart = $_SESSION['cart'];
+                printB($_SESSION['cart']);
+                $value = [];
+                foreach($cart['items'] as $item){
+                    $value[] = createQuery([1, $item['product_id'], $item['quantity']]);
+                }
+            }
+            else{
+                echo 'empty cart or user!';
+            }
         }
 
         public function action(){
-             printB($_SESSION['cart']);
             if(empty($_SESSION['cart']) || empty($_POST['action'])){
                 setHTTPCode(500, "Invalid cart or action");
                 return;
@@ -156,6 +179,7 @@ class CartController extends Controller{
             setHTTPCode(200, "Add product success!");
             return;
         }
+        
 
         public function itemInCart($cart, $idItem){ //  Check item exist in cart
             foreach($cart['items'] as $key => $item){   
