@@ -1,4 +1,9 @@
-div {
-	padding-top: 300px;
+.form {
+	background-color: pink;
+	padding-top: 100px;
 	border: 1px solid black;
+}
+
+.form input div {
+
 }

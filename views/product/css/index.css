@@ -22,9 +22,6 @@ div {
 	background-position: center;
 }
 
-.checked {
-	color: yellow;
-}
 .imgFixed{
 	height: 450px;
 	position: absolute;
@@ -61,7 +58,9 @@ div {
 	box-shadow: 2px 2px 2px grey;
 }
 
-
+.checked {
+	color: yellow;
+}
 
 
 .ch {
@@ -123,12 +122,22 @@ div {
 	text-decoration: none;
 	background-color: orange;
 }
+
+
+
 .im {
+	width: 190px;
+	height: 190px;
+	text-align: left;
+}
+
+.im img {
 	padding: 3px;
 	width: 190px;
 	height:190px;
-	text-align: left;
 }
+
+
 
 .footer {
 	background-color: darkgrey;
@@ -156,4 +165,16 @@ div {
 	padding: 10px;
 	float: left;
 	text-align: left;
+}
+
+.form div {
+	padding-right: 10px; 
+}
+
+.form input{
+	max-width: 100px;
+}
+
+.form select{
+	max-width: 100px;
 }

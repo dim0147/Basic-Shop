@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-
+  <meta name="viewport" content="width=device-width, initial-scale=0.41, maximum-scale=1" />
   <div class="main">
 
     <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
@@ -21,7 +21,7 @@
           <div class="head" 
               style="background-image: url(https://trak.in/wp-content/uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg)">
           </div>
-            <img class="imgFixed" src="https://trak.in/wp-content/  uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg" alt="First slide">
+            <img class="imgFixed" src="https://trak.in/wp-content/uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg" alt="First slide">
           </div>
         </div>
 
@@ -65,8 +65,10 @@
         </div>
         <div>
           @foreach ($products as $product)
-          <a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" title="{{$product['title']}}" image="views/public/image/{{$product['image']}}" des="{{$product['description']}}">
-            <img class="im" src="@asset('views/public/image/'.$product['image'])" alt="">
+          <a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" identify="{{$product['id']}}" title="{{$product['title']}}" des="{{$product['description']}}" image="views/public/image/{{$product['image']}}">
+            <div class="im">
+              <img src="@asset('views/public/image/'.$product['image'])" alt="">
+            </div>
             <div class="product">
               <div class="title">
                 <b>{{$product['title']}}</b>
@@ -100,7 +102,7 @@
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="demo"></h5>
+            <h5 class="modal-title" id="modalTitle"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">x</span>
             </button>
@@ -114,18 +116,30 @@
             <!--<p id="das" class="modalImage" alt="blk"></p>-->
           </div>
           <div class="modal-footer">
-            <form action="/WEBASSIGNMENT2/cart" method="POST">
+            <form class="form" action="/WEBASSIGNMENT2/cart" method="POST">
             <!-- Name of input element determines name in $_FILES array -->
-                Send this file:
-                <select id="ls">
-                    <option value="add">add</option>
-                    <option value="remove">remove</option>
-                    <option value="decrease">decrease</option>
-                </select>
+              <div>
+                Item_id = 
+                <span name="id" id="modalID"></span>
+              </div>
 
-                <input name="id" value="4"  />
-                <input name="quantity" value="1"  />
+              <div>
+                Action:
+                <select id="ls">
+                  <option value="add">add</option>
+                  <option value="remove">remove</option>
+                  <option value="decrease">decrease</option>
+                </select>
+              </div>
+
+              <div>
+                Quantity:
+                <input name="quantity" value="1"/>
+              </div>
+
+              <div>
                 <input type="submit" value="Send File" />
+              </div>
             </form>
                 <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cart</button>
                 <button type="button" class="btn btn-primary">BUY</button>-->
