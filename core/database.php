@@ -53,11 +53,14 @@
             return $result;
         }
 
-        function insert($value){
+        function insert($value, $table = NULL){
             try{
                 if(is_null($this->pdo))
                     return false;
-                $stmt = $this->pdo->prepare("INSERT INTO $this->table VALUES $value");
+                if ($table === NULL)
+                    $table = $this->table;
+                echo $value . ' - '.$table;
+                $stmt = $this->pdo->prepare("INSERT INTO $table VALUES $value");
                 $stmt->execute();
                 return true;
                 

@@ -6,7 +6,6 @@
 @endsection
 
 @section('content')
-
   <div class="main">
 
         <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">

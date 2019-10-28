@@ -1,15 +1,43 @@
 <?php 
+require __DIR__ . '/../vendor/autoload.php';
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
+use PayPal\Api\Amount;
+use PayPal\Api\Address;
+use PayPal\Api\Details;
+use PayPal\Api\Item;
+use PayPal\Api\ItemList;
+use PayPal\Api\Payer;
+use PayPal\Api\Payment;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Transaction;
+use PayPal\Api\ExecutePayment;
+use PayPal\Api\PaymentExecution;
+use PayPal\Api\PayerInfo;
+use PayPal\Api\Presentation;
+use PayPal\Api\WebProfile;
+
+use Sample\PayPalClient;
+use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 
 class CartController extends Controller{
 
         private $prodModel;
-
+        private $userModel;
+        private $apiContext;
         function __construct(){
             $this->model = new CartModel();
             $this->prodModel = new ProductModel();
+            $this->userModel = new UserModel();
             $this->fileRender = [
                 'checkout' => 'cart.checkout'
             ];
+            $this->apiContext = new ApiContext(
+                new OAuthTokenCredential(
+                    CLIENT_ID,     // ClientID
+                    CLIENT_SECRET     // ClientSecret
+                )
+            );
         }
 
         public function checkout(){
@@ -21,16 +49,144 @@ class CartController extends Controller{
 
         public function postCheckout(){ // TODO Later update
             if(!empty($_SESSION['cart']) && isset($_SESSION['user'])){
-                $cart = $_SESSION['cart'];
-                printB($_SESSION['cart']);
-                $value = [];
-                foreach($cart['items'] as $item){
-                    $value[] = createQuery([1, $item['product_id'], $item['quantity']]);
-                }
+                $this->createPayment();
+                // $value = [];
+                // foreach($cart['items'] as $item){
+                //     $value[] = createQuery([1, $item['product_id'], $item['quantity']]);
+                // }
             }
             else{
                 echo 'empty cart or user!';
             }
+        }
+
+        public function successCheckoutRender(){
+            // Get payment object by passing paymentId
+            $paymentId = $_GET['paymentId'];
+            $payment = Payment::get($paymentId, $this->apiContext);
+
+            // Execute payment with payer ID
+            $execution = new PaymentExecution();
+            $payerId = $_GET['PayerID'];
+            $execution->setPayerId($payerId);
+
+            try {
+            // Execute payment
+            $result = $payment->execute($execution, $this->apiContext);
+            $userID = $this->userModel->select(['user_id'], ['name' => $_SESSION['user']]);
+            if(!$userID){
+                setHTTPCode(500, 'Something wrong!!!');
+                return;
+            }
+            $userID = $userID[getFirstKey($userID)]['user_id'];
+            $orderID = $this->createOrderToDB($result->toArray(), $userID);
+            $this->createCartsToDB($orderID, $userID);
+            }
+            catch (Exception $ex) {
+                die($ex);
+            }
+            
+        }
+
+        public function createPayment(){
+            //  Set user information
+            $addressPayer = new Address();
+            $addressPayer->setLine1($_POST['address'])
+                         ->setPhone( $_POST['phone'] )  
+                         ->setCity('Singapore')  
+                         ->setCountryCode('SG') 
+                         ->setPostalCode('02')
+                         ->setLine2($_POST['address'])
+                         ->setPhone( $_POST['phone']); 
+
+            $payerInf = new PayerInfo();
+            $payerInf->setEmail($_POST['email'])
+                     ->setFirstName($_SESSION['user'])
+                     ->setBillingAddress($addressPayer);
+
+            //  Method payer, here is paypal account for testing later
+            $payer = new Payer();
+            $payer->setPaymentMethod('paypal')
+                  ->setPayerInfo($payerInf);
+
+            //  List Item
+            $listItem = [];
+            foreach($_SESSION['cart']['items'] as $item){
+                $item1 = new Item();
+                $item1->setName($item['title'])
+                    ->setCurrency('USD')
+                    ->setQuantity($item['quantity'])
+                    ->setPrice($item['price']);
+                $listItem[] = $item1;
+            }
+            $listItemPaypal = new ItemList();
+            $listItemPaypal->setItems($listItem);
+
+            //  Ship free and subtotal
+            $shipFee = 10.5;
+            $detail = new Details();
+            $detail->setShipping($shipFee)
+                   ->setSubtotal($_SESSION['cart']['totalPrice']);
+            
+            //  Amount Money
+            $amount = new Amount();
+            $amount->setTotal($_SESSION['cart']['totalPrice'] + $shipFee)
+                    ->setCurrency('USD')
+                    ->setDetails($detail);
+
+            //  Set contract for payment
+            $transaction = new Transaction();
+            $transaction->setAmount($amount);
+            $transaction->setItemList($listItemPaypal);
+
+            // Set URL if user cancel or return
+            $redirectUrls = new RedirectUrls();
+            $redirectUrls->setReturnUrl(URL_WEBSITE . '/cart/checkout/success') //  success
+                         ->setCancelUrl(URL_WEBSITE . '/product');   //  cancel
+
+            // Create new Payment
+            $payment = new Payment();
+            $payment->setIntent('sale')
+                ->setPayer($payer)
+                ->setTransactions(array($transaction))
+                ->setRedirectUrls($redirectUrls)
+                ->setNoteToPayer($_POST['notice']);
+
+                // After Step 3
+            try {
+                $payment->create($this->apiContext);
+                header($payment->getApprovalLink());
+            }
+            catch (\PayPal\Exception\PayPalConnectionException $ex) {
+                // This will print the detailed information on the exception.
+                //REALLY HELPFUL FOR DEBUGGING
+                echo $ex->getData();
+            }
+        }
+
+        public function createOrderToDB($payment, $userID){
+            $address = $payment['transactions'][0]['item_list']['shipping_address'];
+            $address = $this->getAddressFromArr($address);
+            $email = $payment['payer']['payer_info']['email'];
+            $status = $payment['state'];
+            $paymentID = $payment['id'];
+            $values = createQuery([$userID, $address, 'NULL', $email, $status, $paymentID, 'DEFAULT']);
+            $this->prodModel->insert($values, 'orders');
+            $orderID = $this->prodModel->pdo->lastInsertId();
+            return $orderID;
+        }
+
+        public function createCartsToDB($orderID, $userID){
+            $cartVal = createQuery(['DEFAULT', $userID, $orderID]);
+            $this->prodModel->insert($cartVal, 'cart');
+            $cartID = $this->prodModel->pdo->lastInsertId();
+            $cartItemVal = [];
+            foreach($_SESSION['cart']['items'] as $item){
+                $cartItemVal[] = createQuery([$cartID, $item['product_id'], $item['quantity']]);
+            }
+            $cartItemVal = implode(', ',$cartItemVal);
+            $this->prodModel->insert($cartItemVal, 'cart_item');
+            
         }
 
         public function action(){
@@ -180,7 +336,6 @@ class CartController extends Controller{
             return;
         }
         
-
         public function itemInCart($cart, $idItem){ //  Check item exist in cart
             foreach($cart['items'] as $key => $item){   
                 if($item['product_id'] == $idItem){
@@ -205,6 +360,10 @@ class CartController extends Controller{
                 array_push($cartTemp['items'], $item);
             }
            return $cartTemp;
+        }
+
+        public function getAddressFromArr($arr){
+            return $arr['line1'] . ', ' . $arr['city'];
         }
 }
 

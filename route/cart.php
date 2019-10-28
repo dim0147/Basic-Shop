@@ -17,4 +17,9 @@
         $cart->postCheckout();
     });
 
+    route('/cart/checkout/success', function(){
+        global $cart;
+        $cart->successCheckoutRender();
+    });
+
 ?>
