@@ -1,12 +1,12 @@
 @extends('layouts.mainlayout')
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href='@asset('views/product/css/index.css')'>
+    <link rel="stylesheet" type="text/css" href='@asset('./views/product/css/index.css')'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 @endsection
 
 @section('content')
-  <meta name="viewport" content="width=device-width, initial-scale=0.41, maximum-scale=1" />
+  <meta name="viewport" content="width=1177" />
   <div class="main">
 
     <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
@@ -21,27 +21,27 @@
           <div class="head" 
               style="background-image: url(https://trak.in/wp-content/uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg)">
           </div>
-            <img class="imgFixed" src="https://trak.in/wp-content/uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg" alt="First slide">
-          </div>
+          <img class="imgFixed" src="https://trak.in/wp-content/uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg" alt="First slide">
         </div>
+      </div>
 
-        <div class="carousel-item">
-          <div class="d-block img-fluid">
-            <div class="head" 
-            style="background-image: url(https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg)">
-            </div>
-            <img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt="Second slide">
+      <div class="carousel-item">
+        <div class="d-block img-fluid">
+          <div class="head" 
+          style="background-image: url(https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg)">
           </div>
+          <img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt="Second slide">
         </div>
+      </div>
 
-        <div class="carousel-item">
-            <div class="d-block img-fluid">
+      <div class="carousel-item">
+        <div class="d-block img-fluid">
           <div class="head" 
           style="background-image: url(https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop)">
-              </div>
-                  <img class="imgFixed" src="https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop" alt="Third slide">
-              </div>
+          </div>
+          <img class="imgFixed" src="https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop" alt="Third slide">
         </div>
+      </div>
             
 
 
@@ -93,11 +93,6 @@
       </div>
     </div>
 
-    <div class="footer">
-      fsdaf
-    </div>
-
-
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -116,16 +111,16 @@
             <!--<p id="das" class="modalImage" alt="blk"></p>-->
           </div>
           <div class="modal-footer">
-            <form class="form" action="/WEBASSIGNMENT2/cart" method="POST">
             <!-- Name of input element determines name in $_FILES array -->
+            <form class="form" action="/WEBASSIGNMENT2/cart" method="POST">
               <div>
                 Item_id = 
-                <span name="id" id="modalID"></span>
+                <input type="hidden" name="id" id="modalID">
               </div>
 
               <div>
                 Action:
-                <select id="ls">
+                <select name="action" list="ls">
                   <option value="add">add</option>
                   <option value="remove">remove</option>
                   <option value="decrease">decrease</option>
@@ -134,7 +129,7 @@
 
               <div>
                 Quantity:
-                <input name="quantity" value="1"/>
+                <input type="number" name="quantity" value="1"/>
               </div>
 
               <div>
@@ -148,6 +143,10 @@
       </div>
     </div>
   </div>
+  <div class="footer">
+      <P>fsdaf</P>
+  </div>
+
   @endsection
   @section('javascript')
   <script src="@asset('views/product/js/javascript.js')"></script>
