@@ -57,6 +57,10 @@ class CartController extends Controller{
         }
 
         public function successCheckoutRender(){
+            // if(empty($_SESSION['cart']['items'])){
+            //     setHTTPCode(500, "Error, Cart Empty!");
+            //     return;
+            // }
             // Get payment object by passing paymentId
             $paymentId = $_GET['paymentId'];
             $payment = Payment::get($paymentId, $this->apiContext);
@@ -69,19 +73,44 @@ class CartController extends Controller{
             try {
             // Execute payment
             $result = $payment->execute($execution, $this->apiContext);
+            $result = $result->toArray();
+            $items = $result['transactions'][0]['item_list']['items'];
+            $items = $this->getIdAndMergeToProd($items);
             $userID = $this->userModel->select(['user_id'], ['name' => $_SESSION['user']]);
             if(!$userID){
                 setHTTPCode(500, 'Something wrong!!!');
                 return;
             }
             $userID = $userID[getFirstKey($userID)]['user_id'];
-            $orderID = $this->createOrderToDB($result->toArray(), $userID);
-            $this->createCartsToDB($orderID, $userID);
+            $orderID = $this->createOrderToDB($result, $userID);
+            $this->createCartsToDB($orderID, $userID, $items);
             }
             catch (Exception $ex) {
                 die($ex);
             }
             
+        }
+
+        public function getIdAndMergeToProd($listItem){
+            $condition = [];
+            foreach($listItem as $item){
+                $condition[] ="'" . $item['name'] . "'";
+            }
+            $condition = "title IN(" . implode(', ', $condition) . ")";
+            $result = $this->prodModel->getProdWithField(['id', 'title'], $condition);
+            $arr = [];
+            foreach($result as $value){
+                $arr[$value['id']] = $value['title'];
+            }
+            foreach($listItem as $key => $item){
+                $titleProd = $item['name'];
+                foreach($arr as $id => $nameProd){
+                    if ($titleProd == $nameProd){
+                        $listItem[$key]['id'] = $id;
+                    }
+                }
+            }
+            return $listItem;
         }
 
         public function createPayment(){
@@ -172,13 +201,13 @@ class CartController extends Controller{
             return $orderID;
         }
 
-        public function createCartsToDB($orderID, $userID){
+        public function createCartsToDB($orderID, $userID, $cart){
             $cartVal = createQuery(['DEFAULT', $userID, $orderID]);
             $this->prodModel->insert($cartVal, 'cart');
             $cartID = $this->prodModel->pdo->lastInsertId();
             $cartItemVal = [];
-            foreach($_SESSION['cart']['items'] as $item){
-                $cartItemVal[] = createQuery([$cartID, $item['product_id'], $item['quantity']]);
+            foreach($cart as $item){
+                $cartItemVal[] = createQuery([$cartID, $item['id'], $item['quantity']]);
             }
             $cartItemVal = implode(', ',$cartItemVal);
             $this->prodModel->insert($cartItemVal, 'cart_item');
@@ -219,7 +248,7 @@ class CartController extends Controller{
         }
 
         public function removeProd($keyItem){
-            if ( empty($_SESSION['cart']['items'] || empty($_POST['id']) ){
+            if ( empty($_SESSION['cart']['items']) || empty($_POST['id']) ){
                 setHTTPCode(500, "Invalid cart or ID");
                 return;
             }
@@ -242,7 +271,7 @@ class CartController extends Controller{
 
         // *** DECREASE QUANTITY PRODUCT  
         public function decreaseProd(){
-            if (empty($_SESSION['cart']['items'] || empty($_POST['id']) || empty($_POST['quantity'])){
+            if (empty($_SESSION['cart']['items']) || empty($_POST['id']) || empty($_POST['quantity'])){
                 setHTTPCode(500, "Invalid cart or ID or quantity");
                 return;
             }
@@ -276,7 +305,7 @@ class CartController extends Controller{
 
         // **** ADD PRODUCT ***
         public function addToCart(){
-            if (empty($_SESSION['cart']['items'] || empty($_POST['id']) || empty($_POST['quantity'])){
+            if (empty($_SESSION['cart']['items']) || empty($_POST['id']) || empty($_POST['quantity'])){
                 setHTTPCode(500, "Invalid cart or ID or quantity");
                 return;
             }

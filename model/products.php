@@ -8,7 +8,7 @@
         public function getAllProduct(){
             if(is_null($this->pdo))
                 return NULL;
-                $stmt = $this->pdo->prepare("SELECT products.*, images.name, images.product_id, cp.category_name FROM products 
+            $stmt = $this->pdo->prepare("SELECT products.*, images.name, images.product_id, cp.category_name FROM products 
                                             LEFT JOIN categorys_link_products cp 
                                             ON products.id = cp.product_id
                                             LEFT JOIN images
@@ -45,6 +45,13 @@
             catch(PDOException $err){
                 return [];
             }
+        }
+
+        public function getProdWithField($field, $condition){
+            $field = implode(',' , $field);
+            $stmt = $this->pdo->prepare("SELECT $field FROM products WHERE $condition");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         public function addNewProduct($title, $descr, $price, $imageName, $stat, $rate){
