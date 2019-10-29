@@ -27,7 +27,7 @@
         $adminController->editCateIndex();
     });
 
-    route('/admin/post/add-category', function(){
+    route('/admin/post/edit-category', function(){
         global $adminController;
         $adminController->postEditCate();
     });

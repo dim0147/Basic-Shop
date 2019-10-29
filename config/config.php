@@ -19,7 +19,7 @@
     define('CLIENT_ID', 'AXVrN0Bt347zeWzsdILP8EtT9xSOZNcxIrRh5D-MwSnXA7C7aZv-FTev7k1yEGMoEv-qgKVJdDUep8Uk');
     define('CLIENT_SECRET', 'ENDHQErg0xYBiEvfiMCW0MDsotlf-aClToQQ89AnW54aYht7UC5zThb82TWQzVJOPdOBaJ2XGJGcI03H');
     //  ERROR
-    define('DISPLAY_ERROR', TRUE);
+    define('DISPLAY_ERROR', FALSE);
     
     $LOAD_CORE = [
         'helper', // new

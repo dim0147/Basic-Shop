@@ -33,6 +33,7 @@
         }
 
         public function postAddCate(){
+            echo "hi";
             if(empty($_POST['category'])){
                 setHTTPCode(500, 'Empty Field!!');
                 return;
