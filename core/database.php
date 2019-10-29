@@ -3,10 +3,10 @@
 
     class database{
         public $pdo = NULL;
-        public $servername = SERVERNAME;
+        public $server_name = SERVER_NAME;
         public $dbname = DB_NAME;
-        public $dbuser = DB_USER;
-        public $dbpassword = DB_PASSWORD;
+        public $db_user = DB_USER;
+        public $db_password = DB_PASSWORD;
         public $table = '';
 
         function __construct(){
@@ -18,7 +18,7 @@
                 global $database;
                 $this->table = $table;
                 if(is_null($database)){
-                    $database = new PDO("mysql:host=$this->servername;dbname=$this->dbname", $this->dbuser, $this->dbpassword);
+                    $database = new PDO("mysql:host=$this->server_name;dbname=$this->dbname", $this->db_user, $this->db_password);
                     $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     $this->pdo = $database;
                 }
@@ -31,7 +31,7 @@
             }
         }
 
-        function getAll(){
+        public function getAll(){
             if(is_null($this->pdo))
                 return NULL;
             $stmt = $this->pdo->prepare("SELECT * FROM $this->table");
@@ -40,7 +40,7 @@
             return $result;
         }
 
-        function select($field = NULL, $condition , $table = NULL){
+        public function select($field = NULL, $condition , $table = NULL){
             if(is_null($this->pdo))
                     return false;
             if ($table === NULL)
@@ -55,7 +55,7 @@
             return $result;
         }
 
-        function insert($value, $table = NULL){
+        public function insert($value, $table = NULL){
             try{
                 if(is_null($this->pdo))
                     return false;
@@ -89,5 +89,19 @@
             }
         }
 
+        public function delete($condition, $table = NULL){
+            try{
+                if(is_null($this->pdo))
+                    return false;
+                if ($table === NULL)
+                    $table = $this->table;
+                $condition = createCheckQuery($condition);
+                $stmt = $this->pdo->prepare("DELETE FROM $table WHERE $condition");
+                $stmt->execute();
+            }
+            catch(PDOException $ex){
+                die($ex);
+            }
+        }
     }
 ?>

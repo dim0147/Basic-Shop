@@ -160,4 +160,11 @@ function getArrFromJSON($JSON){
     return (array)$arr;
 }
 
+function fatal_handler(){
+    $error = error_get_last();
+
+    if ($error['type'] === E_ERROR) { 
+        echo "<h1>Opps! Something wrong is happen!</h1>";
+    } 
+}
 ?>

@@ -9,7 +9,7 @@
 
     route('/admin/post/add-product', function(){
         global $adminController;
-        $adminController->upload();
+        $adminController->postAddProduct();
     });
 
     route('/admin/add-category', function(){
@@ -20,6 +20,11 @@
     route('/admin/post/add-category', function(){
         global $adminController;
         $adminController->postAddCate();
+    });
+
+    route('/admin/post/delete-category', function(){
+        global $adminController;
+        $adminController->postDeleteCate();
     });
 
     route('/admin/edit-category', function(){

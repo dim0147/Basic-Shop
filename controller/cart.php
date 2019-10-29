@@ -57,23 +57,26 @@ class CartController extends Controller{
         }
 
         public function successCheckoutRender(){
-            // if(empty($_SESSION['cart']['items'])){
-            //     setHTTPCode(500, "Error, Cart Empty!");
-            //     return;
-            // }
-            // Get payment object by passing paymentId
+            // Get payment ID from redirect url
             $paymentId = $_GET['paymentId'];
+            //  Check if order have already exist by check paymentID
+            $checkOrderExist = $this->prodModel->select(NULL, ['paymentID' => $paymentId], 'orders');
+            if($checkOrderExist){
+                setHTTPCode(500, "Order already create!!");
+                return;
+            }
+            //  Get payment detail by paymentID get from above
             $payment = Payment::get($paymentId, $this->apiContext);
 
-            // Execute payment with payer ID
+            // Create execute payment, pass PayerID get from redirect url 
             $execution = new PaymentExecution();
-            $payerId = $_GET['PayerID'];
-            $execution->setPayerId($payerId);
+            $idPayer = $_GET['PayerID'];
+            $execution->setPayerId($idPayer);
 
             try {
-            // Execute payment
+            // Execute payment with execution above
             $result = $payment->execute($execution, $this->apiContext);
-            $result = $result->toArray();
+            $result = $result->toArray();   //  Convert result to array
             $items = $result['transactions'][0]['item_list']['items'];
             $items = $this->getIdAndMergeToProd($items);
             $userID = $this->userModel->select(['user_id'], ['name' => $_SESSION['user']]);
