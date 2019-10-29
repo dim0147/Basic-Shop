@@ -47,13 +47,9 @@ class CartController extends Controller{
             return;
         }
 
-        public function postCheckout(){ // TODO Later update
+        public function postCheckout(){
             if(!empty($_SESSION['cart']) && isset($_SESSION['user'])){
                 $this->createPayment();
-                // $value = [];
-                // foreach($cart['items'] as $item){
-                //     $value[] = createQuery([1, $item['product_id'], $item['quantity']]);
-                // }
             }
             else{
                 echo 'empty cart or user!';

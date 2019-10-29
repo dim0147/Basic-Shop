@@ -11,7 +11,9 @@
             $this->model = new UserModel();
             $this->fileRender = [
                 'add-product' => 'admin.add-product',
-                'edit-product' => 'admin.edit-product'
+                'edit-product' => 'admin.edit-product',
+                'add-category' => 'admin.add-category',
+                'edit-category' => 'admin.edit-category'
             ];
         }
 
@@ -23,6 +25,57 @@
                 'categorys' => $categorys
             ]);
             return;
+        }
+
+        public function addCateIndex(){
+            echo "wtf";
+            $this->render($this->fileRender['add-category'], ['title' => 'Add Category']);
+        }
+
+        public function postAddCate(){
+            if(empty($_POST['category'])){
+                setHTTPCode(500, 'Empty Field!!');
+                return;
+            }
+            if($this->prodModel->select(NULL, ['name' => $_POST['category']], 'categorys')){
+                setHTTPCode(500, 'Category exist!!!');
+                return;
+            }
+            $description = '';
+            if(!empty($_POST['description']))
+                $description = $_POST['description'];
+            $value = createQuery(['DEFAULT', $_POST['category'], $description]);
+            $this->prodModel->insert($value, 'categorys');
+            setHTTPCode(200, 'Create successful!');
+            return;
+      
+        }
+
+        public function editCateIndex(){
+            if(empty($_GET['id'])){
+                setHTTPCode(500, 'Please pass id!');
+                return;
+            }
+            $category = $this->prodModel->select(NULL, ['id' => $_GET['id']], 'categorys');
+            if(!$category){
+                setHTTPCode(500, 'Please pass id!');
+                return;
+            }
+            $category = $category[getFirstKey($category)];
+            printB($category);
+            $this->render($this->fileRender['edit-category'], [
+                                            'title' => "Edit " . $category['name'],
+                                            'category' => $category]);
+        }
+
+        function postEditCate(){
+            if(empty($_POST['category']) || empty($_POST['id']) || !isset($_POST['description'])){
+                setHTTPCode(500, "ERROR!");
+                return;
+            }
+            $this->prodModel->update(['name' => $_POST['category'],'description' => $_POST['description']], ['id' => $_POST['id']], 'categorys');
+            $this->prodModel->update(['category_name' => $_POST['category']], ['category_id' => $_POST['id']], 'categorys_link_products');
+            setHTTPCode(200, 'Success!');
         }
 
         public function upload(){
@@ -87,16 +140,18 @@
             }
             $product = mergeResult(['name', 'category_name'], ['listImage', 'categoryName'], 'id', $product, ['name' => 'image_id', 'category_name' => 'category_id']);
             //  Get All category product
+            printB($product);
             $listCategoryProduct = array_values($product)[0]['categoryName'];
             $categorys = $this->cateModel->getCategory();
-            if(!empty(array_values($listCategoryProduct)[0])){  //  If product category not empty
+            //  If product category not empty, use array values because default have 1 element in array []
+            if(!empty(array_values($listCategoryProduct)[0])){  
                 foreach($listCategoryProduct as $key => $cate){   //  Loop through all category
                     if (in_array($cate, $listCategoryProduct))   //  if product category exist in array category
                         unset($categorys[$key]);    //  remove that category from array category
                 }
             }
             else{  // product category is empty
-                $product[getFirstKey($product)]['categoryName'] = NULL;
+                $product[getFirstKey($product)]['categoryName'] = [];
             }
             $this->render($this->fileRender['edit-product'], [
                 'product' => $product,
@@ -282,11 +337,11 @@
             /******** UPDATE PRODUCT WITH HEADER IMAGE ***********/
                 // Update field, eg: title,description,...  
                 $fieldUpdate = [
-                    'title' => addApostrophe($_POST['title']), 
+                    'title' => ($_POST['title']), 
                     'price' => (float)$_POST['price'], 
-                    'status' => addApostrophe($_POST['status']), 
+                    'status' => ($_POST['status']), 
                     'rate' => $_POST['rate'], 
-                    'description' => addApostrophe($_POST['description'])
+                    'description' => ($_POST['description'])
                     ];
                 $oldImage = ''; //  set old image first in case header image is change
                 //  If header Image is update

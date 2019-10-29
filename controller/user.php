@@ -4,7 +4,8 @@
         function __construct(){
                 $this->model = new UserModel();
                 $this->fileRender = [
-                    'index' => 'user.index'
+                    'index' => 'user.index',
+                    'login' => 'user.login'
                 ];
         }
 
@@ -20,8 +21,12 @@
             }
         }
 
+        public function loginIndex(){
+            $this->render($this->fileRender['login'], ['title' => "Login"]);
+        }
+
         public function postLogin(){
-            if(!empty($_POST['username']) && !empty($_POST['password']) && !isset($_SESSION['user'])){ 
+            if(!empty($_POST['username']) && !empty($_POST['password']) && empty($_SESSION['user'])){ 
                 $username = $_POST['username'];
                 $password = $_POST['password'];
                 $passwordQuery = $this->model->select(NULL, ["username" => $username,

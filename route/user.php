@@ -6,6 +6,11 @@
         $userController->index();
     });
 
+    route('/user/login', function(){
+        global $userController;
+        $userController->loginIndex();
+    });
+
     route('/user/post/login', function(){
         global $userController;
         $userController->postLogin();

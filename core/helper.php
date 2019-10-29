@@ -17,9 +17,16 @@ function mergeResult($arrOrigin, $arrMerge, $keyToValidate, $data, $keyOfElement
                 $nameKeyMerge = $arrMerge[$i];
                 $valueOfKeyOrigin =  $e[$nameKeyOrigin];  //  get KEY origin of duplicate product, eg: $e['name']
                 if($keyOfElement && array_key_exists($nameKeyOrigin, $keyOfElement)){
-                    //  Get value from addition field, eg: $e['image_id'] = 3, 3 is assign to variable
+                    //  Get value from addition field, eg: $e['image_id'] = 3, 3 is assign to keyMergeElement
+                    //  $keyOfElement = ['name' => 'image_id'], $nameKeyOrigin = 'name' 
+                    // =>  $keyOfElement[$nameKeyOrigin] => $keyOfElement['name'] = 'image_id'
+                    // => $e['image_id'] = 1 => $keyMergeElement = 1
                     $keyMergeElement = $e[$keyOfElement[$nameKeyOrigin]]; 
                     //  Add like this $e[listImage][idImage] = nameImage, listImage is arrMerge
+                    // ['listImg'] => [
+                    //     ['idImage'] => nameImage,
+                    //     ['idImage'] => nameImage,
+                    // ]
                     $e[$nameKeyMerge][$keyMergeElement] = $valueOfKeyOrigin;    
                 }
                 else
@@ -90,6 +97,8 @@ function createQuery($arrValue, $arrUpdate = false){
     $arr = [];
     if($arrUpdate !== false){    //  QUERY FOR UPDATE FIELD
         foreach ($arrValue as $field => $val){
+            if(!is_numeric($val))
+                $val = addApostrophe($val);
             $arr[] = $field . " = " . $val;
         }
         $arr = implode(',', $arr);

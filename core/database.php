@@ -40,14 +40,16 @@
             return $result;
         }
 
-        function select($field = NULL, $condition){
+        function select($field = NULL, $condition , $table = NULL){
             if(is_null($this->pdo))
                     return false;
+            if ($table === NULL)
+                $table = $this->table;
             if($field === NULL)
                 $field = ['*'];
             $condition = createCheckQuery($condition);
             $field = implode(',' , $field);
-            $stmt = $this->pdo->prepare("SELECT $field FROM $this->table WHERE $condition");
+            $stmt = $this->pdo->prepare("SELECT $field FROM $table WHERE $condition");
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
@@ -59,7 +61,7 @@
                     return false;
                 if ($table === NULL)
                     $table = $this->table;
-                echo $value . ' - '.$table;
+                echo $table . " - " . $value;
                 $stmt = $this->pdo->prepare("INSERT INTO $table VALUES $value");
                 $stmt->execute();
                 return true;
@@ -70,7 +72,22 @@
             }
         }
 
-        
+        public function update($query, $condition, $table = NULL){
+            try{
+                if(is_null($this->pdo))
+                    return false;
+                if ($table === NULL)
+                    $table = $this->table;
+                $condition = createQuery($condition, TRUE);
+                $query = createQuery($query, TRUE);
+                $stmt = $this->pdo->prepare("UPDATE $table SET $query WHERE $condition");
+                $stmt->execute();
+                return true;
+            }
+            catch(PDOException $err){
+                die($err);
+            }
+        }
 
     }
 ?>

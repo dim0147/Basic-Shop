@@ -1,0 +1,10 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('content'); ?>
+ <form action="post/login" method="POST">
+ user name <input type="text" name='username'>
+ password <input type="text" name='password'><br>
+ <button type="submit">submit</button>
+</form>    
+<?php $this->stopSection(); ?>
+<?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

@@ -17,9 +17,11 @@
             <img sid="{{$item}}" class="thumbnailImg" id="{{$id}}" src="@asset('views/public/image/'.$item)" alt="thumbnail" style="width:50px; height:30px; margin: 10px;">
         @endforeach
         <br>
+            
         @foreach ($prod['categoryName'] as $id => $item)
             <input class="category" idCategory="{{$id}}" type="checkbox" value='{{$item}}' checked>{{$item}}<br>
         @endforeach
+
         @foreach ($category as $id => $item)
             <input class="category" idCategory="{{$id}}" type="checkbox" value='{{$item['name']}}'>{{$item['name']}}<br>
         @endforeach

@@ -17,9 +17,11 @@
  <img sid="<?php echo static::e($item); ?>" class="thumbnailImg" id="<?php echo static::e($id); ?>" src="<?php  echo (isset($this->assetDict[('views/public/image/'.$item)]))?$this->assetDict[('views/public/image/'.$item)]:$this->baseUrl.'/'.('views/public/image/'.$item); ?>" alt="thumbnail" style="width:50px; height:30px; margin: 10px;">
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  <br>
+ 
  <?php $__currentLoopData = $prod['categoryName']; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
  <input class="category" idCategory="<?php echo static::e($id); ?>" type="checkbox" value='<?php echo static::e($item); ?>' checked><?php echo static::e($item); ?><br>
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+
  <?php $__currentLoopData = $category; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
  <input class="category" idCategory="<?php echo static::e($id); ?>" type="checkbox" value='<?php echo static::e($item['name']); ?>'><?php echo static::e($item['name']); ?><br>
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>

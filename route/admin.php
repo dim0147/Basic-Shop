@@ -12,6 +12,26 @@
         $adminController->upload();
     });
 
+    route('/admin/add-category', function(){
+        global $adminController;
+        $adminController->addCateIndex();
+    });
+
+    route('/admin/post/add-category', function(){
+        global $adminController;
+        $adminController->postAddCate();
+    });
+
+    route('/admin/edit-category', function(){
+        global $adminController;
+        $adminController->editCateIndex();
+    });
+
+    route('/admin/post/add-category', function(){
+        global $adminController;
+        $adminController->postEditCate();
+    });
+
     route('/admin/edit-product?{id}', function(){
         global $adminController;
         $adminController->editProduct();
