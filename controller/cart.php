@@ -48,7 +48,7 @@ class CartController extends Controller{
         }
 
         public function postCheckout(){
-            if(!empty($_SESSION['cart']) && isset($_SESSION['user'])){
+            if(!empty($_SESSION['cart']['items']) && isset($_SESSION['user'])){
                 $this->createPayment();
             }
             else{
@@ -219,7 +219,7 @@ class CartController extends Controller{
         }
 
         public function removeProd($keyItem){
-            if ( empty($_SESSION['cart']) || empty($_POST['id']) ){
+            if ( empty($_SESSION['cart']['items'] || empty($_POST['id']) ){
                 setHTTPCode(500, "Invalid cart or ID");
                 return;
             }
@@ -242,7 +242,7 @@ class CartController extends Controller{
 
         // *** DECREASE QUANTITY PRODUCT  
         public function decreaseProd(){
-            if (empty($_SESSION['cart']) || empty($_POST['id']) || empty($_POST['quantity'])){
+            if (empty($_SESSION['cart']['items'] || empty($_POST['id']) || empty($_POST['quantity'])){
                 setHTTPCode(500, "Invalid cart or ID or quantity");
                 return;
             }
@@ -276,7 +276,7 @@ class CartController extends Controller{
 
         // **** ADD PRODUCT ***
         public function addToCart(){
-            if (empty($_SESSION['cart']) || empty($_POST['id']) || empty($_POST['quantity'])){
+            if (empty($_SESSION['cart']['items'] || empty($_POST['id']) || empty($_POST['quantity'])){
                 setHTTPCode(500, "Invalid cart or ID or quantity");
                 return;
             }
