@@ -279,7 +279,6 @@
             else{  // product category is empty
                 $product[getFirstKey($product)]['categoryName'] = [];
             }
-            printb($categorys);
             $this->render($this->fileRender['edit-product'], [
                 'product' => $product,
                 'category' => $categorys,
@@ -328,12 +327,16 @@
 
              /******** UPDATE CATEGORY   ***********/
                 // P1:  Add Category if array add category send from client not empty
-                if(!empty($cateAdd))
+                $cateAdd = $this->validArrCate($cateAdd);
+                if(!empty($cateAdd)){
                     $this->addCategory($cateAdd);   //  Query database
+                    echo("vcc");
+                }
 
 
                 //  P2: Delete Category if array delete category send from client not empty
                 if(!empty($cateDel)){
+                    echo "del";
                     $this->deleteCategory($cateDel); //  Query database
                 }
         
@@ -386,6 +389,17 @@
             }
             else
                 setHTTPCode(500, "Field Empty!!");
+        }
+
+        public function validArrCate($arrCate){
+            $newArr = [];
+            // printB($arrCate);
+            foreach($arrCate as $idCate => $nameCate){
+                $result = $this->prodModel->select(NULL, ['category_id' => $idCate, 'product_id' => $_POST['id']], 'categorys_link_products');
+                if(!$result)
+                    $newArr[$idCate] = $nameCate;
+            }
+            return $newArr;
         }
 
         public function addField($imageHeader){
@@ -479,7 +493,7 @@
                 $query = createQuery($fieldUpdate, true);   //  True mean create update query
                 $this->prodModel->updateProduct($query, $_POST['id']); // If err will die immediately
                 if(!empty($oldImage))   //  If not empty, delete old image from storage
-                    removeFiles([$oldImage['image']], PATH_IMAGE_UPLOAD);
+                    removeFiles([$oldImage[0]['image']], PATH_IMAGE_UPLOAD);
                 return true;
         }
 

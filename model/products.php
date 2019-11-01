@@ -107,7 +107,7 @@
             try{
                 if(is_null($this->pdo))
                     return false;
-                $stmt = $this->pdo->prepare("UPDATE products SET $query WHERE products.id = $id");
+                $stmt = $this->pdo->prepare("UPDATE products SET $query WHERE id = $id");
                 $stmt->execute();
                 return true;
             }

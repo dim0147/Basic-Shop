@@ -88,7 +88,8 @@ function checkEmpty($arr){
 
 function removeFiles($arrFileName, $path){
     foreach($arrFileName as $file){
-        unlink($path. '/' . $file);
+        if(file_exists($path. '/' . $file))
+            unlink($path. '/' . $file);
     }
     return true;
 }
@@ -146,6 +147,11 @@ function checkEmptyFile($file, $type){
 }
 
 function addApostrophe($string){
+    $firstCha = NULL;
+    if(substr($string, 0, 1) === "'" || substr($string, 0, 1) === '"')
+        $string = substr($string,1);
+    if(substr($string, - 1) === "'" || substr($string, - 1) === '"')
+        $string = substr($string, 0, -1);
     return '"' . $string . '"';
 }
 

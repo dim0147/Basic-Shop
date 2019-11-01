@@ -42,7 +42,8 @@
  var categoryDelete = ['3', '1'];
  var categoryAdd = {
  '2': 'Killing',
- '4': 'Champions'
+ '6': 'Multiplayer',
+ '7': 'Indle'
  };
 $('.submit').click(function(e){
  e.preventDefault();

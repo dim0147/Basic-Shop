@@ -8,11 +8,11 @@
     define('SERVER_NAME', 'localhost');
     define('DB_NAME', 'shop');
     define('DB_USER', 'root');
-    define('DB_PASSWORD', '');
+    define('DB_PASSWORD', 'root');
 
     //  ENVIRONMENT
-    define('DEVELOP_FOLDER', 'WEBASSIGNMENT2');
-    define('URL_WEBSITE', 'http://localhost:8888/WEBASSIGNMENT2');
+    define('DEVELOP_FOLDER', '');
+    define('URL_WEBSITE', 'http://192.168.33.10');
     define('PATH_IMAGE_UPLOAD',  getcwd() . "/views/public/image");
     define('DISPLAY_ERROR', TRUE);
 

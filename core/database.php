@@ -61,7 +61,6 @@
                     return false;
                 if ($table === NULL)
                     $table = $this->table;
-                echo $table . " - " . $value;
                 $stmt = $this->pdo->prepare("INSERT INTO $table VALUES $value");
                 $stmt->execute();
                 return true;
