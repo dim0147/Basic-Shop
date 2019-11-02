@@ -57,6 +57,16 @@ class CartController extends Controller{
         }
 
         public function successCheckoutRender(){
+            if(empty($_SESSION['user'])){
+                setHTTPCode(500, "User not found, something go wrong!!!");
+                return;
+            }
+
+            if(empty($_GET['paymentId'])){
+                setHTTPCode(500, "Something Wrong!");
+                return;
+            }
+
             // Get payment ID from redirect url
             $paymentId = $_GET['paymentId'];
             //  Check if order have already exist by check paymentID
@@ -77,6 +87,10 @@ class CartController extends Controller{
             // Execute payment with execution above
             $result = $payment->execute($execution, $this->apiContext);
             $result = $result->toArray();   //  Convert result to array
+            if(empty($result['transactions'][0]['item_list']['items'])){
+                setHTTPCode(500, "List item in bill is empty??!!!");
+                return;
+            }
             $items = $result['transactions'][0]['item_list']['items'];
             $items = $this->getIdAndMergeToProd($items);
             $userID = $this->userModel->select(['user_id'], ['name' => $_SESSION['user']]);
@@ -86,6 +100,11 @@ class CartController extends Controller{
             }
             $userID = $userID[getFirstKey($userID)]['user_id'];
             $orderID = $this->createOrderToDB($result, $userID);
+            if($orderID === false){
+                    setHTTPCode(500, "Error while create Order!!");
+                    return;
+            }
+
             $this->createCartsToDB($orderID, $userID, $items);
             }
             catch (Exception $ex) {
@@ -117,10 +136,14 @@ class CartController extends Controller{
         }
 
         public function createPayment(){
+            if(empty($_POST['address']) || empty($_POST['phone']) || empty($_POST['email'])){
+                setHTTPCode(500, 'Require Field is empty!!');
+                return;
+            }
             //  Set user information
             $addressPayer = new Address();
             $addressPayer->setLine1($_POST['address'])
-                         ->setPhone( $_POST['phone'] )  
+                         ->setPhone($_POST['phone'])  
                          ->setCity('Singapore')  
                          ->setCountryCode('SG') 
                          ->setPostalCode('02')
@@ -177,8 +200,12 @@ class CartController extends Controller{
             $payment->setIntent('sale')
                 ->setPayer($payer)
                 ->setTransactions(array($transaction))
-                ->setRedirectUrls($redirectUrls)
-                ->setNoteToPayer($_POST['notice']);
+                ->setRedirectUrls($redirectUrls);
+
+            // Notice from user
+            if(!empty($_POST['notice']))
+                $payment->setNoteToPayer($_POST['notice']);
+                
 
                 // After Step 3
             try {
@@ -193,6 +220,9 @@ class CartController extends Controller{
         }
 
         public function createOrderToDB($payment, $userID){
+            if(!isset($payment['transactions'][0]['item_list']['shipping_address'], $payment['payer']['payer_info']['email'], $payment['state'], $payment['id']))
+                return false;
+
             $address = $payment['transactions'][0]['item_list']['shipping_address'];
             $address = $this->getAddressFromArr($address);
             $email = $payment['payer']['payer_info']['email'];
