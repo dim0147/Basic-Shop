@@ -285,7 +285,7 @@ class CartController extends Controller{
                 $key = $checkItem; //   Key of item in items list
                 $qTy = (int)$_POST['quantity'];
                 $priceDec = $cart['items'][$key]['price'] * $qTy;    //  price to decrease
-                if(( ($cart['items'][$key]['quantity'] -= $qTy) <= 0 )){
+                if( $cart['items'][$key]['quantity'] - $qTy <= 0 ){
                     $cart['totalPrice'] -= $cart['items'][$key]['priceTotal'];
                     $cart['totalQty'] -= $cart['items'][$key]['quantity'];
                     $this->removeProd($key);
@@ -295,7 +295,7 @@ class CartController extends Controller{
                 $cart['items'][$key]['quantity'] -= $qTy;
                 $cart['items'][$key]['priceTotal'] -= $priceDec;
                 // Edit total
-              //  $cart['totalPrice'] -= $priceDec;
+                $cart['totalPrice'] -= $priceDec;
                 $cart['totalQty'] -= $qTy;
 
                 $_SESSION['cart'] = $cart;
@@ -308,7 +308,7 @@ class CartController extends Controller{
 
         // **** ADD PRODUCT ***
         public function addToCart(){
-            if (empty($_SESSION['cart']['items']) || empty($_POST['id']) || empty($_POST['quantity'])){
+            if (empty($_SESSION['cart']) || empty($_POST['id']) || empty($_POST['quantity'])){
                 setHTTPCode(500, "Invalid cart or ID or quantity");
                 return;
             }
