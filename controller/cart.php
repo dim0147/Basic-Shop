@@ -93,7 +93,7 @@ class CartController extends Controller{
             }
             $items = $result['transactions'][0]['item_list']['items'];
             $items = $this->getIdAndMergeToProd($items);
-            $userID = $this->userModel->select(['user_id'], ['name' => $_SESSION['user']]);
+            $userID = $this->userModel->select(['user_id'], ['user_id' => $_SESSION['user']]);
             if(!$userID){
                 setHTTPCode(500, 'Something wrong!!!');
                 return;
@@ -106,6 +106,7 @@ class CartController extends Controller{
             }
 
             $this->createCartsToDB($orderID, $userID, $items);
+            setHTTPCode(200, "Success!");
             }
             catch (Exception $ex) {
                 die($ex);
@@ -116,7 +117,8 @@ class CartController extends Controller{
         public function getIdAndMergeToProd($listItem){
             $condition = [];
             foreach($listItem as $item){
-                $condition[] ="'" . $item['name'] . "'";
+                $item['name'] = str_replace('"', "'", $item['name']);
+                $condition[] ='"' . $item['name'] . '"';
             }
             $condition = "title IN(" . implode(', ', $condition) . ")";
             $result = $this->prodModel->getProdWithField(['id', 'title'], $condition);
@@ -240,11 +242,9 @@ class CartController extends Controller{
             $cartID = $this->prodModel->pdo->lastInsertId();
             $cartItemVal = [];
             foreach($cart as $item){
-                $cartItemVal[] = createQuery([$cartID, $item['id'], $item['quantity']]);
+                $cartItemVal[] = [$cartID, $item['id'], $item['quantity']];
             }
-            $cartItemVal = implode(', ',$cartItemVal);
-            $this->prodModel->insert($cartItemVal, 'cart_item');
-            
+            $this->prodModel->insertMany($cartItemVal, NULL, 'cart_item');
         }
 
         public function action(){
@@ -368,7 +368,7 @@ class CartController extends Controller{
         }
 
         public function addProdToCart(){
-            $prod = $this->prodModel->getSingleProduct($_POST['id'], ['products.price', 'products.title']);
+            $prod = $this->prodModel->getProductWithId($_POST['id'], ['products.price', 'products.title']);
             if(empty($prod)){
                 setHTTPCode(500, "Product not found!");
                 return;

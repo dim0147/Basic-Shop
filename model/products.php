@@ -19,7 +19,7 @@
             return $result;
         }
 
-        public function getSingleProduct($id, $fields = ['products.*', 'images.name']){
+        public function getProductWithId($id, $fields = ['products.*', 'images.name']){
             try{
                 if(is_null($this->pdo))
                     return NULL;
@@ -38,7 +38,8 @@
                                     FROM products 
                                     LEFT JOIN categorys_link_products cp ON products.id = cp.product_id
                                     LEFT JOIN images ON images.product_id = products.id
-                                    WHERE products.id = $id");
+                                    WHERE products.id = :id");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();
                 return $stmt->fetchAll(\PDO::FETCH_ASSOC);
             }
@@ -49,6 +50,7 @@
 
         public function getProdWithField($field, $condition){
             $field = implode(',' , $field);
+            
             $stmt = $this->pdo->prepare("SELECT $field FROM products WHERE $condition");
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -103,19 +105,6 @@
             }
         }
 
-        public function updateProduct($query, $id){
-            try{
-                if(is_null($this->pdo))
-                    return false;
-                $stmt = $this->pdo->prepare("UPDATE products SET $query WHERE id = $id");
-                $stmt->execute();
-                return true;
-            }
-            catch(PDOException $err){
-                die($err);
-            }
-        }
-
         public function deleteThumbnail($listID){
             try{
                 if(is_null($this->pdo))
@@ -135,6 +124,7 @@
             try{
                 if(is_null($this->pdo))
                     return false;
+                
                 $stmt = $this->pdo->prepare("DELETE FROM categorys_link_products WHERE product_id = $id AND category_id IN ($query)");
                 $stmt->execute();
                 return true;

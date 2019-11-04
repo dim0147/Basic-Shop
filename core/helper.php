@@ -94,6 +94,33 @@ function removeFiles($arrFileName, $path){
     return true;
 }
 
+function createUpdateQueryV1($arrValue){
+    $arr = [];
+    foreach($arrValue as $field => $value){
+        $arr[] = $field . " = :" . $field;
+    }
+    $query = implode(',' , $arr);
+    return $query;
+}
+
+function createCondQuery($arrValue){
+    $arr = [];
+    foreach($arrValue as $field => $value){
+        $arr[] = $field . " = :" . $field;
+    }
+    $query = implode(' AND ' , $arr);
+    return $query;
+}
+
+function validateDataPDO($value){
+    // Default is Str type
+    $type = PDO::PARAM_STR;
+    if (is_numeric($value)){   //  If number, set to Integer
+        $type = PDO::PARAM_INT;
+    }
+    return $type;
+}
+
 function createQuery($arrValue, $arrUpdate = false){
     $arr = [];
     if($arrUpdate !== false){    //  QUERY FOR UPDATE FIELD
@@ -164,6 +191,14 @@ function getFirstKey($arr){
 function getArrFromJSON($JSON){
     $arr = json_decode($JSON);
     return (array)$arr;
+}
+
+function createPlaceHold($size){
+    $placeHold = [];
+    for($i = 0; $i < $size; $i++){
+        $placeHold[] = '?';
+    }
+    return implode(',', $placeHold);
 }
 
 function fatal_handler(){

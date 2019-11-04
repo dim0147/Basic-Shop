@@ -260,7 +260,7 @@
                 return;
             }
             // Get Product
-            $product = $this->prodModel->getSingleProduct($_GET['id'], ['products.*, images.name, images.image_id, cp.category_id, cp.category_name']);
+            $product = $this->prodModel->getProductWithId($_GET['id'], ['products.*, images.name, images.image_id, cp.category_id, cp.category_name']);
             if(!$product){  // if product not found
                 setHTTPCode(500, "Product not found!");
                 return;
@@ -330,13 +330,11 @@
                 $cateAdd = $this->validArrCate($cateAdd);
                 if(!empty($cateAdd)){
                     $this->addCategory($cateAdd);   //  Query database
-                    echo("vcc");
                 }
 
 
                 //  P2: Delete Category if array delete category send from client not empty
                 if(!empty($cateDel)){
-                    echo "del";
                     $this->deleteCategory($cateDel); //  Query database
                 }
         
@@ -346,12 +344,13 @@
         }
 
         public function postLogin(){
-            if(!empty($_POST['username']) && !empty($_POST['password']) && !isset($_SESSION['username'])){ 
+            if(!empty($_POST['username']) && !empty($_POST['password']) && !isset($_SESSION['user'])){ 
                 $username = $_POST['username'];
                 $password = $_POST['password'];
                 $passwordQuery = $this->model->select(NULL, ["username" => $username,
                                                                 "type" => 'admin']);
                 $result = isset($passwordQuery[getFirstKey($passwordQuery)]['password']);
+                printB($result);
                 if($result && password_verify($password, $passwordQuery[getFirstKey($passwordQuery)]['password'])){
                     // $_SESSION['username'] = $username;
                     setHTTPCode(200, "Sign In Success!");
@@ -420,7 +419,6 @@
 
         public function addCategory($arrCate){
             $queryCateAdd = [];
-            echo $_POST['id'];
             foreach($arrCate as $idCate => $nameCate){
                 $queryCateAdd[] = createQuery(['DEFAULT', $_POST['id'], (int)$idCate, $nameCate, $_POST['title']]);
             }
@@ -482,16 +480,16 @@
                     'price' => (float)$_POST['price'], 
                     'status' => ($_POST['status']), 
                     'rate' => $_POST['rate'], 
-                    'description' => ($_POST['description'])
+                    'description' => ($_POST['description']),
                     ];
                 $oldImage = ''; //  set old image first in case header image is change
                 //  If header Image is update
                 if ($imgHeader !== false){
-                    $fieldUpdate['image'] = addApostrophe($imgHeader);  //  Add character ["] on left and right Img header
+                    $fieldUpdate['image'] = $imgHeader;  //  Add character ["] on left and right Img header
                     $oldImage = $this->prodModel->select(['image'], ['id' => $_POST['id']]);//  get old image before update new one
                 }
-                $query = createQuery($fieldUpdate, true);   //  True mean create update query
-                $this->prodModel->updateProduct($query, $_POST['id']); // If err will die immediately
+                $this->prodModel->update($fieldUpdate, ['id' => $_POST['id']]); // If err will die immediately
+                return;
                 if(!empty($oldImage))   //  If not empty, delete old image from storage
                     removeFiles([$oldImage[0]['image']], PATH_IMAGE_UPLOAD);
                 return true;

@@ -113,13 +113,14 @@
  <!--<p id="das" class="modalImage" alt="blk"></p>-->
  </div>
  <div class="modal-footer">
- <form action="/WEBASSIGNMENT2/cart" method="POST">
+ <form action="cart/action" method="POST">
  <!-- Name of input element determines name in $_FILES array -->
  Send this file: <input type="text" name="action" list="ls"/>
  <datalist id="ls">
  <option value="add">
  <option value="remove">
  <option value="decrease">
+ <option value="show">
  </datalist>
 
  <input name="id" value="4"  />

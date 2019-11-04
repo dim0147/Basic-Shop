@@ -30,7 +30,7 @@
         public function detail(){
             if (!empty($_GET['q'])){    //  If query not emtpy
                 $id = $_GET['q'];
-                $result = $this->model->getSingleProduct($id); //  Query Product
+                $result = $this->model->getProductWithId($id); //  Query Product
                 $result = mergeResult(['name'], ['image_list'], 'id', $result); // Merge to one 
                 if(count($result) <= 0) //  If not have
                     return $this->renderNotFound();
