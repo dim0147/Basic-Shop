@@ -74,23 +74,7 @@
             return $result;
         }
 
-        public function insert($value, $table = NULL){
-            try{
-                if(is_null($this->pdo))
-                    return false;
-                if ($table === NULL)
-                    $table = $this->table;
-                $stmt = $this->pdo->prepare("INSERT INTO $table VALUES $value");
-                $stmt->execute();
-                return true;
-                
-            }
-            catch(PDOException $err){
-                die($err);
-            }
-        }
-
-        public function insertMany($arrValue, $arrColumn = NULL, $table = NULL){
+        public function insert($arrValue, $arrColumn = NULL, $table = NULL){
             try{
                 if(is_null($this->pdo))
                     return false;
@@ -176,14 +160,27 @@
             }
         }
 
-        public function delete($condition, $table = NULL){
+        public function delete($condQuery, $table = NULL){
             try{
                 if(is_null($this->pdo))
                     return false;
                 if ($table === NULL)
                     $table = $this->table;
-                $condition = createCheckQuery($condition);
-                $stmt = $this->pdo->prepare("DELETE FROM $table WHERE $condition");
+                
+                //  Create condition query
+                $condition = createCondQuery($condQuery);
+                
+                //  Create query
+                $sql = "DELETE FROM $table WHERE $condition";
+
+                $stmt = $this->pdo->prepare($sql);
+
+                 // Blind value to condition
+                 foreach($condQuery as $field => &$value){
+                    $typeVal = validateDataPDO($value);
+                    $stmt->bindParam(':'. $field, $value, $typeVal);   //  bind param to field
+                }
+
                 $stmt->execute();
             }
             catch(PDOException $ex){

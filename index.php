@@ -22,7 +22,7 @@
     foreach($LOAD_ROUTE as $route){
         require_once('route/' . $route . '.php');
     }
-
+     $i = 10;
     //  Display error
     if(!DISPLAY_ERROR){
         register_shutdown_function( "fatal_handler" );

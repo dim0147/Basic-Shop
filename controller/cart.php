@@ -230,21 +230,23 @@ class CartController extends Controller{
             $email = $payment['payer']['payer_info']['email'];
             $status = $payment['state'];
             $paymentID = $payment['id'];
-            $values = createQuery([$userID, $address, 'NULL', $email, $status, $paymentID, 'DEFAULT']);
-            $this->prodModel->insert($values, 'orders');
+            $valuesToInsert = [[$userID, $address, $email, $status, $paymentID]];
+            $columToInsert = ['user_id', 'address', 'email', 'status', 'paymentID'];
+            $this->prodModel->insert($valuesToInsert, $columToInsert, 'orders');
             $orderID = $this->prodModel->pdo->lastInsertId();
             return $orderID;
         }
 
         public function createCartsToDB($orderID, $userID, $cart){
-            $cartVal = createQuery(['DEFAULT', $userID, $orderID]);
-            $this->prodModel->insert($cartVal, 'cart');
+            $valuesToInsert = [[$userID, $orderID]];
+            $columnToInsert = ['user_id', 'order_id'];
+            $this->prodModel->insert($valuesToInsert, $columnToInsert, 'cart');
             $cartID = $this->prodModel->pdo->lastInsertId();
             $cartItemVal = [];
             foreach($cart as $item){
                 $cartItemVal[] = [$cartID, $item['id'], $item['quantity']];
             }
-            $this->prodModel->insertMany($cartItemVal, NULL, 'cart_item');
+            $this->prodModel->insert($cartItemVal, NULL, 'cart_item');
         }
 
         public function action(){

@@ -77,34 +77,6 @@
             }
         }
 
-        public function addThumbnailProduct($value){
-            try{
-                if(is_null($this->pdo))
-                    return false;
-                $stmt = $this->pdo->prepare("INSERT INTO images VALUES $value");
-                $stmt->execute();
-                return true;
-                
-            }
-            catch(PDOException $err){
-                die($err);
-            }
-        }
-
-        public function addCategoryProduct($value){
-            try{
-                if(is_null($this->pdo))
-                    return false;
-                $stmt = $this->pdo->prepare("INSERT INTO categorys_link_products VALUES $value");
-                $stmt->execute();
-                return true;
-                
-            }
-            catch(PDOException $err){
-                die($err);
-            }
-        }
-
         public function deleteThumbnail($listID){
             try{
                 if(is_null($this->pdo))
