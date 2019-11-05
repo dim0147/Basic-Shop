@@ -4,24 +4,21 @@
             $this->connect('users');
         }
 
-        public function getProfile(){
+        public function getOrderUser($userID){
             try{
-                if ($this->pdo === null && !empty($_SESSION['user']))
+                if ($this->pdo === null)
                     return false;
 
-                $user_id = $_SESSION['user'];
-                $user_id = $this->pdo->quote($user_id);
-                $stmt = $this->pdo->prepare("SELECT users.username, users.name,
-                                    orders.order_id, orders.status, orders.address, orders.phone, orders.email, orders.paymentID,
+                $stmt = $this->pdo->prepare("SELECT orders.order_id, orders.status, orders.address, orders.phone, orders.email, orders.paymentID,
                                     products.id as 'prodID', products.title, products.image,
                                     categorys_link_products.category_name, categorys_link_products.product_id
-                                    FROM users
-                                    LEFT JOIN orders ON orders.user_id = users.user_id
-                                    INNER JOIN cart ON cart.order_id = orders.order_id
-                                    INNER JOIN cart_item ON cart_item.cart_id = cart.cart_id
-                                    INNER JOIN products ON products.id = cart_item.product_id
+                                    FROM orders
+                                    LEFT JOIN cart ON cart.order_id = orders.order_id
+                                    LEFT JOIN cart_item ON cart_item.cart_id = cart.cart_id
+                                    LEFT JOIN products ON products.id = cart_item.product_id
                                     LEFT JOIN categorys_link_products ON categorys_link_products.product_id = products.id    
-                                    WHERE users.user_id = $user_id");
+                                    WHERE orders.user_id = :userID");
+                $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
                 $stmt->execute();
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }

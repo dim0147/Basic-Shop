@@ -31,44 +31,51 @@
             }
         }
 
-        public function getAll(){
-            if(is_null($this->pdo))
-                return NULL;
-            $stmt = $this->pdo->prepare("SELECT * FROM $this->table");
-            $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
-        }
-
         public function select($field = NULL, $condQuery , $table = NULL){
             if(is_null($this->pdo))
                     return false;
 
-             // Check table, if not pass param, use default table
+                // Check table, if not pass param, use default table
             if ($table === NULL)
                 $table = $this->table;
 
-             // Check field require, if not pass param, use '*'
+                // Check field require, if not pass param, use '*'
             if($field === NULL)
                 $field = ['*'];
             $field = implode(',' , $field);
 
-            //  Create condition
+                //  If select ALL
+            if($condQuery === 'ALL' || $condQuery === '*' || $condQuery === 'All' || $condQuery === 'all'){
+                    //  Set up SQL
+                $sql = "SELECT $field 
+                    FROM $table";
+    
+                $stmt = $this->pdo->prepare($sql);
+
+                    //  Execute sql
+                $stmt->execute();
+
+                    //  Return result
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            }
+
+                //  Create condition
             $condition = createCondQuery($condQuery);
 
-            //  Set up SQL
+                //  Set up SQL
             $sql = "SELECT $field 
                     FROM $table 
                     WHERE $condition";
             $stmt = $this->pdo->prepare($sql);
 
-            // Blind value to condition
+                // Blind value to condition
             foreach($condQuery as $field => &$value){
                 $typeVal = validateDataPDO($value);
                 $stmt->bindParam(':'. $field, $value, $typeVal);   //  bind param to field
             }
 
-            // Execute query
+                // Execute query
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $result;
@@ -79,41 +86,41 @@
                 if(is_null($this->pdo))
                     return false;
                 
-                // Identify table, if not specific use default table
+                    // Identify table, if not specific use default table
                 if ($table === NULL)
                     $table = $this->table;
 
-                //  Column to insert
+                    //  Column to insert
                 $column = NULL;
                 if($arrColumn != NULL)
                     $column = "(" . implode(',', $arrColumn) . ")"; // (field1, field2, ect..)
                 
-                //  Set up PlaceHolder[(?,?,?), (?,?,?)] and 
+                    //  Set up PlaceHolder[(?,?,?), (?,?,?)] and 
                 $placeHolderArr = [];
 
-                // Value to Insert when execute query
+                    // Value to Insert when execute query
                 $valueInsert = [];
 
-                //  Loop through data to insert, $values = ['Josh', 'NewYork' , 32]
+                    //  Loop through data to insert, $values = ['Josh', 'NewYork' , 32]
                 foreach($arrValue as $values){
-                    //  Create place holder an store into array, get total element of $values, then add "(" | ")"
-                    //  and add it to $placeHolderArr array, later implode it.
+                        //  Create place holder an store into array, get total element of $values, then add "(" | ")"
+                        //  and add it to $placeHolderArr array, later implode it.
                     $placeHolderArr[] = "(" . createPlaceHold(count($values)) .")";
 
-                    // Add every element in $values array to array $valueInsert
+                        // Add every element in $values array to array $valueInsert
                     foreach($values as $val){
                         array_push($valueInsert, $val);
                     }
                 }
 
-                //  Implode $placeHoldVal array, return (?,?,?), (?,?,?)
+                    //  Implode $placeHoldVal array, return (?,?,?), (?,?,?)
                 $placeHoldVal = implode(', ', $placeHolderArr);
                 
-                //  Set up SQL
+                    //  Set up SQL
                 $sql = "INSERT INTO $table $column VALUES $placeHoldVal";
                 $stmt = $this->pdo->prepare($sql);
 
-                // Execute with array valueInsert use to pass into $placeHoldVal above
+                    // Execute with array valueInsert use to pass into $placeHoldVal above
                 $stmt->execute($valueInsert);
                 return true;
             }
@@ -167,21 +174,29 @@
                 if ($table === NULL)
                     $table = $this->table;
                 
-                //  Create condition query
-                $condition = createCondQuery($condQuery);
+                    //  Initilize condition array, contain['title IN (?,?,?)', 'id IN (?,?,?)']
+                $condition = [];
+
+                    //  Value to insert
+                $valueToInsert = [];
+
+                    //  Loop through 
+                foreach($condQuery as $field => $value){
+                    $condTemp = $field . ' IN (' . createPlaceHold(count($value)) . ')';
+                    array_push($condition, $condTemp);
+                    foreach($value as $element){
+                        array_push($valueToInsert, $element);
+                    }
+                }
+
+                $condition = implode(' AND ', $condition);
                 
                 //  Create query
                 $sql = "DELETE FROM $table WHERE $condition";
 
                 $stmt = $this->pdo->prepare($sql);
 
-                 // Blind value to condition
-                 foreach($condQuery as $field => &$value){
-                    $typeVal = validateDataPDO($value);
-                    $stmt->bindParam(':'. $field, $value, $typeVal);   //  bind param to field
-                }
-
-                $stmt->execute();
+                $stmt->execute($valueToInsert);
             }
             catch(PDOException $ex){
                 die($ex);

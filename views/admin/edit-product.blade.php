@@ -39,7 +39,7 @@
 <script>
     var imgIdDelete = [];
     var imgNameDelete = [];
-    var categoryDelete = ['3', '1'];
+    var categoryDelete = [];
     var categoryAdd = {
         '2': 'Killing',
         '6': 'Multiplayer',

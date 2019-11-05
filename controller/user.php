@@ -10,48 +10,65 @@
         }
 
         public function index(){
-            if($this->model != NULL){
-                //  Get Profile user, include orders
-                $info = $this->model->getProfile();
-                if(!$info){
-                    setHTTPCode(500, "Error, cannot find user!");
-                    return;
-                }
-                //  Merge result, title of product merge to listProduct, make id product is a key,
-                //  title is value of that key
-                //  Example :
-                //  [1] => "Game Of Throne" (1 is id of product)
-                $user = mergeResult(['title'], ['listProduct'], 'order_id', $info, ['title' => 'prodID']);
-                $addInfo = mergeResult(['category_name', 'image'], ['listCategory', 'listImg'], 'prodID', $info);
+            if(empty($_SESSION['user'])){
+                setHTTPCode(400, "User not found!");
+                return;
+            }
 
-                foreach($user as $key => $order){
+                //  Get Profile user, include orders
+            $user = $this->model->select(['user_id', 'username', 'name'], ['user_id' => $_SESSION['user'],
+                                                                           'type' => 'user']);
+            if(!$user){ //  if error
+                setHTTPCode(500, "Error, cannot find user!");
+                return;
+            }
+
+                //  Get Order of user
+            $orders = [];
+            $infOrder = $this->model->getOrderUser($_SESSION['user']);
+                //  If Order exist
+            if($infOrder){
+                    //  Merge result, title of product merge to listProduct, make id product as a key,
+                    //  title is value of that key, identify by order ID
+                    //  Example :
+                    //  [1] => "Game Of Throne" (1 is id of product)
+                $orders = mergeResult(['title'], ['listProduct'], 'order_id', $infOrder, ['title' => 'prodID']);
+
+                    //  Merge category , image product, identify by productID
+                $addInfo = mergeResult(['category_name', 'image'], ['listCategory', 'listImg'], 'prodID', $infOrder);
+
+                    //  Loop through all Order
+                foreach($orders as $key => $order){
+
+                        //  Loop through list product of single order
                     foreach($order['listProduct'] as $idProd => $title){ 
-                        $user[$key]['listProduct'][$idProd] = array(
-                            'title' => $title,
-                            'category' => [],
-                            'image' => ''
-                        );   
+                        
+                            //  Then loop on addition value for product ( category and image )
                         foreach($addInfo as $value){
+
+                                //  If  product id of addition value equal to product id of listProduct from order   
                             if($value['prodID'] == $idProd){
+                                    //  create new element include category, image of this product
                                 $element = array(
                                     'title' => $title,
                                     'category' => $value['listCategory'],
                                     'image' => $value['listImg'][0]
                                 );
-                                $user[$key]['listProduct'][$idProd] = $element;
+                                    //  Assign product id element in listProduct of order equal that element(include title, category, image)
+                                $orders[$key]['listProduct'][$idProd] = $element;
                                 break;
                             }
                         }                
                     }
                 }
-                 printB($user);
-                // $this->render($this->fileRender['index'],
-                //  [
-                //      'users' => $users, 
-                //      'name' => "Jonh", 
-                //      'title' => "Hi" 
-                // ]);
             }
+            printB($orders);
+            $this->render($this->fileRender['index'],
+                [
+                    'users' => $user,
+                    'orders' => $orders, 
+                    'title' => "Hi" 
+                ]);
         }
 
         public function loginIndex(){
@@ -59,16 +76,20 @@
         }
 
         public function postLogin(){
+            //  Check if not empty
             if(!empty($_POST['username']) && !empty($_POST['password']) && empty($_SESSION['user'])){ 
                 $username = $_POST['username'];
                 $password = $_POST['password'];
-                $passwordQuery = $this->model->select(NULL, ["username" => $username,
-                                                                "type" => 'user']);
-                $result = isset($passwordQuery[getFirstKey($passwordQuery)]['password']);
-                echo " dm ";
-                printB($result);
-                if($result && password_verify($password, $passwordQuery[getFirstKey($passwordQuery)]['password'])){
-                    $_SESSION['user'] = $passwordQuery[getFirstKey($passwordQuery)]['user_id'];
+
+                    //  Get user through username
+                $user = $this->model->select(NULL, ["username" => $username,
+                                                            "type" => 'user']);
+
+                    // Check if user exist and password verify success
+                $result = isset($user[getFirstKey($user)]['password']);
+                if($result && password_verify($password, $user[getFirstKey($user)]['password'])){
+                        //  Assign user session with user id
+                    $_SESSION['user'] = $user[getFirstKey($user)]['user_id'];
                     setHTTPCode(200, "Sign In Success!");
                     return;
                 }
@@ -81,24 +102,27 @@
         }
 
         public function postRegister(){
+                //  Check if not empty
             if(!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['name']) && !isset($_SESSION['user'])){
-                //  Assign variable
+                    
+                    //  Assign variable
                 $username = $_POST['username'];
                 $password = $_POST['password'];
                 $name = $_POST['name'];
 
-                //  Check if username is exist
+                    //  Check if username is exist
                 $checkExist = $this->model->select(NULL,['username' => $username,
                                                         'type' => 'user']); 
-                if($checkExist){    //  If yes return
+                if($checkExist){ //  If yes return   
                     setHTTPCode(500, "Username exist!");
                     return;
                 }
 
-                // Insert new User
-                $password = password_hash($password, PASSWORD_DEFAULT); //  hash password
-                $values = createQuery(['DEFAULT', $username, $password, $name, 'Active', 'DEFAULT', 'user']);
-                $this->model->insert($values);
+                    // Insert new User
+                $password = password_hash($password, PASSWORD_DEFAULT); //  hash password before insert
+                $column = ['username', 'password', 'name', 'status', 'type'];   //  column to insert
+                $values = [[$username, $password, $name, 'Active', 'user']];    //  value to insert
+                $this->model->insert($values, $column);
                 setHTTPCode(200, "Register success!!");
                 return;
             }

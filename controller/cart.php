@@ -212,7 +212,7 @@ class CartController extends Controller{
                 // After Step 3
             try {
                 $payment->create($this->apiContext);
-                header($payment->getApprovalLink());
+                header("Location: ". $payment->getApprovalLink());
             }
             catch (\PayPal\Exception\PayPalConnectionException $ex) {
                 // This will print the detailed information on the exception.
@@ -230,17 +230,17 @@ class CartController extends Controller{
             $email = $payment['payer']['payer_info']['email'];
             $status = $payment['state'];
             $paymentID = $payment['id'];
-            $valuesToInsert = [[$userID, $address, $email, $status, $paymentID]];
-            $columToInsert = ['user_id', 'address', 'email', 'status', 'paymentID'];
-            $this->prodModel->insert($valuesToInsert, $columToInsert, 'orders');
+            $values = [[$userID, $address, $email, $status, $paymentID]];
+            $column = ['user_id', 'address', 'email', 'status', 'paymentID'];
+            $this->prodModel->insert($values, $column, 'orders');
             $orderID = $this->prodModel->pdo->lastInsertId();
             return $orderID;
         }
 
         public function createCartsToDB($orderID, $userID, $cart){
-            $valuesToInsert = [[$userID, $orderID]];
-            $columnToInsert = ['user_id', 'order_id'];
-            $this->prodModel->insert($valuesToInsert, $columnToInsert, 'cart');
+            $values = [[$userID, $orderID]];
+            $column = ['user_id', 'order_id'];
+            $this->prodModel->insert($values, $column, 'cart');
             $cartID = $this->prodModel->pdo->lastInsertId();
             $cartItemVal = [];
             foreach($cart as $item){

@@ -13,12 +13,6 @@
             if($this->model != NULL){
                 $products = $this->model->getAllProduct();; //  get all from Product Model
                 $products = mergeResult(['category_name', 'name'], ['category_list', 'image_list'], 'id', $products);
-                // foreach($products as $key => $product){   //  loop through products, edit some field
-                //     $description = $product['description'];
-                //     $product['full'] = $description;
-                //     if (strlen($description) > 100) //  Short description
-                //         $products[$key]['description'] = substr($description, 0, 90) . '...';
-                // }
                 $this->render($this->fileRender['index'],
                  [
                      'title' => 'Products',
@@ -28,7 +22,7 @@
         }
 
         public function detail(){
-            if (!empty($_GET['q'])){    //  If query not emtpy
+            if (!empty($_GET['q'])){    //  If query not empty
                 $id = $_GET['q'];
                 $result = $this->model->getProductWithId($id); //  Query Product
                 $result = mergeResult(['name'], ['image_list'], 'id', $result); // Merge to one 

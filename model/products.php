@@ -91,19 +91,5 @@
 
 
         }
-
-        public function delCategoryProd($query, $id){
-            try{
-                if(is_null($this->pdo))
-                    return false;
-                
-                $stmt = $this->pdo->prepare("DELETE FROM categorys_link_products WHERE product_id = $id AND category_id IN ($query)");
-                $stmt->execute();
-                return true;
-            }
-            catch(PDOException $err){
-                die($err);
-            }
-        }
     }
 ?>

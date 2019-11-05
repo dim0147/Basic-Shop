@@ -27,10 +27,17 @@ function mergeResult($arrOrigin, $arrMerge, $keyToValidate, $data, $keyOfElement
                     //     ['idImage'] => nameImage,
                     //     ['idImage'] => nameImage,
                     // ]
-                    $e[$nameKeyMerge][$keyMergeElement] = $valueOfKeyOrigin;    
+                    if(empty($valueOfKeyOrigin))   //  Check if value of key origin is empty
+                        $e[$nameKeyMerge] = [];
+                    else
+                        $e[$nameKeyMerge][$keyMergeElement] = $valueOfKeyOrigin;    
                 }
-                else
-                    $e[$nameKeyMerge] = [$valueOfKeyOrigin]; //  create empty Caterogy list and add first value 
+                else{
+                    if(empty($valueOfKeyOrigin))    //  Check if value of key origin is empty
+                        $e[$nameKeyMerge] = [];
+                    else
+                        $e[$nameKeyMerge] = [$valueOfKeyOrigin]; //  create empty Category list and add first value 
+                }
                 $arrResult[$idProduct] = $e;  //  Add to empty array
             }
         }
@@ -40,7 +47,7 @@ function mergeResult($arrOrigin, $arrMerge, $keyToValidate, $data, $keyOfElement
                 $nameKeyOrigin = $arrOrigin[$i];
                 $nameKeyMerge = $arrMerge[$i];
                 $valueOfKeyOrigin =  $e[$nameKeyOrigin];  //  get KEY origin of duplicate product, eg: $e['name']
-                if (!in_array($valueOfKeyOrigin, $arrResult[$idProduct][$nameKeyMerge])){   //  Check if have already
+                if (!in_array($valueOfKeyOrigin, $arrResult[$idProduct][$nameKeyMerge]) && !empty($valueOfKeyOrigin)){   //  Check if have already
                      //  Check if addition key from specific origin field 
                     if($keyOfElement && array_key_exists($nameKeyOrigin, $keyOfElement)){
                         $keyMergeElement = $e[$keyOfElement[$nameKeyOrigin]];
@@ -119,30 +126,6 @@ function validateDataPDO($value){
         $type = PDO::PARAM_INT;
     }
     return $type;
-}
-
-function createQuery($arrValue, $arrUpdate = false){
-    $arr = [];
-    if($arrUpdate !== false){    //  QUERY FOR UPDATE FIELD
-        foreach ($arrValue as $field => $val){
-            if(!is_numeric($val))
-                $val = addApostrophe($val);
-            $arr[] = $field . " = " . $val;
-        }
-        $arr = implode(',', $arr);
-        return $arr;
-    }else{
-        foreach($arrValue as $value){   //  QUERY FOR ADD VALUE
-                if ($value == 'NULL' || $value == 'DEFAULT' || is_numeric($value))
-                    $arr[] =  $value;
-                else
-                    $arr[] = '"' . $value .'"';
-        }
-        $arr = implode(',', $arr);
-        $arr = str_pad($arr, strlen($arr) + 1, "(", STR_PAD_LEFT);
-        $arr = str_pad($arr, strlen($arr) + 1, ")", STR_PAD_BOTH);
-        return $arr;
-    }
 }
 
 function createCheckQuery($arr){
