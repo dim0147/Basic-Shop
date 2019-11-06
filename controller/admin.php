@@ -123,7 +123,6 @@
         }
 
         public function editProduct($imgHeader){ // Edit product to DB
-            /******** UPDATE PRODUCT WITH HEADER IMAGE ***********/
                 // Update field, eg: title,description,...  
                 $fieldUpdate = [
                     'title' => ($_POST['title']), 
@@ -175,13 +174,41 @@
         }
 
         public function validArrCate($arrCate){ //  Check if product category exist and remove it
-            $newArr = [];
-            foreach($arrCate as $idCate => $nameCate){
-                $result = $this->prodModel->select(NULL, ['category_id' => $idCate, 'product_id' => $_POST['id']], 'categorys_link_products');
-                if(!$result)
-                    $newArr[$idCate] = $nameCate;
+                //  Check if empty
+            if(empty($arrCate))
+                return false;
+                //  Create array of json object array
+            $listKey = array_keys($arrCate);
+            $listName = array_values($arrCate);
+            $arrayCategory = array_combine($listKey, $listName);
+                //  Set condition for check category if exist 
+            $category = [
+                'id' => array_keys($arrayCategory)
+            ];
+                //  Check product if contain some category
+            $product = [
+                'category_id' => array_keys($arrayCategory),
+                'product_id' => [$_POST['id']]
+            ];
+                //  Query Check category if exist all
+            $categoryCheck = $this->prodModel->selectMany(['COUNT(*)'], NULL, $category, 'categorys');
+                //  If empty in count, something wrong!
+            if(empty($categoryCheck[0]['COUNT(*)']))    
+                return false;
+                //  If count not equal length of array category to add, mean some category is fake
+            if($categoryCheck[0]['COUNT(*)'] != count($arrayCategory))  
+                return false;
+                //  Check product  if have some category already
+            $productCheck = $this->prodModel->selectMany(['category_id'], NULL, $product, 'categorys_link_products');
+                //  If not return completely array category to add
+            if(!$productCheck)
+                return $arrayCategory;
+                // Have some category include already, remove them from array category add so add any category that not add yet
+            foreach($productCheck as $element){
+                $idCategory = $element['category_id'];  //  Get id category that have already
+                unset($arrayCategory[$idCategory]);
             }
-            return $newArr;
+            return $arrayCategory;
         }
 
         public function errorUpload($images, $type){    //  Remove image from local if upload to DB fails
@@ -204,10 +231,8 @@
             }
             return $newName;
         }
-        
-
-            //  ADD PRODUCT
-        public function addProduct(){
+    
+        public function addProductIndex(){
                 //  Get all category from db
             $categorys = $this->prodModel->select(NULL, '*', 'categorys');
             $this->render($this->fileRender['add-product'],
@@ -218,43 +243,45 @@
             return;
         }
 
+        /**
+         * Create new product
+         * @param {Object} $_POST['categorys']
+         * @param {File}   $_FILES['header'], $_FILES['thumbnail']
+         * @param {string} $_POST['categorys'], 
+         * @param {string} $_POST['title']
+         * @param {string} $_POST['description'] 
+         * @param {string} $_POST['price'] 
+         * @param {string} $_POST['status'] 
+         * @param {string} $_POST['rate']
+         */
         public function postAddProduct(){
-
                 //  Convert category json get from client to array 
             $categorys = json_decode($_POST['categorys']);
             $categorys = (array)$categorys;
-
                 //  Check if any field is empty
             if(checkEmptyFile($_FILES['header'], 1) || checkEmptyFile($_FILES['thumbnail'], 2) || checkEmpty([ $_POST['categorys'], $_POST['title'], $_POST['description'], $_POST['price'], $_POST['status'], $_POST['rate']]))
             {
                 setHTTPCode(500, 'Empty Field!');
                 return;
             }
-
                 //  Check title if exist
             if($this->prodModel->select(NULL, ['title' => $_POST['title']])){   
                 setHTTPCode(500, 'Product exist!');
                 return;
             }
-
                 //  upload header image to storage, return name header image
             $imageHeader = $this->uploadHeader();  
-            
                 //  Check if error remove header image from storage
             if(!$imageHeader){ 
                 setHTTPCode(500, 'Error while upload header image!');
                 return;
             }
-
                 //  Add product to database, return the id of product when create finish
             $this->addNewProduct($imageHeader);
-
                 //  upload thumbnail to storage , return list name image;
             if(!checkEmptyFile($_FILES['thumbnail'], 2)){
-
                 // Upload to storage, not DB, return list name image
                 $listImg = $this->uploadThumbnail();    
-
                 //  If Error
                 if(!$listImg){
                     setHTTPCode(500, "ERROR while update thumbnail!");
@@ -263,7 +290,6 @@
                 //  Upload thumbnail image to database, get list of name image from upload local storage
                 $this->uploadThumbOnDB($listImg);;
             }
-
                 // Add category
             if(!empty($categorys)){
                 $this->addCategory($categorys);
@@ -272,36 +298,30 @@
             setHTTPCode(200, "Create successful!");
         }
 
-
-            // EDIT PRODUCT
         public function editProductIndex(){
                 //  Check if have param
             if(!isset($_GET['id'])){ 
                 setHTTPCode(500, "Please pass parameter!");
                 return;
             }
-            
                 // Get Product
             $product = $this->prodModel->getProductWithId($_GET['id'], ['products.*, images.name, images.image_id, cp.category_id, cp.category_name']);
             if(!$product){  // if product not found
                 setHTTPCode(500, "Product not found!");
                 return;
             }
-
                 //  Merge many records result to one
             $product = mergeResult(['name', 'category_name'], ['listImage', 'categoryName'], 'id', $product, ['name' => 'image_id', 'category_name' => 'category_id']);
-
                 //  Get All category product
             $listCategoryProduct = array_values($product)[0]['categoryName'];
             $categorys = $this->prodModel->select(NULL, '*', 'categorys');
-        
-                // Remove category have from product to $categorys Array (contain all category include category of product, we go to remove them out)
+                // Remove category of product to $categorys Array (contain all category include category of product, we go to remove them out)
                 // If product category not empty    
             if(!empty($listCategoryProduct)){  
                     //  Loop through all category of product
                 foreach($listCategoryProduct as $idCate => $cateName){   
                     foreach($categorys as $key => $element){ //  Loop through all category 
-                        if($element['id'] == $idCate){  //  If element['id'] equal to $idCate of product
+                        if($element['id'] == $idCate){  //  If element['id'] category equal to $idCate of product
                             unset($categorys[$key]);   //  remove that category from array category and break
                             break;
                         }
@@ -309,7 +329,7 @@
                 }
             }
             else{ 
-                // product category is empty, set key categoryName equal null array
+                // product category is empty, set key categoryName of product equal null array
                 $product[getFirstKey($product)]['categoryName'] = [];
             }
         
@@ -321,15 +341,30 @@
             return;
         }
 
+        /**
+         * Update product
+         * @param {Object} $_POST['imgDel'] 
+         * @param {Object} $_POST['nameImgDel']
+         * @param {Object} $_POST['cateAdd']
+         * @param {Object} $_POST['cateDel']
+         * @param {File}   $_FILES['header'], $_FILES['thumbnail']
+         * @param {string} $_POST['title']
+         * @param {string} $_POST['description'] 
+         * @param {string} $_POST['price'] 
+         * @param {string} $_POST['status'] 
+         * @param {string} $_POST['rate']
+         */
         public function postEditProduct(){
+            if(!isset($_POST['imgDel'], $_POST['nameImgDel'], $_POST['cateAdd'], $_POST['cateDel'], $_FILES['header'], $_FILES['thumbnail'], $_POST['price'], $_POST['status'], $_POST['rate'], $_POST['description'])){
+                setHTTPCode(400, "Error, empty field!!");
+                return;
+            }
                 //  Get array name & id of image thumbnail need to delete
             $arrRmvImg = getArrFromJSON($_POST['imgDel']);
             $arrNameRmvImg = getArrFromJSON($_POST['nameImgDel']);
-
                 //  Get array category add & del
             $cateAdd = getArrFromJSON($_POST['cateAdd']);
             $cateDel = getArrFromJSON($_POST['cateDel']);
-
                 //  Update header image if have
             $imgHeader = false;
             if(!checkEmptyFile($_FILES['header'], 1)){   //  if image header is not empty
@@ -339,10 +374,8 @@
                     return;
                 }
             }
-
                 // Update field, eg: title,description,...,pass variable $imgHeader for check if have header image or not 
             $this->editProduct($imgHeader);  
-
                 // Update thumbnail if have
             if(!checkEmptyFile($_FILES['thumbnail'], 2)){
                 $listImg = $this->uploadThumbnail();   // Upload to storage, not DB, return list name image
@@ -352,37 +385,35 @@
                 }
                 $this->uploadThumbOnDB($listImg); //  If not error, save list name image to database
             }
-                
                 // Remove old thumbnail
             $this->deleteThumbOnDB($arrRmvImg, $arrNameRmvImg); 
-
                 // Add Category if array add category send from client not empty
             $cateAdd = $this->validArrCate($cateAdd);
-            if(!empty($cateAdd)){
+            if(!empty($cateAdd) ){
                 $this->addCategory($cateAdd);   //  Add to DB
             }
-
+            
                 // Delete category if array delete category send from client not empty
             if(!empty($cateDel)){
                 $this->deleteCategory($cateDel); // Remove from DB
             }
-
                 /******** ALL IS SUCCESS  ***********/
             setHTTPCode(200, "Update success!");
         }
 
-
-            //  LOGIN
+        /**
+         * ADMIN LOGIN
+         * @param {String} $_POST['username']
+         * @param {String} $_POST['password']
+         */
         public function postLogin(){
                 //  Check if not empty 
             if(!empty($_POST['username']) && !empty($_POST['password']) && empty($_SESSION['user'])){ 
                 $username = $_POST['username'];
                 $password = $_POST['password'];
-
                     //  Get user
                 $user = $this->model->select(NULL, ["username" => $username,
                                                     "type" => 'admin']);
-                    
                     //  Check if user exist and verify password success
                 $result = isset($user[getFirstKey($user)]['password']);
                 if($result && password_verify($password, $user[getFirstKey($user)]['password'])){
@@ -398,15 +429,18 @@
             setHTTPCode(500, "Something wrong, please check again!");
         }
 
-        
-            //  REGISTER
+        /**
+         * ADMIN REGISTER
+         * @param {String} $_POST['username']
+         * @param {String} $_POST['password']
+         * @param {String} $_POST['name']
+         */
         public function postRegister(){
             if(!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['name'])){
                 //  Assign variable
                 $username = $_POST['username'];
                 $password = $_POST['password'];
                 $name = $_POST['name'];
-
                 //  Check if username is exist
                 $checkExist = $this->model->select(NULL, ['username' => $username,
                                                         'type' => 'admin']); 
@@ -414,7 +448,6 @@
                     setHTTPCode(500, "Username exist!");
                     return;
                 }
-
                 // Insert new User
                 $password = password_hash($password, PASSWORD_DEFAULT); //  hash password
                 $column = ['username', 'password', 'name', 'status', 'type'];
@@ -427,12 +460,14 @@
                 setHTTPCode(500, "Field Empty!!");
         }
 
-
-            //  ADD CATEGORY
         public function addCateIndex(){
             $this->render($this->fileRender['add-category'], ['title' => 'Add Category']);
         }
-         
+        
+        /**
+         * Add new category
+         * @param {String} $_POST['category']
+         */
         public function postAddCate(){
             if(empty($_POST['category'])){  //  Check if don't have name category to add
                 setHTTPCode(500, 'Empty Field!!');
@@ -450,21 +485,21 @@
 
             //  Column need to insert
             $column = ['name', 'description'];
-
             //  Data need insert  
             $value = 
             [
                 [$_POST['category'], $description]
             ];
-
             $this->prodModel->insert($value, $column, 'categorys');
             setHTTPCode(200, 'Create successful!');
             return;
       
         }  
         
-        
-            //  EDIT CATEGORY
+        /**
+         * Render pate edit category
+         * @param {String} $_GET['id']
+         */
         public function editCateIndex(){
             if(empty($_GET['id'])){ //  Check id field if empty
                 setHTTPCode(500, 'Please pass id!');
@@ -482,9 +517,15 @@
                                             'category' => $category]);
         }
  
+        /**
+         * Edit category
+         * @param {String} $_POST['category']
+         * @param {String} $_POST['id'] (require)
+         * @param {String} $_POST['description']
+         */
         public function postEditCate(){
-            if(empty($_POST['category']) || empty($_POST['id']) || !isset($_POST['description'])){
-                setHTTPCode(500, "ERROR!");
+            if(!isset($_POST['category']) || empty($_POST['id']) || !isset($_POST['description'])){
+                setHTTPCode(500, "ERROR, empty field or wrong parameter!");
                 return;
             }
             //  Update categorys table
@@ -494,8 +535,10 @@
             setHTTPCode(200, 'Success!');
         }
 
-
-            //  DELETE CATEGORY
+        /**
+         * Delete category
+         * @param {String} $_POST['id'] (require)
+         */
         public function postDeleteCate(){
             if(empty($_POST['id'])){
                 setHTTPCode(500, "Error, id is empty!");

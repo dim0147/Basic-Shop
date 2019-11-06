@@ -4,7 +4,7 @@
 
     route('/admin/add-product', function(){
         global $adminController;
-        $adminController->addProduct();
+        $adminController->addProductIndex();
     });
 
     route('/admin/post/add-product', function(){
