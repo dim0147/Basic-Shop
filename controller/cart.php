@@ -288,7 +288,7 @@ class CartController extends Controller{
 
         public function postCheckout(){ //  Request for  make charge 
                 //  Check if empty cart or user
-            if(empty($_SESSION['cart']['items']) && !isset($_SESSION['user'])){
+            if(empty($_SESSION['cart']['items']) || empty($_SESSION['user'])){
                 setHTTPCode(400, "Empty cart or user");
                 return;
             }   
@@ -506,6 +506,7 @@ class CartController extends Controller{
             }
                 //  Insert list item to DB
             $this->prodModel->insert($cartItemVal, NULL, 'cart_item');
+            return true;
         }    
 }
 
