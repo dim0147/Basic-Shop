@@ -12,7 +12,7 @@
 
     //  ENVIRONMENT
     define('DEVELOP_FOLDER', '');
-    define('URL_WEBSITE', 'http://192.168.33.10');
+    define('URL_WEBSITE', 'http://dev.shop');
     define('PATH_IMAGE_UPLOAD',  getcwd() . "/views/public/image");
     define('DISPLAY_ERROR', TRUE);
 

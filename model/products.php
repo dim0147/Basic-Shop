@@ -48,14 +48,6 @@
             }
         }
 
-        public function getProdWithField($field, $condition){
-            $field = implode(',' , $field);
-            
-            $stmt = $this->pdo->prepare("SELECT $field FROM products WHERE $condition");
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-
         public function addNewProduct($title, $descr, $price, $imageName, $stat, $rate){
             try{
                 if(is_null($this->pdo))

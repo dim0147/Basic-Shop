@@ -8,8 +8,9 @@
                     'login' => 'user.login'
                 ];
         }
-
+            //  Get Profile
         public function index(){
+                //  Check user
             if(empty($_SESSION['user'])){
                 setHTTPCode(400, "User not found!");
                 return;
@@ -62,7 +63,7 @@
                     }
                 }
             }
-            printB($orders);
+                //  Render page  
             $this->render($this->fileRender['index'],
                 [
                     'users' => $user,
@@ -76,14 +77,18 @@
         }
 
         public function postLogin(){
-            //  Check if not empty
-            if(!empty($_POST['username']) && !empty($_POST['password']) && empty($_SESSION['user'])){ 
+                //  Check if not empty
+            if(empty($_POST['username']) || empty($_POST['password']) || !empty($_SESSION['user'])){ 
+                setHTTPCode(500, "Something wrong, please check again!");
+                return;
+            }
+                    //  Get username and password
                 $username = $_POST['username'];
                 $password = $_POST['password'];
 
                     //  Get user through username
                 $user = $this->model->select(NULL, ["username" => $username,
-                                                            "type" => 'user']);
+                                                    "type" => 'user']);
 
                     // Check if user exist and password verify success
                 $result = isset($user[getFirstKey($user)]['password']);
@@ -93,18 +98,18 @@
                     setHTTPCode(200, "Sign In Success!");
                     return;
                 }
-                else{
+                else{   //  Verify password fail
                     setHTTPCode(500, "Username or Password Wrong!");
                     return;
                 }
-            }
-            setHTTPCode(500, "Something wrong, please check again!");
+            
         }
 
         public function postRegister(){
                 //  Check if not empty
-            if(!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['name']) && !isset($_SESSION['user'])){
-                    
+            if(empty($_POST['username']) || empty($_POST['password']) || empty($_POST['name']) || !empty($_SESSION['user'])){
+                setHTTPCode(500, "Field empty or user already Login!!");
+            }
                     //  Assign variable
                 $username = $_POST['username'];
                 $password = $_POST['password'];
@@ -125,10 +130,7 @@
                 $this->model->insert($values, $column);
                 setHTTPCode(200, "Register success!!");
                 return;
-            }
-            else
-                setHTTPCode(500, "Field empty or user already Login!!");
         }
-
+                
     }
 ?>

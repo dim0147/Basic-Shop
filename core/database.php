@@ -81,6 +81,48 @@
             return $result;
         }
 
+        public function selectMany($fields = NULL, $join = NULL, $condQuery, $table = NULL){
+            if(is_null($this->pdo))
+            return false;
+
+                // Check table, if not pass param, use default table
+            if ($table === NULL)
+                $table = $this->table;
+
+                // Check field require, if not pass param, use '*'
+            if($fields === NULL)
+                $fields = ['*'];
+            $fields = implode(',' , $fields);
+
+                //  Initilize condition array, contain['title IN (?,?,?)', 'id IN (?,?,?)']
+            $condition = [];
+
+                //  Value to insert
+            $valueToInsert = [];
+
+                //  Loop through 
+            foreach($condQuery as $field => $value){
+                    //  Create element place holder, ex: 'id IN(?,?,?)'
+                $condTemp = $field . ' IN (' . createPlaceHold(count($value)) . ')';
+                    //  Push to condition array
+                array_push($condition, $condTemp);
+                    //  Loop though value 
+                foreach($value as $element){    
+                        //  Push every element in value, ex: id IN (1,2,3)/ 1,2,3 is element loop though
+                    array_push($valueToInsert, $element);
+                }
+            }
+
+                //  Implode condition to get query
+            $condition = implode(' AND ', $condition);
+            
+                //  Create query
+            $sql = "SELECT $fields FROM $table $join WHERE $condition";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($valueToInsert);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         public function insert($arrValue, $arrColumn = NULL, $table = NULL){
             try{
                 if(is_null($this->pdo))

@@ -11,8 +11,13 @@
 
         public function index(){
             if($this->model != NULL){
-                $products = $this->model->getAllProduct();; //  get all from Product Model
+                    //  Get all from Product Model
+                $products = $this->model->getAllProduct();
+
+                    //  Merge result identify by id product
                 $products = mergeResult(['category_name', 'name'], ['category_list', 'image_list'], 'id', $products);
+                
+                    //  Render product
                 $this->render($this->fileRender['index'],
                  [
                      'title' => 'Products',
@@ -22,21 +27,35 @@
         }
 
         public function detail(){
-            if (!empty($_GET['q'])){    //  If query not empty
-                $id = $_GET['q'];
-                $result = $this->model->getProductWithId($id); //  Query Product
-                $result = mergeResult(['name'], ['image_list'], 'id', $result); // Merge to one 
-                if(count($result) <= 0) //  If not have
+                 //  If query not empty
+            if (empty($_GET['q'])){ 
+                setHTTPCode(400, 'Need param!');
+                return $this->renderNotFound();
+            }
+                    //  Get id product
+                $id = $_GET['q'];   
+
+                    //  Query Product
+                $result = $this->model->getProductWithId($id); 
+
+                    //  If not have
+                 if(!$result) {
+                    setHTTPCode(400, 'Bad request!');
                     return $this->renderNotFound();
-                $title = $result[key($result)]['title'];    //  Get title product
+                 }
+                
+                    // Merge to one 
+                $result = mergeResult(['name'], ['image_list'], 'id', $result); 
+
+                    //  Get title product
+                $title = $result[key($result)]['title']; 
+
+                    //  Render Product   
                 $this->render($this->fileRender['detail'],
                  [
                     'title' => $title,
                     'products' => $result
                  ]);
-            }
-            else    //  query is empty
-                return $this->renderNotFound();
         }
 
     }

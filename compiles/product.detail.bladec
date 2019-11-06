@@ -1,0 +1,4 @@
+<?php $_shouldextend[1]=1; ?>
+
+
+<?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

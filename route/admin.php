@@ -39,7 +39,7 @@
 
     route('/admin/edit-product?{id}', function(){
         global $adminController;
-        $adminController->editProduct();
+        $adminController->editProductIndex();
     });
 
     route('/admin/post/edit-product/', function(){
