@@ -10,6 +10,7 @@
     $LOAD_CORE = [
         'helper', // new
         'blade_template',
+        'session',
         'controller',
         'database',
         'route'

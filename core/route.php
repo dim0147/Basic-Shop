@@ -1,4 +1,5 @@
 <?php
+    // OK
     $routes = [];
 
     function removeParamURL($url){

@@ -18,6 +18,7 @@
                 global $database;
                 $this->table = $table;
                 if(is_null($database)){
+                    // Check if this data base is null
                     $database = new PDO("mysql:host=$this->servername;dbname=$this->dbname", $this->dbuser, $this->dbpassword);
                     $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     $this->pdo = $database;
@@ -31,9 +32,11 @@
             }
         }
 
+        /*
         function getAll(){
-            if(is_null($this->pdo))
+            if(is_null($this->pdo)){
                 return NULL;
+            }
             $stmt = $this->pdo->prepare("SELECT * FROM $this->table");
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -47,6 +50,7 @@
             $stmt->execute();
             return $stmt->fetch();
         }
+        */
 
         function checkExist($arr, $field = '*'){
             try{
@@ -73,7 +77,6 @@
                 $stmt = $this->pdo->prepare("INSERT INTO $this->table VALUES $value");
                 $stmt->execute();
                 return true;
-                
             }
             catch(PDOException $err){
                 die($err);

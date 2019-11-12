@@ -10,20 +10,6 @@
 </style>
 
 <?php 
-
-if (!isset($_SESSION)){
-    echo "chua khoi tao \n";
-    session_start();
-    if(!isset($_SESSION['cart'])){
-    echo "cart chua khoi tao";
-    $_SESSION['cart'] = [
-            "items" => [],
-            "totalPrice" => 0,
-            "totalQty" => 0
-        ];
-    }
-}
-
 class CartController extends Controller{
 
         private $prodModel;
