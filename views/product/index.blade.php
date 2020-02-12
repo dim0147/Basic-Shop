@@ -1,13 +1,13 @@
 @extends('layouts.mainlayout')
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href='@asset('views/product/css/index.css')'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href='@asset('views/public/css/productIndex.css')'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 @endsection
 
 @section('content')
+  <meta name="viewport" content="width=1177"/>
   <div class="main">
-
         <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
           <ol class="carousel-indicators">
               <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -15,47 +15,41 @@
               <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
           </ol>
 
-      <div class="carousel-item active">
+          <div class="carousel-item active">
             <div class="d-block img-fluid">
               <div class="head" 
-              style="background-image: url(https://trak.in/wp-content/uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg)">
+                style="background-image: url(https://trak.in/wp-content/uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg)">
               </div>
               <img class="imgFixed" src="https://trak.in/wp-content/  uploads/2019/09/Flipkart-Amazon-Banner-Opt-1-1280x720-1024x576-1-1024x576.jpg" alt="First slide">
-              </div>
-        </div>
+            </div>
+          </div>
 
-        <div class="carousel-item">
-          <div class="d-block img-fluid">
-            <div class="head" 
-            style="background-image: url(https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg)">
-              </div>
-                  <img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt="Second slide">
-              </div>
-      </div>
-
-        <div class="carousel-item">
+          <div class="carousel-item">
             <div class="d-block img-fluid">
-          <div class="head" 
-          style="background-image: url(https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop)">
+              <div class="head" style="background-image: url(https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg)">
               </div>
-                  <img class="imgFixed" src="https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop" alt="Third slide">
+              <img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt="Second slide">
+            </div>
+          </div>
+
+          <div class="carousel-item">
+            <div class="d-block img-fluid">
+              <div class="head" style="background-image: url(https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop)">
               </div>
+              <img class="imgFixed" src="https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop" alt="Third slide">
+            </div>
+          </div>
+
+          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+
+          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
         </div>
-            
-
-
-
-      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-
-      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
-
-    </div>
 
         <div class="body">
       <div class="parentContainer">
@@ -64,7 +58,8 @@
         </div>
         <div>
           @foreach ($products as $product)
-          <a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" title="{{$product['title']}}" image="views/public/image/{{$product['image']}}" des="{{$product['description']}}">
+          <a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" identify="{{$product['id']}}" title="{{$product['title']}}" 
+          image="views/public/image/{{$product['image']}}" des="{{$product['description']}}">
             <img class="im" src="@asset('views/public/image/'.$product['image'])" alt="">
             <div class="product">
               <div class="title">
@@ -99,7 +94,7 @@
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="demo"></h5>
+            <h5 class="modal-title" id="modalTitle"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">x</span>
             </button>
@@ -113,19 +108,30 @@
             <!--<p id="das" class="modalImage" alt="blk"></p>-->
           </div>
           <div class="modal-footer">
-            <form action="cart/action" method="POST">
-            <!-- Name of input element determines name in $_FILES array -->
-                Send this file: <input type="text" name="action" list="ls"/>
-                <datalist id="ls">
-                    <option value="add">
-                    <option value="remove">
-                    <option value="decrease">
-                    <option value="show">
-                </datalist>
+            <form class="form" action="/WEBASSIGNMENT2/cart/action" method="POST">
+              <div>
+                Item_id = 
+                <input type="hidden" name="id" id="modalID">
+              </div>
 
-                <input name="id" value="4"  />
-                <input name="quantity" value="1"  />
+              <div>
+                Action:
+                <select name="action" list="ls">
+                  <option value="show">show</option>
+                  <option value="add">add</option>
+                  <option value="remove">remove</option>
+                  <option value="decrease">decrease</option>
+                </select>
+              </div>
+
+              <div>
+                Quantity:
+                <input type="number" name="quantity" value="1"/>
+              </div>
+
+              <div>
                 <input type="submit" value="Send File" />
+              </div>
             </form>
                 <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cart</button>
                 <button type="button" class="btn btn-primary">BUY</button>-->
@@ -138,3 +144,5 @@
   @section('javascript')
   <script src="@asset('views/product/js/javascript.js')"></script>
   @endsection
+
+

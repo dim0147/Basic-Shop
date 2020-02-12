@@ -1,13 +1,13 @@
 <?php $_shouldextend[1]=1; ?>
 
 <?php $this->startSection('css'); ?>
- <link rel="stylesheet" type="text/css" href='<?php  echo (isset($this->assetDict[('views/product/css/index.css')]))?$this->assetDict[('views/product/css/index.css')]:$this->baseUrl.'/'.('views/product/css/index.css'); ?>'>
+ <link rel="stylesheet" type="text/css" href='<?php  echo (isset($this->assetDict[('views/public/css/productIndex.css')]))?$this->assetDict[('views/public/css/productIndex.css')]:$this->baseUrl.'/'.('views/public/css/productIndex.css'); ?>'>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <?php $this->stopSection(); ?>
 
 <?php $this->startSection('content'); ?>
+ <meta name="viewport" content="width=1177"/>
  <div class="main">
-
  <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
  <ol class="carousel-indicators">
  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -26,8 +26,7 @@
 
  <div class="carousel-item">
  <div class="d-block img-fluid">
- <div class="head" 
- style="background-image: url(https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg)">
+ <div class="head" style="background-image: url(https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg)">
  </div>
  <img class="imgFixed" src="https://img.mshanken.com/d/cao/bolt/2019-04/bslv19-std-800x450-2.jpg" alt="Second slide">
  </div>
@@ -35,15 +34,11 @@
 
  <div class="carousel-item">
  <div class="d-block img-fluid">
- <div class="head" 
- style="background-image: url(https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop)">
+ <div class="head" style="background-image: url(https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop)">
  </div>
  <img class="imgFixed" src="https://bigten.org/images/2019/9/11/19MBBT_Header_v2.jpg?width=1024&mode=crop" alt="Third slide">
  </div>
  </div>
- 
-
-
 
  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -54,7 +49,6 @@
  <span class="carousel-control-next-icon" aria-hidden="true"></span>
  <span class="sr-only">Next</span>
  </a>
-
  </div>
 
  <div class="body">
@@ -64,7 +58,8 @@
  </div>
  <div>
  <?php $__currentLoopData = $products; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
- <a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" title="<?php echo static::e($product['title']); ?>" image="views/public/image/<?php echo static::e($product['image']); ?>" des="<?php echo static::e($product['description']); ?>">
+ <a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" identify="<?php echo static::e($product['id']); ?>" title="<?php echo static::e($product['title']); ?>" 
+ image="views/public/image/<?php echo static::e($product['image']); ?>" des="<?php echo static::e($product['description']); ?>">
  <img class="im" src="<?php  echo (isset($this->assetDict[('views/public/image/'.$product['image'])]))?$this->assetDict[('views/public/image/'.$product['image'])]:$this->baseUrl.'/'.('views/public/image/'.$product['image']); ?>" alt="">
  <div class="product">
  <div class="title">
@@ -99,7 +94,7 @@
  <div class="modal-dialog modal-lg modal-dialog-centered">
  <div class="modal-content">
  <div class="modal-header">
- <h5 class="modal-title" id="demo"></h5>
+ <h5 class="modal-title" id="modalTitle"></h5>
  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
  <span aria-hidden="true">x</span>
  </button>
@@ -113,19 +108,30 @@
  <!--<p id="das" class="modalImage" alt="blk"></p>-->
  </div>
  <div class="modal-footer">
- <form action="cart/action" method="POST">
- <!-- Name of input element determines name in $_FILES array -->
- Send this file: <input type="text" name="action" list="ls"/>
- <datalist id="ls">
- <option value="add">
- <option value="remove">
- <option value="decrease">
- <option value="show">
- </datalist>
+ <form class="form" action="/WEBASSIGNMENT2/cart/action" method="POST">
+ <div>
+ Item_id = 
+ <input type="hidden" name="id" id="modalID">
+ </div>
 
- <input name="id" value="4"  />
- <input name="quantity" value="1"  />
+ <div>
+ Action:
+ <select name="action" list="ls">
+ <option value="show">show</option>
+ <option value="add">add</option>
+ <option value="remove">remove</option>
+ <option value="decrease">decrease</option>
+ </select>
+ </div>
+
+ <div>
+ Quantity:
+ <input type="number" name="quantity" value="1"/>
+ </div>
+
+ <div>
  <input type="submit" value="Send File" />
+ </div>
  </form>
  <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cart</button>
  <button type="button" class="btn btn-primary">BUY</button>-->
@@ -138,4 +144,7 @@
  <?php $this->startSection('javascript'); ?>
  <script src="<?php  echo (isset($this->assetDict[('views/product/js/javascript.js')]))?$this->assetDict[('views/product/js/javascript.js')]:$this->baseUrl.'/'.('views/product/js/javascript.js'); ?>"></script>
  <?php $this->stopSection(); ?>
+
+
+
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

@@ -19,7 +19,11 @@
     route('/user/post/register', function(){
         global $userController;
         $userController->postRegister();
-    })
+    });
 
     
+    route('/user/logout', function(){
+        global $userController;
+        $userController->logOut();
+    });
 ?>

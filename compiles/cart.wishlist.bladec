@@ -1,0 +1,47 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('content'); ?>
+	<style>
+ table {
+ font-family: arial, sans-serif;
+ border-collapse: collapse;
+ width: 100%;
+ }
+
+ td, th {
+ border: 1px solid #dddddd;
+ text-align: center;
+ padding: 8px;
+ }
+
+ tr:nth-child(even) {
+ background-color: #dddddd;
+ }
+
+ img {
+ border: 1px solid black;
+ width: 120px;
+ height: 120px;
+ }
+	</style>
+	<h2>Hello</h2>
+	<table>
+ <tr>
+ <th>Product Image</th>
+ <th>Product Title</th>
+ <th>Quantity</th>
+ <th>Total Price</th>
+ </tr>
+ <?php $__currentLoopData = $carts['items']; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $cart => $values): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <tr>
+ <td><img src="<?php  echo (isset($this->assetDict[('views/public/image/'.$values['product_image'])]))?$this->assetDict[('views/public/image/'.$values['product_image'])]:$this->baseUrl.'/'.('views/public/image/'.$values['product_image']); ?>"></td>
+ <td><?php echo static::e($values['title']); ?></td>
+ <td><?php echo static::e($values['quantity']); ?></td>
+ <td><?php echo static::e($values['priceTotal']); ?></td>
+ </tr>
+ 	<?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+	</table><br>
+	<p>Total Price: <b><?php echo static::e($carts['totalPrice']); ?></b></p>
+	<p>Total Product: <b><?php echo static::e($carts['totalQty']); ?></b></p>
+<?php $this->stopSection(); ?>
+<?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

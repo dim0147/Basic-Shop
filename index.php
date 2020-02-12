@@ -1,5 +1,6 @@
 <?php
-
+    //session_destroy();
+    // echo $_SESSION['user'];
     /* LOAD CONFIG */
     require_once('config/config.php');
 
