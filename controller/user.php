@@ -5,7 +5,8 @@
                 $this->model = new UserModel();
                 $this->fileRender = [
                     'index' => 'user.index',
-                    'login' => 'user.login'
+                    'login' => 'user.login',
+                    'register' => 'user.register'
                 ];
         }
             //  Get Profile
@@ -59,7 +60,7 @@
                                 $orders[$key]['listProduct'][$idProd] = $element;
                                 break;
                             }
-                        }                
+                        }
                     }
                 }
             }

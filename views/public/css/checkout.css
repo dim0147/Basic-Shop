@@ -1,0 +1,201 @@
+/*
+@import url('https://fonts.googleapis.com/css?family=Viaoda+Libre&display=swap" rel="stylesheet');
+$coral: #ec7149;
+$maroon: #8d2807;
+$title: #5b479c;
+*/
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: orange;
+}
+
+.wrapper {
+    margin-top: 5%;
+
+    display: flex;
+    justify-content: center;
+    font-family: '', cursive;
+    margin: auto;
+
+    -webkit-box-shadow: 9px 14px 26px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 9px 14px 26px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 9px 13px 25px 0px rgba(0, 0, 0, 0.2);
+
+    animation: slideUp 2500ms ease;
+}
+
+@keyframes slideUp {
+    0% {
+        -webkit-transform: translateY(100%);
+        transform: translateY(100%);
+        visibility: visible;
+    }
+
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+
+    }
+}
+
+.container {
+    background-color: turquoise;
+    border: 1px solid black;
+    padding: 20px;
+}
+
+h1 {
+    align-self: center;
+}
+
+form {
+    width: 100%;
+
+    >* {
+        margin-top: 21px;
+    }
+
+    input {
+        width: 100%;
+        min-height: 26px;
+        border: 0;
+        font-size: 1rem;
+        letter-spacing: .15rem;
+        font-family: 'Viaoda Libre', cursive;
+        margin-top: 6px;
+        color: $maroon;
+        border-radius: 5px;
+    }
+
+    label {
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 3px;
+        color: $maroon;
+    }
+
+    h1 {
+        font-size: 25px;
+        line-height: 11px;
+        color: $title;
+        letter-spacing: 2px;
+    }
+
+    h1:nth-of-type(3) {
+        margin-top: 10%;
+    }
+}
+
+.name {
+    justify-content: space-between;
+    display: flex;
+    width: 100%;
+
+    div {
+        width: 46%;
+    }
+}
+
+.address-info {
+    display: flex;
+    justify-content: space-between;
+
+    div {
+        width: 35%;
+    }
+}
+
+.cc-info {
+    display: flex;
+    justify-content: space-between;
+
+    div {
+        width: 50%;
+    }
+}
+
+.btns {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    button {
+        margin: 4px 0;
+        height: 31px;
+        width: 40%;
+        color: #cfc9e1;
+        background-color: #4a3b76;
+        text-transform: uppercase;
+        border: 0;
+        border-radius: .3rem;
+        letter-spacing: 2px;
+
+        &:hover {
+            animation-name: btn-hov;
+            animation-duration: 550ms;
+            animation-fill-mode: forwards;
+        }
+    }
+}
+
+@keyframes btn-hov {
+    100% {
+        background-color: #cfc9e1;
+        color: #4a3b76;
+        transform: scale(1.05)
+    }
+}
+
+input:focus,
+button:focus {
+    outline: none;
+}
+
+@media (max-width: 737px) {
+    .wrapper {
+        width: 100%;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .btns {
+        align-items: center;
+
+        button {
+            width: 50%;
+        }
+    }
+
+    form h1 {
+        text-align: center;
+    }
+
+    .name,
+    .address-info,
+    .cc-info {
+        flex-direction: column;
+        width: 100%;
+        justify-content: space-between;
+
+        div {
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            display: flex;
+        }
+    }
+
+    .street,
+    .cc-num {
+        text-align: center;
+    }
+
+    input {
+        margin: 6px 0;
+        min-height: 35px;
+    }
+}
