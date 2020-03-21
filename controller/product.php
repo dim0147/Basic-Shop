@@ -4,8 +4,8 @@
         function __construct(){
            $this->model = new ProductModel();
            $this->fileRender = [
-            'index' => 'product.index',
-            'detail' => 'product.detail'
+                'index' => 'product.index',
+                'detail' => 'product.detail'
             ]; 
         }
 
@@ -16,46 +16,50 @@
 
                     //  Merge result identify by id product
                 $products = mergeResult(['category_name', 'name'], ['category_list', 'image_list'], 'id', $products);
-                
                     //  Render product
                 $this->render($this->fileRender['index'],
-                 [
+                [
                      'title' => 'Products',
                      'products' => $products
-                 ]);
+                ]);
             }
         }
 
+
+
         public function detail(){
-                 //  If query not empty
-            if (empty($_GET['q'])){ 
+            $id = $_GET['q']; //  Get product id
+            $title = '';
+            $result = '';
+
+            if (empty($id)){
                 setHTTPCode(400, 'Need param!');
+                return;
+            }
+
+            $result = $this->model->getProductWithId($id);
+            if(!$result) { //  If query not empty
+                setHTTPCode(400, 'Bad request!');
                 return $this->renderNotFound();
             }
-                    //  Get id product
-                $id = $_GET['q'];   
-
+            $result = mergeResult(['name'], ['image_list'], 'id', $result);
+            $title = $result[key($result)]['title'];
+            /*
                     //  Query Product
-                $result = $this->model->getProductWithId($id); 
 
                     //  If not have
-                 if(!$result) {
-                    setHTTPCode(400, 'Bad request!');
-                    return $this->renderNotFound();
-                 }
                 
-                    // Merge to one 
-                $result = mergeResult(['name'], ['image_list'], 'id', $result); 
+                    // Merge to one  
 
                     //  Get title product
-                $title = $result[key($result)]['title']; 
+            */
 
                     //  Render Product   
-                $this->render($this->fileRender['detail'],
-                 [
-                    'title' => $title,
-                    'products' => $result
-                 ]);
+            $this->render($this->fileRender['detail'],
+            [
+                'title' => $title,
+                'products' => $result
+            ]);
         }
 
     }

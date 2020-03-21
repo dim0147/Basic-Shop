@@ -20,7 +20,7 @@
         }
 
         public function getProductWithId($id, $fields = ['products.*', 'images.name']){
-            try{
+            try {
                 if(is_null($this->pdo))
                     return NULL;
                     

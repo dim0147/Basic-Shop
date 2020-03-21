@@ -30,7 +30,8 @@ class CartController extends Controller{
             $this->prodModel = new ProductModel();
             $this->userModel = new UserModel();
             $this->fileRender = [
-                'checkout' => 'cart.checkout'
+                'checkout' => 'cart.checkout',
+                'cart' => 'cart.wishlist'
             ];
             $this->apiContext = new ApiContext(
                 new OAuthTokenCredential(
@@ -64,10 +65,8 @@ class CartController extends Controller{
             $info = $this->prodModel->selectMany(['id', 'title'], null, $condition);
                 //  Loop through list item
             foreach($listItem as $key => $item){
-                    //  Get name of item
-                $titleProd = $item['name'];
-                    //  Loop through addition info result
-                foreach($info as $element){
+                $titleProd = $item['name']; //  Get name of item
+                foreach($info as $element){ //  Loop through addition info result
                         //  If name of item equal name of addition info merge two array
                     if ($titleProd == $element['title'])
                         $listItem[$key] = array_merge_recursive($listItem[$key], $element);
@@ -84,11 +83,12 @@ class CartController extends Controller{
     
             //  CART
         public function action(){
-            if(empty($_SESSION['cart']) || empty($_POST['action'])){
-                setHTTPCode(500, "Invalid cart or action");
+            if (!isset($_POST['action']))$_POST['action'] = '';
+            if(empty($_SESSION['cart'])){
+                setHTTPCode(400, "Invalid cart");
                 return;
             }
-            
+
             switch($_POST['action']){
                 case "add":
                     $this->addToCart();
@@ -99,21 +99,25 @@ class CartController extends Controller{
                 case "remove":
                     $this->removeProd(NULL);
                     break;
-                case "show":
-                    $this->showCart();
-                    break;
                 default:
-                    setHTTPCode(500, "Invalid action");
+                    setHTTPCode(400, "Invalid action");
             }
+
+            $cart = $_SESSION['cart'];
+            // printB($cart);
+            $this->render($this->fileRender['cart'],
+                [
+                    'title' => 'cart',
+                    'carts' => $cart
+                ]);
         }
 
         public function addToCart(){    //  Action Add
                 //  Check empty field
-            if (empty($_SESSION['cart']) || empty($_POST['id']) || empty($_POST['quantity'])){
+            if (empty($_POST['id']) || empty($_POST['quantity'])){
                 setHTTPCode(500, "Invalid cart or ID or quantity");
                 return;
             }
-            
                 //  Get cart
             $cart = $_SESSION['cart'];
 
@@ -134,7 +138,9 @@ class CartController extends Controller{
         public function addProdToCart(){    //  Add new Product to cart
 
                 //  Get product
-            $prod = $this->prodModel->getProductWithId($_POST['id'], ['products.price', 'products.title']);
+            $prod = $this->prodModel->getProductWithId($_POST['id'], ['products.price', 'products.title','products.image']);
+            printB($prod);
+
             if(!$prod){ //  If not found
                 setHTTPCode(500, "Product not found!");
                 return;
@@ -144,8 +150,9 @@ class CartController extends Controller{
             $cart = $_SESSION['cart'];
 
                 //  Create new item
-            $item = [   
+            $item = [
                 'product_id' => $_POST['id'],
+                'product_image' => $prod[0]['image'],
                 'quantity' => $_POST['quantity'],
                 'title' => $prod[0]['title'],
                 'price' => $prod[0]['price'],
@@ -265,16 +272,6 @@ class CartController extends Controller{
             
             setHTTPCode(200, "Remove success");
             return;
-        
-        }
-
-        public function showCart(){ //  Showing cart
-            if(!empty($_SESSION['cart'])){
-                printB($_SESSION['cart']);
-                setHTTPCode(200);
-                return;
-            }
-            setHTTPCode(500, 'Not Found!');
         }
 
 

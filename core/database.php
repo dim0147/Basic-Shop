@@ -44,16 +44,11 @@
                 $field = ['*'];
             $field = implode(',' , $field);
 
-                //  If select ALL
+                //  If the script is select ALL from table name
             if($condQuery === 'ALL' || $condQuery === '*' || $condQuery === 'All' || $condQuery === 'all'){
-                    //  Set up SQL
-                $sql = "SELECT $field 
-                    FROM $table";
-    
+                $sql = "SELECT $field FROM $table"; //  Set up SQL
                 $stmt = $this->pdo->prepare($sql);
-
-                    //  Execute sql
-                $stmt->execute();
+                $stmt->execute(); //  Execute sql
 
                     //  Return result
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

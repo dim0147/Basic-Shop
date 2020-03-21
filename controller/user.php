@@ -5,7 +5,8 @@
                 $this->model = new UserModel();
                 $this->fileRender = [
                     'index' => 'user.index',
-                    'login' => 'user.login'
+                    'login' => 'user.login',
+                    'register' => 'user.register'
                 ];
         }
             //  Get Profile
@@ -18,7 +19,7 @@
 
                 //  Get Profile user, include orders
             $user = $this->model->select(['user_id', 'username', 'name'], ['user_id' => $_SESSION['user'],
-                                                                           'type' => 'user']);
+                'type' => 'user']);
             if(!$user){ //  if error
                 setHTTPCode(500, "Error, cannot find user!");
                 return;
@@ -59,7 +60,7 @@
                                 $orders[$key]['listProduct'][$idProd] = $element;
                                 break;
                             }
-                        }                
+                        }
                     }
                 }
             }
@@ -76,8 +77,13 @@
             $this->render($this->fileRender['login'], ['title' => "Login"]);
         }
 
-        public function postLogin(){
+        public function postLogin(){ 
+           // session_destroy();
+            /*if(!empty($_SESSION['user'])){
+                echo "user dang nhap roi dit me may " . $_SESSION['user'];
+                session_destroy();
                 //  Check if not empty
+            }*/
             if(empty($_POST['username']) || empty($_POST['password']) || !empty($_SESSION['user'])){ 
                 setHTTPCode(500, "Something wrong, please check again!");
                 return;
@@ -130,6 +136,10 @@
                 $this->model->insert($values, $column);
                 setHTTPCode(200, "Register success!!");
                 return;
+        }
+
+        function logOut(){
+            $_SESSION['user'] = NULL;
         }
                 
     }

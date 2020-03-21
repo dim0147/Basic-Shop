@@ -1,4 +1,4 @@
-
+<br><br>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#"><i class="fas fa-users"></i> Group Project</a>
@@ -8,15 +8,15 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home
+            <a class="nav-link" href="/WEBASSIGNMENT2/product">Home
               <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" href="/WEBASSIGNMENT2/cart/action">Your Cart</a>
           </li>
           <li class="nav-item"> 
-            <a class="nav-link" href="#">Services</a>
+            <a class="nav-link" href="/WEBASSIGNMENT2/product">Services</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
@@ -24,4 +24,19 @@
         </ul>
       </div>
     </div>
-  </nav>
+</nav>
+
+  <!--
+  <nav class="navbar navbar-expand-sm bg-light">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 1</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 2</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 3</a>
+    </li>
+  </ul>
+</nav>-->
