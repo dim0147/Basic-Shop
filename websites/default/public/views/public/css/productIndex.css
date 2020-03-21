@@ -1,0 +1,182 @@
+* {
+	-webkit-text-size-adjust: none;
+	text-size-adjust: none
+}
+
+div {
+	display: inline-block;
+}
+
+.main {
+	text-align: center;
+	width: 100%;
+	/*background-color: rgb(200,200,200);*/
+}
+
+.head {
+	width: 100vw;
+	height: 450px;
+	filter: blur(13px);
+	background-size: cover; 
+	background-repeat: no-repeat; 
+	background-position: center;
+}
+
+.imgFixed{
+	height: 450px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+  	bottom: 0;
+  	margin-left: auto;
+	margin-right: auto;
+}
+
+
+
+
+
+
+
+
+.body {
+	width: 100%;
+	background-image: url("flower.jpg");
+}
+
+.parentContainer {
+	width: 1177px;
+	background-color: rgb(248,230,248);
+	box-shadow: 2px 2px 2px grey;
+	/*background-color: rgb(248,248,248);*/
+   	opacity: 0.9;
+}
+
+.header {
+	width: 100%;
+	box-shadow: 2px 2px 2px grey;
+}
+
+.checked {
+	color: yellow;
+}
+
+
+.ch {
+	margin: 3px;
+	float:left;
+	width: 190px;
+	text-align: left;
+	background-color: white;
+	box-shadow: 1px 1px 1px lightgrey;
+}
+.ch div {
+	box-sizing: border-box;
+    overflow: hidden;
+
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+}
+
+
+.product {
+	margin: 6px;
+}
+.product .title {
+    font-size: 1em;
+    line-height: 1em;
+    height: 2em;
+    -webkit-line-clamp: 2;
+}
+.product .price {
+	color: grey;
+	line-height: 2em;
+	height: 3em;
+	margin-top: 0em;
+	-webkit-line-clamp: 1;
+
+}
+.product .description {
+	margin-top: -.5em;
+	font-size: 1em;
+	line-height: 1em;
+	height:3em;
+    -webkit-line-clamp: 3;
+}
+.product .rating {
+	margin-top: .5em;
+}
+
+
+
+
+
+.ch {
+	color: inherit;
+	text-decoration: none;
+}
+.ch:hover {
+	color: inherit;
+	text-decoration: none;
+	background-color: orange;
+}
+
+
+
+.im {
+	width: 190px;
+	height: 190px;
+	text-align: left;
+}
+
+.im img {
+	padding: 3px;
+	width: 190px;
+	height:190px;
+}
+
+
+
+.footer {
+	background-color: darkgrey;
+	width: 3000px;
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+.customModal {
+    width: 2000px;
+    margin: auto;
+}
+
+.modalContainer{
+	width: 50%;
+	min-height: 300px;
+	box-shadow: 2px 2px 2px lightgrey;
+}
+
+#modalImage {
+	height: auto;
+	float: left;
+	width: 50%;
+}
+
+#modalDescription {
+	padding: 10px;
+	float: left;
+	text-align: left;
+}
+
+.form div {
+	padding-right: 10px; 
+}
+
+.form input{
+	max-width: 100px;
+}
+
+.form select{
+	max-width: 100px;
+}

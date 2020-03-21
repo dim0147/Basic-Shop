@@ -1,0 +1,84 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('content'); ?>
+ 
+<form style="padding-top: 100px;" method="POST">
+ <?php $__currentLoopData = $product; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $prod): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <input type="hidden" name="id" value="<?php echo static::e($prod['id']); ?>"><br>
+ Title: <input type="text" name="title" value="<?php echo static::e($prod['title']); ?>"><br>
+ Price: <input type="text" name="price" value="<?php echo static::e($prod['price']); ?>"><br>
+ Status: <input type="text" name="status" value="<?php echo static::e($prod['status']); ?>"><br>
+ Rate: <input type="text" name="rate" value="<?php echo static::e($prod['rate']); ?>"><br>
+ Description: <textarea name="description" id="" cols="30" rows="10"><?php echo static::e($prod['description']); ?></textarea><br>
+ Header: <input type="file" name="header"><br>
+ <img sid="<?php echo static::e($prod['image']); ?>" src="<?php  echo (isset($this->assetDict[('views/public/image/'.$prod['image'])]))?$this->assetDict[('views/public/image/'.$prod['image'])]:$this->baseUrl.'/'.('views/public/image/'.$prod['image']); ?>" alt="header" style="width:50px; height:30px;"><br>
+ Thumbnail: <input type="file" name="thumbnail[]" multiple><br>
+ <?php $__currentLoopData = $prod['listImage']; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <img sid="<?php echo static::e($item); ?>" class="thumbnailImg" id="<?php echo static::e($id); ?>" src="<?php  echo (isset($this->assetDict[('views/public/image/'.$item)]))?$this->assetDict[('views/public/image/'.$item)]:$this->baseUrl.'/'.('views/public/image/'.$item); ?>" alt="thumbnail" style="width:50px; height:30px; margin: 10px;">
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ <br>
+ 
+ <?php $__currentLoopData = $prod['categoryName']; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <input class="category" idCategory="<?php echo static::e($id); ?>" type="checkbox" value='<?php echo static::e($item); ?>' checked><?php echo static::e($item); ?><br>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+
+ <?php $__currentLoopData = $category; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <input class="category" idCategory="<?php echo static::e($id); ?>" type="checkbox" value='<?php echo static::e($item['name']); ?>'><?php echo static::e($item['name']); ?><br>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ <br>
+ <button class="btn btn-primary submit">Submit</button>
+
+</form>
+
+<?php $this->stopSection(); ?>
+
+
+<?php $this->startSection('javascript'); ?>
+
+<script>
+ var imgIdDelete = [];
+ var imgNameDelete = [];
+ var categoryDelete = [];
+ var categoryAdd = {
+ '2': 'Killing',
+ '6': 'Multiplayer',
+ '7': 'Indle',
+ '8': 'Nhu cc'
+ };
+$('.submit').click(function(e){
+ e.preventDefault();
+ var data = new FormData($(this).parents('form')[0]);
+ data.append('imgDel', JSON.stringify(imgIdDelete));
+ data.append('nameImgDel', JSON.stringify(imgNameDelete));
+ data.append('cateAdd', JSON.stringify(categoryAdd));
+ data.append('cateDel', JSON.stringify(categoryDelete));
+ $.ajax({
+ method: 'POST',
+ url: 'post/edit-product',
+ processData: false,
+ contentType: false,
+ cache: false,
+ data: data,
+ success: res => {
+ alert(res);
+ console.log(res);
+ },
+ error: err => {
+ alert(err.responseText);
+ } 
+ })
+
+})
+
+$('.thumbnailImg').click(function(e){
+ imgIdDelete.push($(this).attr('id'));
+ imgNameDelete.push($(this).attr('sid'));
+ alert($(this).attr('id'));
+ console.log(imgNameDelete);
+})
+
+</script>
+ 
+<?php $this->stopSection(); ?>
+<?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

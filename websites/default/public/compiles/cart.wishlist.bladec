@@ -1,0 +1,68 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('content'); ?>
+	<style>
+ table {
+ font-family: arial, sans-serif;
+ border-collapse: collapse;
+ width: 100%;
+ }
+
+ td, th {
+ border: 1px solid #dddddd;
+ text-align: center;
+ padding: 8px;
+ }
+
+ tr:nth-child(even) {
+ background-color: #dddddd;
+ }
+
+ img {
+ border: 1px solid black;
+ width: 120px;
+ height: 120px;
+ }
+	</style>
+	<?php if(isset($carts) && isset($carts['items'])  && is_array($carts['items']) && count($carts['items']) >= 1 ): ?>
+ <table>
+ <tr>
+ <th>Product Image</th>
+ <th>Product Title</th>
+ <th>Quantity</th>
+ <th>Total Price</th>
+ <th>Action</th>
+ <th>Remove</th>
+ </tr>
+ <?php $__currentLoopData = $carts['items']; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $cart => $values): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <tr>
+ <td><img src="<?php  echo (isset($this->assetDict[('views/public/image/'.$values['product_image'])]))?$this->assetDict[('views/public/image/'.$values['product_image'])]:$this->baseUrl.'/'.('views/public/image/'.$values['product_image']); ?>"></td>
+ <td><?php echo static::e($values['title']); ?></td>
+ <td><?php echo static::e($values['quantity']); ?></td>
+ <td><?php echo static::e($values['priceTotal']); ?></td>
+ <td>
+ <button id-product="<?php echo static::e($values['product_id']); ?>" type="button" class="add-product btn btn-success btn-sm">+</button>
+ <input type="number" name="quantity" value="1" style="width: 70px;">
+ <button id-product="<?php echo static::e($values['product_id']); ?>" type="button" class="decrease-product btn btn-warning btn-sm">-</button>
+ </td>
+ <td><button type="button" class="delete-product btn btn-danger btn-sm" id-product="<?php echo static::e($values['product_id']); ?>">X</button></td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </table><br>
+
+ <?php if(isset($carts) && isset($carts['totalPrice'])): ?>
+ <p>Total Price: <b><?php echo static::e($carts['totalPrice']); ?></b></p>
+ <?php endif; ?>
+
+ <?php if(isset($carts) && isset($carts['totalQty'])): ?>
+ <p>Total Product: <b><?php echo static::e($carts['totalQty']); ?></b></p>
+ <?php endif; ?>
+	<?php else: ?>
+ <h1>You currently don't have any items!!</h1>
+	<?php endif; ?>
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection('javascript'); ?>
+<script src="<?php  echo (isset($this->assetDict[('views/cart/js/wishlist.js')]))?$this->assetDict[('views/cart/js/wishlist.js')]:$this->baseUrl.'/'.('views/cart/js/wishlist.js'); ?>"></script>
+<?php $this->stopSection(); ?>
+<?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

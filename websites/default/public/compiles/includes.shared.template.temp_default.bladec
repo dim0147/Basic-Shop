@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title><?php echo static::e($title); ?></title>
+ <link rel="stylesheet" href= <?php echo static::e(asset("bootstrap/bootstrap.min.css")); ?>>
+</head>
+
+<body>
+
+<?php echo $this->runChild('includes.shared.template.header'); ?>
+<?php echo $this->yieldContent('content'); ?>
+
+<?php echo $this->runChild('includes.shared.template.footer'); ?>
+</body>
+</html>

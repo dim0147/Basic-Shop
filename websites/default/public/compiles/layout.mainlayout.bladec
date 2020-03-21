@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title><?php echo static::e($title); ?></title>
+ <link rel="stylesheet" href= "css/bootstrapwd.min.css">
+</head>
+
+<body>
+
+<?php echo $this->runChild('layout.partials.header'); ?>
+<?php echo $this->yieldContent('content'); ?>
+
+<?php echo $this->runChild('layout.partials.footer'); ?>
+</body>
+</html>
