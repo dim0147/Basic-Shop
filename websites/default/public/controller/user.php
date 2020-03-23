@@ -1,8 +1,10 @@
 <?php
     class UserController extends Controller{
-        
+        public $cartModel;
+
         function __construct(){
                 $this->model = new UserModel();
+                $this->cartModel = new CartModel();
                 $this->fileRender = [
                     'index' => 'user.index',
                     'login' => 'user.login'
@@ -135,6 +137,27 @@
                 $this->model->insert($values, $column);
                 setHTTPCode(200, "Register success!!");
                 return;
+        }
+
+        public function showOrders(){
+            if (empty($_SESSION['user'])){
+                setHTTPCode(400, 'User not found!');
+                return;
+            }
+            setHTTPCode(200, 'User found!');
+            $orders = $this->cartModel->getSpecificCart($_SESSION['user']);
+            printB($orders);
+            echo "merge";
+            $current = null;
+            foreach ($orders as $value) {
+                if (empty($current)){
+                    $current = $value;
+                    continue;
+                }
+                $current = array_merge_recursive($current, $value);
+            }
+            $orders = mergeResult(['title', 'price', 'quantity'], ['product_title', 'product_price', 'product_quantity'], 'cart_id', $orders);
+            printB($current);
         }
 
         function logOut(){

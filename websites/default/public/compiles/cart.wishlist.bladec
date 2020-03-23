@@ -39,7 +39,7 @@
  <td><img src="<?php  echo (isset($this->assetDict[('views/public/image/'.$values['product_image'])]))?$this->assetDict[('views/public/image/'.$values['product_image'])]:$this->baseUrl.'/'.('views/public/image/'.$values['product_image']); ?>"></td>
  <td><?php echo static::e($values['title']); ?></td>
  <td><?php echo static::e($values['quantity']); ?></td>
- <td><?php echo static::e($values['priceTotal']); ?></td>
+ <td>$<?php echo static::e($values['priceTotal']); ?></td>
  <td>
  <button id-product="<?php echo static::e($values['product_id']); ?>" type="button" class="add-product btn btn-success btn-sm">+</button>
  <input type="number" name="quantity" value="1" style="width: 70px;">
@@ -50,13 +50,16 @@
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  </table><br>
 
+ <div class="border border-dark" style="padding: 20px;">
  <?php if(isset($carts) && isset($carts['totalPrice'])): ?>
- <p>Total Price: <b><?php echo static::e($carts['totalPrice']); ?></b></p>
+ <p>Total Price: <b>$<?php echo static::e($carts['totalPrice']); ?></b></p>
  <?php endif; ?>
 
  <?php if(isset($carts) && isset($carts['totalQty'])): ?>
  <p>Total Product: <b><?php echo static::e($carts['totalQty']); ?></b></p>
  <?php endif; ?>
+ <a href="checkout" type="button" class="btn btn-outline-danger"> >>Proceed to checkout</a>
+ </div>
 	<?php else: ?>
  <h1>You currently don't have any items!!</h1>
 	<?php endif; ?>

@@ -21,6 +21,11 @@
         $userController->postRegister();
     });
 
+    route('/user/orders', function(){
+        global $userController;
+        $userController->showOrders();
+    });
+
     
     route('/user/logout', function(){
         global $userController;

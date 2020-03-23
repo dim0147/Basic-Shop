@@ -39,7 +39,7 @@
 						<td><img src="@asset('views/public/image/'.$values['product_image'])"></td>
 						<td>{{$values['title']}}</td>
 						<td>{{$values['quantity']}}</td>
-						<td>{{$values['priceTotal']}}</td>
+						<td>${{$values['priceTotal']}}</td>
 						<td>
 							<button id-product="{{$values['product_id']}}" type="button" class="add-product btn btn-success btn-sm">+</button>
 							<input type="number" name="quantity" value="1" style="width: 70px;">
@@ -50,13 +50,16 @@
 				@endforeach
 		</table><br>
 
+		<div class="border border-dark" style="padding: 20px;">
 		@if(isset($carts) && isset($carts['totalPrice']))
-			<p>Total Price: <b>{{$carts['totalPrice']}}</b></p>
+			<p>Total Price: <b>${{$carts['totalPrice']}}</b></p>
 		@endif
 
 		@if(isset($carts) && isset($carts['totalQty']))
 			<p>Total Product: <b>{{$carts['totalQty']}}</b></p>
 		@endif
+		<a href="checkout" type="button" class="btn btn-outline-danger"> >>Proceed to checkout</a>
+		</div>
 	@else
 		<h1>You currently don't have any items!!</h1>
 	@endif

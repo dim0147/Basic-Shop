@@ -128,7 +128,7 @@
               </div>
 
               <div>
-                <input type="submit" value="SUBMIT" />
+                <button type="submit" class="btn btn-info">SUBMIT</button>
               </div>
             </form>
                 <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cart</button>

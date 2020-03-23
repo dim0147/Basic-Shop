@@ -280,8 +280,10 @@ class CartController extends Controller{
 
             //  CHECKOUT
         public function checkout(){
+            $cart = $_SESSION['cart'];
             $this->render($this->fileRender['checkout'], [
-                'title' => 'Checkout'
+                'title' => 'Checkout',
+                'carts' => $cart
             ]);
             return;
         }
@@ -453,7 +455,7 @@ class CartController extends Controller{
             }
 
                 //  Success
-            setHTTPCode(200, "Success!");
+            setHTTPCode(200, "Success checkout with Paypal!");
             }
             catch (Exception $ex) {
                 die($ex);
