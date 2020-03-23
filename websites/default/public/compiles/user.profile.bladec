@@ -1,0 +1,91 @@
+<?php $_shouldextend[1]=1; ?>
+<?php $this->startSection('content'); ?>
+<style>
+ table {
+ font-family: arial, sans-serif;
+ border-collapse: collapse;
+ width: 100%;
+ }
+
+ td, th {
+ border: 1px solid #dddddd;
+ text-align: center;
+ padding: 8px;
+ }
+
+ tr:nth-child(even) {
+ background-color: #dddddd;
+ }
+
+ img {
+ border: 1px solid black;
+ width: 120px;
+ height: 120px;
+ }
+	</style>
+<div class="row" style="margin-bottom: 10px;">
+	<div class="card" style="width: 18rem;margin: 0 auto;">
+	<img src="<?php  echo (isset($this->assetDict[('views/public/image/user-image.png')]))?$this->assetDict[('views/public/image/user-image.png')]:$this->baseUrl.'/'.('views/public/image/user-image.png'); ?>" class="card-img-top" alt="User Image">
+	<div class="card-body">
+ <h5 class="card-title">User Profile</h5>
+ <p class="card-text">Name: <?php echo static::e($user['name']); ?></p>
+	</div>
+	<ul class="list-group list-group-flush">
+ <li class="list-group-item"><strong>Username:</strong> <?php echo static::e($user['username']); ?></li>
+ <li class="list-group-item"><strong>Status:</strong> <?php echo static::e($user['status']); ?></li>
+ <li class="list-group-item"><strong>Date joined:</strong> <?php echo static::e($user['date_create']); ?></li>
+	</ul>
+	<div class="card-body">
+ <a href="change-password" class="card-link">Change your password</a>
+	</div>
+	</div>
+</div>
+<div class="orders alert alert-success">
+
+<div class="panel panel-default">
+ <div class="panel-heading text-center">
+ <h1 class="panel-title">Orders</h1>
+ </div>
+ <div class="panel-body">
+<?php $__currentLoopData = $orders; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $orderId => $order): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+<div class="card text-center">
+ <div class="card-header">
+ <h1>Order #<?php echo static::e($orderId); ?></h1>
+ </div>
+ <div class="card-body">
+ <p class="card-text"><strong>Address:</strong> <?php echo static::e($order['address']); ?></p>
+ <p class="card-text"><strong>Email:</strong> <?php echo static::e($order['email']); ?></p>
+ <p class="card-text"><strong>Status:</strong> <?php echo static::e($order['status']); ?></p>
+ <p class="card-text"><strong>PAYMENT_ID:</strong> <?php echo static::e($order['payment_id']); ?></p>
+
+
+ 
+ <table>
+ <tr>
+ <th>Product Image</th>
+ <th>Product Title</th>
+ <th>Quantity</th>
+ <th>Total Price</th>
+ </tr>
+ <?php $__currentLoopData = $order['items']; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <tr>
+ <td><img src="<?php  echo (isset($this->assetDict[('views/public/image/'.$product['product_image'])]))?$this->assetDict[('views/public/image/'.$product['product_image'])]:$this->baseUrl.'/'.('views/public/image/'.$product['product_image']); ?>"></td>
+ <td><?php echo static::e($product['product_name']); ?></td>
+ <td><?php echo static::e($product['product_quantity']); ?></td>
+ <td>$<?php echo static::e($product['product_total_price']); ?></td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </table>
+ <br>
+ <p>Total Product: <b><?php echo static::e($order['total_quantity']); ?></b></p>
+ <p>Total Price: <b>$<?php echo static::e($order['total_price']); ?></b></p>
+ </div>
+</div>
+<br>
+<?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+</div>
+</div>
+</div>
+
+<?php $this->stopSection(); ?>
+<?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

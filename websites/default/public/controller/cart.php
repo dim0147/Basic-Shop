@@ -85,17 +85,29 @@ class CartController extends Controller{
         public function action(){
             if (!isset($_POST['action'])){
                 setHTTPCode(400, "Invalid action");
+                redirectBut();
                 return;
             }
             if(empty($_SESSION['cart'])){
                 setHTTPCode(400, "Invalid cart");
+                redirectBut();
                 return;
             }
             switch($_POST['action']){
                 case "add":
+                    if((int)$_POST['quantity'] <= 0){
+                        setHTTPCode(400, 'Invalid quantity!');
+                        redirectBut();
+                        return;
+                    }
                     $this->addToCart();
                     break;
                 case "decrease":
+                    if((int)$_POST['quantity'] <= 0){
+                        setHTTPCode(400, 'Invalid quantity!');
+                        redirectBut();
+                        return;
+                    }
                     $this->decreaseProd();
                     break;
                 case "remove":
@@ -105,10 +117,12 @@ class CartController extends Controller{
                     break;
                 default:
                     setHTTPCode(400, "Invalid action");
+                    redirectBut();
                     return;
             }
 
             $cart = $_SESSION['cart'];
+            // printB($cart);
             $this->render($this->fileRender['cart'],
                 [
                     'title' => 'cart',
@@ -159,14 +173,14 @@ class CartController extends Controller{
                 'quantity' => $_POST['quantity'],
                 'title' => $prod[0]['title'],
                 'price' => $prod[0]['price'],
-                'priceTotal' => (float)$prod[0]['price'] * (int)$_POST['quantity']
+                'priceTotal' => (double)$prod[0]['price'] * (int)$_POST['quantity']
             ];
 
                 //  Push new item to items field
             array_push($cart['items'], $item);  
 
                 //  Edit total
-            $cart['totalPrice'] += $item['priceTotal'];
+            (double)$cart['totalPrice'] += (double)$item['priceTotal'];
             $cart['totalQty'] += $item['quantity'];
 
                 //  Change session cart
@@ -182,14 +196,14 @@ class CartController extends Controller{
             $cart = $_SESSION['cart'];
 
                 //  Calculate price to increase, $key is identify which product to increase
-            $priceToInc = $cart['items'][$key]['price'] * $qTy;
+            (double)$priceToInc = (double)$cart['items'][$key]['price'] * (int)$qTy;
 
                 //  Edit item in list items
             $cart['items'][$key]['quantity'] += $qTy; 
-            $cart['items'][$key]['priceTotal'] += $priceToInc; 
+            (double)$cart['items'][$key]['priceTotal'] += (double)$priceToInc; 
 
                 //  Edit total
-            $cart['totalPrice'] += $priceToInc;
+            (double)$cart['totalPrice'] += (double)$priceToInc;
             $cart['totalQty'] += $qTy;
 
                 //  Change session cart
@@ -211,6 +225,7 @@ class CartController extends Controller{
                  //  If not exist 
             if($checkItem === false){
                 setHTTPCode(500, "Product not found!");
+
                 return;
             }
                     //  Get cart
@@ -234,9 +249,10 @@ class CartController extends Controller{
                     //  Edit item in list
                 $cart['items'][$key]['quantity'] -= $qTy;
                 $cart['items'][$key]['priceTotal'] -= $priceDec;
+                $cart['items'][$key]['priceTotal'] = (double)$cart['items'][$key]['priceTotal'];
 
                     // Edit total
-                $cart['totalPrice'] -= $priceDec;
+                (double)$cart['totalPrice'] -= (double)$priceDec;
                 $cart['totalQty'] -= $qTy;
 
                     // Update cart
@@ -246,7 +262,7 @@ class CartController extends Controller{
                 return;
         }
         
-        public function removeProd($keyItem){   //  Remove product
+            public function removeProd($keyItem){   //  Remove product
                 //  Check if empty
             if (empty($_SESSION['cart']['items']) || empty($_POST['id'])){
                 setHTTPCode(500, "Invalid cart or ID");
@@ -262,11 +278,11 @@ class CartController extends Controller{
                 //  Get cart
             $cart = $_SESSION['cart'];
                 //  Get price of item
-            $priceDec = $cart['items'][$keyItem]['priceTotal']; 
+            $priceDec = (double)$cart['items'][$keyItem]['priceTotal']; 
                 //  Get quantity of item
             $qTy = $cart['items'][$keyItem]['quantity'];
                 //  Edit total
-            $cart['totalPrice'] -= $priceDec;
+            (double)$cart['totalPrice'] -= $priceDec;
             $cart['totalQty'] -= $qTy;
                 //  Remove item from list item
             unset($cart['items'][$keyItem]);
@@ -290,10 +306,16 @@ class CartController extends Controller{
 
         public function postCheckout(){ //  Request for  make charge 
                 //  Check if empty cart or user
-            if(empty($_SESSION['cart']['items']) || empty($_SESSION['user'])){
-                setHTTPCode(400, "Empty cart or user");
+            if(empty($_SESSION['cart']['items'])){
+                setHTTPCode(400, "Empty cart!");
+                redirectBut();
                 return;
             }   
+            if(empty($_SESSION['user'])){
+                setHTTPCode(400, "Please login first!");
+                redirectBut('/user/login', 'Click here to login');
+                return;
+            }
                 //  Create a payment
             $this->createPayment();
         }
@@ -302,6 +324,7 @@ class CartController extends Controller{
                 //  Check empty field
             if(empty($_SESSION['cart']['items']) || empty($_POST['address']) || empty($_POST['phone']) || empty($_POST['email'])){
                 setHTTPCode(500, 'Require Field is empty!!');
+                redirectBut();
                 return;
             }
                 //  Set user information
@@ -339,14 +362,12 @@ class CartController extends Controller{
             $listItemPaypal->setItems($listItem);
 
                 //  Ship fee and subtotal
-            $shipFee = 10.5;
             $detail = new Details();
-            $detail->setShipping($shipFee)
-                   ->setSubtotal($_SESSION['cart']['totalPrice']);
+            $detail->setSubtotal($_SESSION['cart']['totalPrice']);
             
                 //  Amount to charge
             $amount = new Amount();
-            $amount->setTotal($_SESSION['cart']['totalPrice'] + $shipFee)
+            $amount->setTotal($_SESSION['cart']['totalPrice'])
                     ->setCurrency('USD')
                     ->setDetails($detail);
 
@@ -387,11 +408,13 @@ class CartController extends Controller{
         public function successCheckoutRender(){    //  Checkout success, create Order save to DB
             if(empty($_SESSION['user'])){
                 setHTTPCode(500, "User not found, something go wrong!!!");
+                redirectBut();
                 return;
             }
 
             if(empty($_GET['paymentId']) || empty($_GET['PayerID'])){
                 setHTTPCode(500, "Something Wrong, You should not be in here!");
+                redirectBut();
                 return;
             }
 
@@ -401,6 +424,7 @@ class CartController extends Controller{
             $checkOrderExist = $this->prodModel->select(NULL, ['paymentID' => $paymentId], 'orders');
             if($checkOrderExist){   //  If exist
                 setHTTPCode(500, "Order already create!!");
+                redirectBut();
                 return;
             }
                 //  Get payment detail by paymentID get from above
@@ -419,6 +443,7 @@ class CartController extends Controller{
                 //  Check if list item is empty
             if(empty($result['transactions'][0]['item_list']['items'])){
                 setHTTPCode(500, "List item in bill is empty!!!");
+                redirectBut();
                 return;
             }
 
@@ -429,6 +454,7 @@ class CartController extends Controller{
             $items = $this->getAdditionInfoProd($items);
             if(!$items){    //  If error
                 setHTTPCode(400, "Error, some products is invalid!");
+                redirectBut();
                 return;
             }
 
@@ -436,6 +462,7 @@ class CartController extends Controller{
             $userID = $this->userModel->select(['user_id'], ['user_id' => $_SESSION['user']]);
             if(!$userID){   //   If not have
                 setHTTPCode(500, 'Something wrong, User not found!!!');
+                redirectBut();
                 return;
             }
             $userID = $userID[getFirstKey($userID)]['user_id'];
@@ -444,6 +471,7 @@ class CartController extends Controller{
             $orderID = $this->createOrderToDB($result, $userID);
             if($orderID === false){ //  If create fail
                     setHTTPCode(500, "Error while create Order!!");
+                    redirectBut();
                     return;
             }
 
@@ -451,11 +479,17 @@ class CartController extends Controller{
             $createCart = $this->createCartsToDB($orderID, $userID, $items);
             if(!$createCart){
                 setHTTPCode(400, "Error while create cart!");
+                redirectBut();
                 return;
             }
-
+            $_SESSION['cart'] = [
+                "items" => [],
+                "totalPrice" => 0,
+                "totalQty" => 0
+            ];
                 //  Success
             setHTTPCode(200, "Success checkout with Paypal!");
+            redirectBut('/user/profile', 'Click here to see your orders');
             }
             catch (Exception $ex) {
                 die($ex);

@@ -4,4 +4,5 @@ $('.ch').click(function(){
 	$('#modalTitle').html($(this).attr('title'));
 	$('#modalDescription').html($(this).attr('des'));
 	$('#modalImage').attr('src',$(this).attr('image'));
+	$('.show-dt').attr('href', '/product/detail?id=' + $(this).attr('identify'));
 });

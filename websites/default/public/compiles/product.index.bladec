@@ -128,6 +128,7 @@
  </div>
 
  <div>
+ <a href="" type="button" class="btn btn-danger show-dt">Show Detail</a>
  <button type="submit" class="btn btn-info">SUBMIT</button>
  </div>
  </form>
@@ -142,7 +143,6 @@
  <?php $this->startSection('javascript'); ?>
  <script src="<?php  echo (isset($this->assetDict[('views/product/js/javascript.js')]))?$this->assetDict[('views/product/js/javascript.js')]:$this->baseUrl.'/'.('views/product/js/javascript.js'); ?>"></script>
  <?php $this->stopSection(); ?>
-
 
 
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

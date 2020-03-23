@@ -20,6 +20,18 @@
           <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
           </li>
+          @if (!empty($_SESSION['username']))
+          <li class="nav-item">
+            <a class="nav-link" href="/user/profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/logout">Logout</a>
+          </li>
+          @else
+          <li class="nav-item">
+            <a class="nav-link" href="/user/login">Login</a>
+          </li>
+          @endif
         </ul>
       </div>
     </div>

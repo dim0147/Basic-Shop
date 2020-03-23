@@ -13,29 +13,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>USER Login</title>
+	<title>USER REGISTRATION</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 <div class="header">
-	<h2>LOGIN</h2>
+	<h2>REGISTRATION</h2>
 
 </div>
-<form method="post" action="post/login">
+<form method="post" action="post/register">
 	<div class="input-group">
  <label>Username</label>
  <input type="text" name="username">
 	</div>
+
 	<div class="input-group">
  <label>Password</label>
  <input type="Password" name="password">
+ </div>
+
+ <div class="input-group">
+ <label>Your name</label>
+ <input type="text" name="name">
+	</div>
 
 	<div class="input-group">
- <button type="submit" name="login.php" class="btn">login</button>
+ <button type="submit" class="btn">Register</button>
 	
 	</div>
 	<p>
- Not yet a member? <a href="register">Sign up</a>
+ Already a member? <a href="login">Login</a>
 	</p>
 </form>
 </body>

@@ -2,6 +2,7 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href='@asset('views/public/css/user_login.css')'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 @endsection
 @section('content')
 <!--<form action="post/login" method="POST">
@@ -10,35 +11,27 @@
     <button type="submit">submit</button>
 </form>-->
 
-<!DOCTYPE html>
-<html>
-<head>
-	<title>USER Login</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
 <div class="header">
-	<h2>LOGIN</h2>
+	<h2>Change Password</h2>
 
 </div>
-<form method="post" action="post/login">
+<form method="post" action="post/change-password">
 	<div class="input-group">
-		<label>Username</label>
-		<input type="text" name="username">
+		<label>Old password</label>
+		<input type="Password" name="old-password">
 	</div>
 	<div class="input-group">
-		<label>Password</label>
-		<input type="Password" name="password">
+		<label>New Password</label>
+		<input type="Password" name="new-password">
+
+    <div class="input-group">
+		<label>Confirm new Password</label>
+		<input type="Password" name="confirm-new-password">
 
 	<div class="input-group">
-		<button type="submit" name="login.php" class="btn">login</button>
+		<button type="submit" class="btn">CHANGE</button>
 	
 	</div>
-	<p>
-		Not yet a member? <a href="register">Sign up</a>
-	</p>
 </form>
-</body>
-</html>
 
 @endsection

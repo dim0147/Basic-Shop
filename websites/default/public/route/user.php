@@ -16,14 +16,30 @@
         $userController->postLogin();
     });
 
+    route('/user/register', function(){
+        global $userController;
+        $userController->registerIndex();
+    });
+
     route('/user/post/register', function(){
         global $userController;
         $userController->postRegister();
     });
+    
 
-    route('/user/orders', function(){
+    route('/user/profile', function(){
         global $userController;
-        $userController->showOrders();
+        $userController->showProfile();
+    });
+
+    route('/user/change-password', function(){
+        global $userController;
+        $userController->changePassword();
+    });
+
+    route('/user/post/change-password', function(){
+        global $userController;
+        $userController->postChangePassword();
     });
 
     

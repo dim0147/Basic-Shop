@@ -128,6 +128,7 @@
               </div>
 
               <div>
+              <a href="" type="button" class="btn btn-danger show-dt">Show Detail</a>
                 <button type="submit" class="btn btn-info">SUBMIT</button>
               </div>
             </form>
@@ -142,5 +143,4 @@
   @section('javascript')
   <script src="@asset('views/product/js/javascript.js')"></script>
   @endsection
-
 

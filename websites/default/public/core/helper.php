@@ -184,6 +184,12 @@ function createPlaceHold($size){
     return implode(',', $placeHold);
 }
 
+function redirectBut($url = '/product', $message = 'Click here to go back homepage'){
+    echo "\n";
+    echo '<link rel="stylesheet" type="text/css" href="/views/public/css/bootstrap.min.css">' . "\n";
+    echo '<br><a href="' . $url .'" type="button" class="btn btn-dark">'. $message . '</a>';
+}
+
 function fatal_handler(){
     $error = error_get_last();
 

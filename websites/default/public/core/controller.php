@@ -14,8 +14,7 @@
 
         function renderNotFound(){
             global $blade;
-            echo $PathPageNotFound;
-            echo $blade->run($PathPageNotFound, [
+            echo $blade->run($this->PathPageNotFound, [
                 'title' => "Opps! Not Found"
             ]);
         }

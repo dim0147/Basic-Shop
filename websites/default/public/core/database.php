@@ -239,5 +239,9 @@
                 die($ex);
             }
         }
+
+        public function getLastInsertId(){
+            return $this->pdo->lastInsertId();
+        }
     }
 ?>

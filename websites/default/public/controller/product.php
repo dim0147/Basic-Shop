@@ -1,8 +1,11 @@
 <?php 
     class ProductController extends Controller{
 
+        public $userModel;
+
         function __construct(){
            $this->model = new ProductModel();
+           $this->userModel = new UserModel();
            $this->fileRender = [
                 'index' => 'product.index',
                 'detail' => 'product.detail'
@@ -16,6 +19,7 @@
 
                     //  Merge result identify by id product
                 $products = mergeResult(['category_name', 'name'], ['category_list', 'image_list'], 'id', $products);
+                
                     //  Render product
                 $this->render($this->fileRender['index'],
                 [
@@ -28,37 +32,29 @@
 
 
         public function detail(){
-            $id = $_GET['q']; //  Get product id
-            $title = '';
-            $result = '';
-
-            if (empty($id)){
+            if (empty($_GET['id'])){
                 setHTTPCode(400, 'Need param!');
+                redirectBut();
                 return;
             }
+            $id = $_GET['id']; //  Get product id
 
-            $result = $this->model->getProductWithId($id);
-            if(!$result) { //  If query not empty
+            $product = $this->model->getProductWithId($id);
+            if(!$product) { //  If query not empty
                 setHTTPCode(400, 'Bad request!');
-                return $this->renderNotFound();
+                redirectBut();
+                return;
             }
-            $result = mergeResult(['name'], ['image_list'], 'id', $result);
-            $title = $result[key($result)]['title'];
-            /*
-                    //  Query Product
-
-                    //  If not have
-                
-                    // Merge to one  
-
-                    //  Get title product
-            */
-
+            $product = mergeResult(['name'], ['image_list'], 'id', $product);
+            $product = $product[getFirstKey($product)];
+            // printB($product);
+            if(!is_array($product['image_list']))
+                $product['image_list'] = [];
                     //  Render Product   
             $this->render($this->fileRender['detail'],
             [
-                'title' => $title,
-                'products' => $result
+                'title' => $product['title'],
+                'product' => $product
             ]);
         }
 

@@ -7,7 +7,10 @@
                 $this->cartModel = new CartModel();
                 $this->fileRender = [
                     'index' => 'user.index',
-                    'login' => 'user.login'
+                    'login' => 'user.login',
+                    'register' => 'user.register',
+                    'profile' => 'user.profile',
+                    'change-password' => 'user.change-password'              
                 ];
         }
             //  Get Profile
@@ -15,6 +18,7 @@
                 //  Check user
             if(empty($_SESSION['user'])){
                 setHTTPCode(400, "User not found!");
+                redirectBut();
                 return;
             }
 
@@ -23,6 +27,7 @@
                 'type' => 'user']);
             if(!$user){ //  if error
                 setHTTPCode(500, "Error, cannot find user!");
+                redirectBut();
                 return;
             }
 
@@ -75,18 +80,18 @@
         }
 
         public function loginIndex(){
+            if(!empty($_SESSION['user'])){
+                setHTTPCode(500, "You login already!");
+                redirectBut();
+                return;
+            }
             $this->render($this->fileRender['login'], ['title' => "Login"]);
         }
 
         public function postLogin(){ 
-           // session_destroy();
-            /*if(!empty($_SESSION['user'])){
-                echo "user dang nhap roi dit me may " . $_SESSION['user'];
-                session_destroy();
-                //  Check if not empty
-            }*/
             if(empty($_POST['username']) || empty($_POST['password']) || !empty($_SESSION['user'])){ 
                 setHTTPCode(500, "Something wrong, please check again!");
+                redirectBut();
                 return;
             }
                     //  Get username and password
@@ -102,20 +107,33 @@
                 if($result && password_verify($password, $user[getFirstKey($user)]['password'])){
                         //  Assign user session with user id
                     $_SESSION['user'] = $user[getFirstKey($user)]['user_id'];
+                    $_SESSION['username'] = $user[getFirstKey($user)]['name'];
                     setHTTPCode(200, "Sign In Success!");
+                    redirectBut();
                     return;
                 }
                 else{   //  Verify password fail
                     setHTTPCode(500, "Username or Password Wrong!");
+                    redirectBut('/user/login', 'Click here to login again!');
                     return;
                 }
             
+        }
+
+        public function registerIndex(){
+            if(!empty($_SESSION['user'])){
+                setHTTPCode(500, 'You login already!'); 
+                redirectBut();
+                return;
+            }
+            $this->render($this->fileRender['register'], ['title' => 'Register']);
         }
 
         public function postRegister(){
                 //  Check if not empty
             if(empty($_POST['username']) || empty($_POST['password']) || empty($_POST['name']) || !empty($_SESSION['user'])){
                 setHTTPCode(500, "Field empty or user already Login!!");
+                return;
             }
                     //  Assign variable
                 $username = $_POST['username'];
@@ -127,6 +145,7 @@
                                                         'type' => 'user']); 
                 if($checkExist){ //  If yes return   
                     setHTTPCode(500, "Username exist!");
+                    redirectBut('/user/register', 'Click here to register again');
                     return;
                 }
 
@@ -135,33 +154,84 @@
                 $column = ['username', 'password', 'name', 'status', 'type'];   //  column to insert
                 $values = [[$username, $password, $name, 'Active', 'user']];    //  value to insert
                 $this->model->insert($values, $column);
-                setHTTPCode(200, "Register success!!");
+                $idUser = $this->model->getLastInsertId();
+                $_SESSION['user'] = $idUser;
+                $_SESSION['username'] = $_POST['name'];
+                setHTTPCode(200, "Register success!! ");
+                redirectBut();
                 return;
         }
 
-        public function showOrders(){
+        public function showProfile(){
             if (empty($_SESSION['user'])){
-                setHTTPCode(400, 'User not found!');
+                setHTTPCode(400, 'Please login first!');
+                redirectBut('/user/login', 'Click here to login');
                 return;
             }
-            setHTTPCode(200, 'User found!');
             $orders = $this->cartModel->getSpecificCart($_SESSION['user']);
-            printB($orders);
-            echo "merge";
-            $current = null;
-            foreach ($orders as $value) {
-                if (empty($current)){
-                    $current = $value;
-                    continue;
-                }
-                $current = array_merge_recursive($current, $value);
+            $user = $this->model->select(NULL, ['user_id' => $_SESSION['user']]);
+            if(empty($user)){
+                setHTTPCode("Cannot get profile user, please logout and login again!");
+                redirectBut('/user/logout', 'Click here to logout');
+                return;
             }
-            $orders = mergeResult(['title', 'price', 'quantity'], ['product_title', 'product_price', 'product_quantity'], 'cart_id', $orders);
-            printB($current);
+            $user = $user[getFirstKey($user)];
+            $this->render($this->fileRender['profile'], ['title' => 'Orders Detail', 'orders' => $orders, 'user' => $user]);
+            // printB($orders);
+            
+        }
+
+        public function changePassword(){
+            $this->render($this->fileRender['change-password'], ['title' => 'Change Password']);
+        }
+
+        public function postChangePassword(){
+            if(empty($_SESSION['user'])){
+                setHTTPCode(500, "Please login first!");
+                redirectBut('/user/login', 'Click here to login');
+                return;
+            }
+
+            if(empty($_POST['old-password']) || empty($_POST['new-password']) ||  empty($_POST['confirm-new-password']) || empty($_SESSION['user'])){ 
+                setHTTPCode(500, "Something wrong, please check again!");
+                redirectBut('/user/change-password', 'Click here to change password');
+                return;
+            }
+            if($_POST['new-password'] != $_POST['confirm-new-password']){
+                setHTTPCode(500, "Confirm password wrong!");
+                redirectBut('/user/change-password', 'Click here to change password');
+                return;
+            }
+
+            //  Get user through username
+            $user = $this->model->select(NULL, ["user_id" => $_SESSION['user'],
+                                                "type" => 'user']);
+            if(empty($user)){
+                setHTTPCode(500, "Cannot find user, please logout and login again");
+                redirectBut('/user/login', 'Click here to login again');
+                return;
+            }
+
+            $user = $user[getFirstKey($user)];
+            if(password_verify($_POST['old-password'], $user['password'])){
+                $newPassword = password_hash($_POST['new-password'], PASSWORD_DEFAULT); //  hash password before update
+                $this->model->update(['password' => $newPassword], ['user_id' => $_SESSION['user']]);
+                setHTTPCode(200, "Change password success!");
+                redirectBut();
+                return;
+            }
+            else{
+                setHTTPCode(500, "Old password not correct!");
+                redirectBut('/user/change-password', 'Click here to change password');
+                return;
+            }
+
         }
 
         function logOut(){
-            $_SESSION['user'] = NULL;
+            session_destroy();
+            echo "Logout success";
+            redirectBut();
         }
                 
     }

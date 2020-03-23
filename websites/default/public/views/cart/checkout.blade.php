@@ -30,7 +30,8 @@
         width:80% /* value of your choice which suits your alignment */
     }
 </style>
-<h1 class="">Review your product</h1>
+
+<h1 class="text-center">Review your product</h1>
 @if(isset($carts) && isset($carts['items']) && is_array($carts['items']) && count($carts['items']) >= 1 )
 <table>
     <tr>
@@ -69,11 +70,10 @@
     @endif
 </div>
 
-<h1>CHECKOUT</h1>
+<h1 class="text-center">CHECKOUT</h1>
+<div style="margin-left:40%">
     <form class="" action="post/checkout" method="POST">
         <fieldset>
-
-            
             <!-- Text input-->
             <div class="form-group">
                 <label class="col-md-4 control-label" for="address">Address</label>
@@ -117,8 +117,7 @@
             </div>
         </fieldset>
     </form>
-    
-</div>
+    </div>
 @else
 <h1>You currently don't have any items!!</h1>
 @endif

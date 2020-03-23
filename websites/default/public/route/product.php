@@ -2,7 +2,7 @@
     $productController = new ProductController();
     
 
-    route('/product/detail?{q}', function(){
+    route('/product/detail?{id}', function(){
         global $productController;
         $productController->detail();
     });
