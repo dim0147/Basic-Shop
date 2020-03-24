@@ -2,6 +2,11 @@
 
     $adminController = new AdminController();
 
+    route('/admin/dashboard', function(){
+        global $adminController;;
+        $adminController->dashboard();
+    });
+
     route('/admin/add-product', function(){
         global $adminController;
         $adminController->addProductIndex();

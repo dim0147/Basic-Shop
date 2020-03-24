@@ -13,7 +13,8 @@
                 'add-product' => 'admin.add-product',
                 'edit-product' => 'admin.edit-product',
                 'add-category' => 'admin.add-category',
-                'edit-category' => 'admin.edit-category'
+                'edit-category' => 'admin.edit-category',
+                'dashboard' => 'admin.dashboard'
             ];
         }
             //  HELPER FUNCTION
@@ -232,6 +233,10 @@
             return $newName;
         }
     
+        public function dashboard(){
+            $this->render($this->fileRender['dashboard'], ['title' => 'Dashboard']);
+        }
+
         public function addProductIndex(){
                 //  Get all category from db
             $categorys = $this->prodModel->select(NULL, '*', 'categorys');
@@ -255,6 +260,10 @@
          * @param {string} $_POST['rate']
          */
         public function postAddProduct(){
+            if(empty($_POST['categorys'])){
+                setHTTPCode(500, 'Empty Field!');
+                return;
+            }
                 //  Convert category json get from client to array 
             $categorys = json_decode($_POST['categorys']);
             $categorys = (array)$categorys;

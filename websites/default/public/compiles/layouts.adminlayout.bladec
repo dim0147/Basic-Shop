@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title><?php echo static::e($title); ?></title>
+ <link rel="stylesheet" type="text/css" href="<?php  echo (isset($this->assetDict[('views/public/css/bootraps4/bootstrap.min.css')]))?$this->assetDict[('views/public/css/bootraps4/bootstrap.min.css')]:$this->baseUrl.'/'.('views/public/css/bootraps4/bootstrap.min.css'); ?>" >
+ <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" >
+ <?php echo $this->yieldContent('css'); ?>
+</head>
+
+<body>
+
+<?php echo $this->runChild('layouts.partials.admin_header'); ?>
+<?php echo $this->yieldContent('content'); ?>
+
+<?php echo $this->runChild('layouts.partials.admin_footer'); ?>
+<script src="<?php  echo (isset($this->assetDict[('views/public/js/jquery.min.js')]))?$this->assetDict[('views/public/js/jquery.min.js')]:$this->baseUrl.'/'.('views/public/js/jquery.min.js'); ?>"></script>
+<script src="<?php  echo (isset($this->assetDict[('views/public/bootraps4/bootstrap.min.js')]))?$this->assetDict[('views/public/bootraps4/bootstrap.min.js')]:$this->baseUrl.'/'.('views/public/bootraps4/bootstrap.min.js'); ?>"></script>
+<?php echo $this->yieldContent('javascript'); ?>
+</body>
+</html>
