@@ -15,7 +15,7 @@
 
 @include('layouts.partials.admin_footer')
 <script src="@asset('views/public/js/jquery.min.js')"></script>
-<script src="@asset('views/public/bootraps4/bootstrap.min.js')"></script>
+<script src="@asset('views/public/css/bootraps4/bootstrap.min.js')"></script>
 @yield('javascript')
 </body>
 </html>

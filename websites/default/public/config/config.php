@@ -32,7 +32,6 @@
     $LOAD_MODEL = [
         'products',
         'users',
-
         'categorys',
         'cart'
     ];
@@ -41,13 +40,15 @@
         'product',
         'user',
         'cart',
-        'admin'
+        'admin',
+        'unitTest' // Remove when deloy
     ];
 
     $LOAD_ROUTE = [
         'product',
         'user',
         'cart',
-        'admin'
+        'admin',
+        'unitTest'  // Remove when deloy
     ];
 ?>

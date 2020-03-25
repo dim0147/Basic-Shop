@@ -23,14 +23,15 @@
 	<div class="input-group">
 		<label>New Password</label>
 		<input type="Password" name="new-password">
+	</div>
 
     <div class="input-group">
 		<label>Confirm new Password</label>
 		<input type="Password" name="confirm-new-password">
+	</div>
 
 	<div class="input-group">
 		<button type="submit" class="btn">CHANGE</button>
-	
 	</div>
 </form>
 

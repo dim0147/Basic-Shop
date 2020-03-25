@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="#"><i class="fas fa-users"></i> Group Project</a>
+      <a class="navbar-brand" href="/product"><i class="fas fa-users"></i> Group Project</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -12,7 +12,11 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/cart/show">Your Cart</a>
+            <a class="nav-link" href="/cart/show">Your Cart 
+            @if(isset($_SESSION['cart']) && isset($_SESSION['cart']['totalQty']) && !empty($_SESSION['cart']['totalQty']))
+            <span class="badge">{{$_SESSION['cart']['totalQty']}}</span>
+            @endif
+            </a>
           </li>
           <li class="nav-item"> 
             <a class="nav-link" href="/product">Services</a>

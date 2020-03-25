@@ -11,6 +11,7 @@
             $this->model = new UserModel();
             $this->fileRender = [
                 'add-product' => 'admin.add-product',
+                'show-category' => 'admin.show-category',
                 'edit-product' => 'admin.edit-product',
                 'add-category' => 'admin.add-category',
                 'edit-category' => 'admin.edit-category',
@@ -235,6 +236,17 @@
     
         public function dashboard(){
             $this->render($this->fileRender['dashboard'], ['title' => 'Dashboard']);
+        }
+
+        public function showCategoryIndex(){
+             //  Get all category from db
+             $categorys = $this->prodModel->select(NULL, '*', 'categorys');
+             $this->render($this->fileRender['show-category'],
+             [
+                 'title' => 'Show Categorys',
+                 'categorys' => $categorys
+             ]);
+             return;
         }
 
         public function addProductIndex(){
@@ -562,10 +574,10 @@
             } 
 
             //  Delete records from categorys_link_products table
-            $this->prodModel->delete(['category_id' => $_POST['id']], 'categorys_link_products');
+            $this->prodModel->delete(['category_id' => [$_POST['id']]], 'categorys_link_products');
             //  Delete records from categorys table
-            $this->prodModel->delete(['id' => $_POST['id']], 'categorys');
-            echo "Delete success!";
+            $this->prodModel->delete(['id' => [$_POST['id']]], 'categorys');
+            setHTTPCode(200, 'Delete caterogy success!');
         }
  
     }

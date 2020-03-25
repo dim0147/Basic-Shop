@@ -78,17 +78,20 @@
                     'title' => "Hi" 
                 ]);
         }
-
+// {
         public function loginIndex(){
+            // Check if login already
             if(!empty($_SESSION['user'])){
                 setHTTPCode(500, "You login already!");
                 redirectBut();
                 return;
             }
+            // Otherwise render login page
             $this->render($this->fileRender['login'], ['title' => "Login"]);
         }
 
         public function postLogin(){ 
+            // Check if require field is
             if(empty($_POST['username']) || empty($_POST['password']) || !empty($_SESSION['user'])){ 
                 setHTTPCode(500, "Something wrong, please check again!");
                 redirectBut();
@@ -119,7 +122,7 @@
                 }
             
         }
-
+    // }
         public function registerIndex(){
             if(!empty($_SESSION['user'])){
                 setHTTPCode(500, 'You login already!'); 

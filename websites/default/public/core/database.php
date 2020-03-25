@@ -233,6 +233,7 @@
 
                 $stmt = $this->pdo->prepare($sql);
 
+
                 $stmt->execute($valueToInsert);
             }
             catch(PDOException $ex){

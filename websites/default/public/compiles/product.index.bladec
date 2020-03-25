@@ -2,7 +2,6 @@
 
 <?php $this->startSection('css'); ?>
  <link rel="stylesheet" type="text/css" href='<?php  echo (isset($this->assetDict[('views/public/css/productIndex.css')]))?$this->assetDict[('views/public/css/productIndex.css')]:$this->baseUrl.'/'.('views/public/css/productIndex.css'); ?>'>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <?php $this->stopSection(); ?>
 
 <?php $this->startSection('content'); ?>
@@ -83,10 +82,6 @@
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  </div>
  </div>
- </div>
-
- <div class="footer">
- fsdaf
  </div>
 
 

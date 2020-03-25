@@ -17,6 +17,11 @@
         $adminController->postAddProduct();
     });
 
+    route('/admin/show-category', function(){
+        global $adminController;
+        $adminController->showCategoryIndex();
+    });
+
     route('/admin/add-category', function(){
         global $adminController;
         $adminController->addCateIndex();

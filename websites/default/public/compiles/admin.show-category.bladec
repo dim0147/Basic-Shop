@@ -1,0 +1,48 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('css'); ?>
+<link rel="stylesheet" type="text/css" href="<?php  echo (isset($this->assetDict[('views/admin/css/datatables.min.css')]))?$this->assetDict[('views/admin/css/datatables.min.css')]:$this->baseUrl.'/'.('views/admin/css/datatables.min.css'); ?>"/>
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection('content'); ?>
+<div style="padding: 10px; border: 1px solid #888;">
+<div class="nofi">
+
+</div>
+<h1 class="text-center">Show category</h1>
+<?php if(!empty($categorys)): ?>
+<table id="table-category" class="display">
+ <thead>
+ <tr>
+ <th style="width: 25%">ID</th>
+ <th style="width: 30%">Name</th>
+ <th style="width: 35%">Description</th>
+ <th>Action</th>
+ </tr>
+ </thead>
+ <tbody>
+ <?php $__currentLoopData = $categorys; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <tr>
+ <td><?php echo static::e($category['id']); ?></td>
+ <td><?php echo static::e($category['name']); ?></td>
+ <td><?php echo static::e($category['description']); ?></td>
+ <td>
+ <a href="/admin/edit-category?id=<?php echo static::e($category['id']); ?>"><button type="button" class="btn btn-warning editbtn"><i class="fas fa-edit"></i></button></a>
+ <button type="button" class="btn btn-danger rmvbtn"><i class="fa fa-trash" aria-hidden="true"></i></button>
+ </td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </tbody>
+</table>
+</div>
+<?php else: ?>
+<h1 class="text-center"> You currently don't have any category.</h1>
+<?php endif; ?>
+<?php $this->stopSection(); ?>
+
+
+<?php $this->startSection('javascript'); ?>
+<script type="text/javascript" src="<?php  echo (isset($this->assetDict[('views/admin/css/datatables.min.js')]))?$this->assetDict[('views/admin/css/datatables.min.js')]:$this->baseUrl.'/'.('views/admin/css/datatables.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php  echo (isset($this->assetDict[('views/admin/js/table-show-category.js')]))?$this->assetDict[('views/admin/js/table-show-category.js')]:$this->baseUrl.'/'.('views/admin/js/table-show-category.js'); ?>"></script>
+<?php $this->stopSection(); ?>
+<?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.adminlayout'); } ?>
