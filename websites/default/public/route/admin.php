@@ -47,6 +47,11 @@
         $adminController->postEditCate();
     });
 
+    route('/admin/show-product', function(){
+        global $adminController;
+        $adminController->showProductIndex();
+    });
+
     route('/admin/edit-product?{id}', function(){
         global $adminController;
         $adminController->editProductIndex();
@@ -55,6 +60,11 @@
     route('/admin/post/edit-product/', function(){
         global $adminController;
         $adminController->postEditProduct();
+    });
+
+    route('/admin/post/remove-product/', function(){
+        global $adminController;
+        $adminController->postRemoveProduct();
     });
 
     route('/admin/post/login', function(){

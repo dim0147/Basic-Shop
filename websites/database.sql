@@ -843,7 +843,7 @@ CREATE TABLE `cart` (
   KEY `cart_ibfk_2` (`user_id`),
   CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
   CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -852,7 +852,7 @@ CREATE TABLE `cart` (
 
 LOCK TABLES `cart` WRITE;
 /*!40000 ALTER TABLE `cart` DISABLE KEYS */;
-INSERT INTO `cart` VALUES (23,2,23),(24,2,24),(25,2,25),(26,15,26),(27,15,27);
+INSERT INTO `cart` VALUES (23,2,23),(24,2,24),(25,2,25),(26,15,26),(27,15,27),(28,11,28),(29,16,29),(30,16,30),(31,16,31);
 /*!40000 ALTER TABLE `cart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -880,7 +880,7 @@ CREATE TABLE `cart_item` (
 
 LOCK TABLES `cart_item` WRITE;
 /*!40000 ALTER TABLE `cart_item` DISABLE KEYS */;
-INSERT INTO `cart_item` VALUES (23,3,1),(23,5,1),(24,1,1),(24,6,1),(25,2,4),(25,4,2),(25,5,4),(26,1,8),(26,3,8),(27,4,1);
+INSERT INTO `cart_item` VALUES (23,3,1),(23,5,1),(24,1,1),(24,6,1),(25,2,4),(25,4,2),(25,5,4),(26,1,8),(26,3,8),(27,4,1),(28,4,3),(29,4,1),(30,1,1),(30,3,1);
 /*!40000 ALTER TABLE `cart_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -896,7 +896,7 @@ CREATE TABLE `categorys` (
   `name` varchar(30) DEFAULT NULL,
   `description` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -905,7 +905,7 @@ CREATE TABLE `categorys` (
 
 LOCK TABLES `categorys` WRITE;
 /*!40000 ALTER TABLE `categorys` DISABLE KEYS */;
-INSERT INTO `categorys` VALUES (1,'Như cc','BÙI'),(2,'Killing','hehe'),(3,'Football',''),(6,'Multiplayer',''),(7,'Indle','Mode developed'),(8,'Sexy1111','hi'),(9,'Sexy123','hi'),(11,'sdfadsfesfsdafae','zvdvdsva'),(12,'WDW','dwdw');
+INSERT INTO `categorys` VALUES (1,'Như cc','BÙI'),(2,'Killing','hehe'),(3,'Football',''),(6,'Multiplayer','');
 /*!40000 ALTER TABLE `categorys` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -928,7 +928,7 @@ CREATE TABLE `categorys_link_products` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `categorys_link_products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categorys` (`id`),
   CONSTRAINT `categorys_link_products_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -937,7 +937,7 @@ CREATE TABLE `categorys_link_products` (
 
 LOCK TABLES `categorys_link_products` WRITE;
 /*!40000 ALTER TABLE `categorys_link_products` DISABLE KEYS */;
-INSERT INTO `categorys_link_products` VALUES (70,1,2,'Killing','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(72,1,6,'Multiplayer','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(73,1,7,'Indle','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(74,1,8,'Nhu cc','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(75,2,2,'Killing','AdidasAdidas Originals Trefoil Hoody'),(76,2,6,'Multiplayer','AdidasAdidas Originals Trefoil Hoody'),(77,2,7,'Indle','AdidasAdidas Originals Trefoil Hoody'),(78,2,8,'Nhu cc','AdidasAdidas Originals Trefoil Hoody'),(79,50,1,'Như cc','4'),(80,50,2,'Killing','4'),(81,50,3,'Football','4'),(82,50,6,'Multiplayer','4'),(83,50,7,'Indle','4'),(84,50,8,'Sexy1111','4'),(85,50,9,'Sexy123','4'),(86,50,11,'sdfadsfesfsdafae','4'),(87,3,2,'Killing','Timberland'),(88,3,6,'Multiplayer','Timberland'),(89,3,7,'Indle','Timberland'),(90,3,8,'Nhu cc','Timberland'),(91,51,2,'Killing','Icon for shell'),(92,51,3,'Football','Icon for shell'),(93,52,2,'Killing','Picture'),(94,52,3,'Football','Picture');
+INSERT INTO `categorys_link_products` VALUES (70,1,2,'Killing','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(72,1,6,'Multiplayer','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(75,2,2,'Killing','AdidasAdidas Originals Trefoil Hoody'),(76,2,6,'Multiplayer','AdidasAdidas Originals Trefoil Hoody'),(87,3,2,'Killing','Timberland'),(88,3,6,'Multiplayer','Timberland'),(98,4,2,'Killing','Adidas Originals PE Rolltop Backpack'),(99,4,6,'Multiplayer','Adidas Originals PE Rolltop Backpack');
 /*!40000 ALTER TABLE `categorys_link_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -957,7 +957,7 @@ CREATE TABLE `images` (
   PRIMARY KEY (`image_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=163 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -966,7 +966,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
-INSERT INTO `images` VALUES (61,1,'thumbnail','dPoRIFVnF95W2FQsueTuGoGD.jpg','2019-10-24 14:12:51'),(62,1,'thumbnail','LCBUWwJJ6JKOYvWpSXjdQb54.jpg','2019-10-24 14:12:51'),(65,1,'thumbnail','9ApiKarz6p2s6kzRADwARkz7.jpg','2019-10-24 14:42:24'),(66,1,'thumbnail','diYxhTVB4dGPCTD-ngy-zfZc.jpg','2019-10-24 14:42:24'),(67,1,'thumbnail','j2VMIeOVeinmmoAd4kM4cXUB.jpg','2019-10-24 14:43:02'),(68,1,'thumbnail','o_2nXjYFmG9rNEqPokRCFMG2.jpg','2019-10-24 14:43:02'),(71,1,'thumbnail','h7nX_QSxHXgRPPtRXKSRjN86.jpg','2019-10-24 23:53:14'),(151,50,'thumbnail','6R0DOLslZfuUUG1k23SBrKkA.png','2019-12-16 17:58:16'),(152,3,'thumbnail','XuoKv31G02Zo35lQAroW81U_.png','2019-12-16 18:00:52'),(153,51,'thumbnail','xeb-Z-ADRSQJrHxuN7S7SG61.jpg','2020-03-24 16:47:18'),(154,51,'thumbnail','PImgB7MjruYAnySrsAnLYVd-.png','2020-03-24 16:47:18'),(155,51,'thumbnail','KTi3m7z1XtIfq9rxndqJJT9o.png','2020-03-24 16:47:18'),(156,52,'thumbnail','-h4stJU1J8dLLo8E2_olOcnM.png','2020-03-24 16:57:54');
+INSERT INTO `images` VALUES (61,1,'thumbnail','dPoRIFVnF95W2FQsueTuGoGD.jpg','2019-10-24 14:12:51'),(62,1,'thumbnail','LCBUWwJJ6JKOYvWpSXjdQb54.jpg','2019-10-24 14:12:51'),(65,1,'thumbnail','9ApiKarz6p2s6kzRADwARkz7.jpg','2019-10-24 14:42:24'),(66,1,'thumbnail','diYxhTVB4dGPCTD-ngy-zfZc.jpg','2019-10-24 14:42:24'),(67,1,'thumbnail','j2VMIeOVeinmmoAd4kM4cXUB.jpg','2019-10-24 14:43:02'),(68,1,'thumbnail','o_2nXjYFmG9rNEqPokRCFMG2.jpg','2019-10-24 14:43:02'),(71,1,'thumbnail','h7nX_QSxHXgRPPtRXKSRjN86.jpg','2019-10-24 23:53:14'),(152,3,'thumbnail','XuoKv31G02Zo35lQAroW81U_.png','2019-12-16 18:00:52'),(161,4,'thumbnail','qxI7VyItdeyhymvAJtikm7z6.jpg','2020-03-26 17:07:15');
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -988,7 +988,7 @@ CREATE TABLE `orders` (
   PRIMARY KEY (`order_id`),
   KEY `cart_ibfk_1` (`user_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -997,7 +997,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW3QS2Q2U2645627R554051F',1),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW3QS2Q2U2645627R554051F',2),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',3),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',4),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',5),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',6),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',7),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',8),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',9),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',10),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',11),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',12),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',13),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',14),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW4AJ2Q3LA939451M839714P',15),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW4ARMQ0FM265334M047643C',16),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LXFED3A7RJ920306N6081935',17),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LXFESGI96E86297VN6475601',18),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LX3UPGA3X015549GM102415C',19),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LX5QMUY8CL13236VH6876937',20),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ3ZBQY8SW34939C15806818',21),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ3ZMEA06V162659S731634E',22),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ3ZMVY6FL90846JB564831T',23),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ3ZTPA50S551194V135151G',24),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ4IK7A83721669AA5194508',25),(15,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ4LOMA87V62877XB514742W',26),(15,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ4LZRY6ML10167JT5033934',27);
+INSERT INTO `orders` VALUES (2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW3QS2Q2U2645627R554051F',1),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW3QS2Q2U2645627R554051F',2),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',3),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',4),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',5),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',6),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',7),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',8),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',9),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',10),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',11),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',12),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',13),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW34JKI76G0958788596314D',14),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW4AJ2Q3LA939451M839714P',15),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LW4ARMQ0FM265334M047643C',16),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LXFED3A7RJ920306N6081935',17),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LXFESGI96E86297VN6475601',18),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LX3UPGA3X015549GM102415C',19),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LX5QMUY8CL13236VH6876937',20),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ3ZBQY8SW34939C15806818',21),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ3ZMEA06V162659S731634E',22),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ3ZMVY6FL90846JB564831T',23),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ3ZTPA50S551194V135151G',24),(2,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ4IK7A83721669AA5194508',25),(15,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ4LOMA87V62877XB514742W',26),(15,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ4LZRY6ML10167JT5033934',27),(11,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ6NWMI10H92526MR773080P',28),(16,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ6N55I26E82200VW551225B',29),(16,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ6N6LY0YW693392A908450B',30),(16,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-LZ6N65A5MU18640XL470841C',31);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1017,7 +1017,7 @@ CREATE TABLE `products` (
   `status` enum('Available','Out of stock','Coming Soon','Unavailable') DEFAULT NULL,
   `rate` enum('1','2','3','4','5') DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1026,7 +1026,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'Nintendo Switch with Gray Joy‑Con - HAC-001(-01)','Play your way with the Nintendo Switch gaming system. Whether you’re at home or on the go, solo or with friends, the Nintendo Switch system is designed to fit your life. Dock your Nintendo Switch to enjoy HD gaming on your TV. Heading out? Just undock your console and keep playing in handheld mode\r\nThis model includes battery life of approximately 4.5 to 9 hours\r\nThe battery life will depend on the games you play. For instance, the battery will last approximately 5.5 hours for The Legend of Zelda: Breath of the Wild (games sold separately)\r\nModel number HAC 001(01)',500.00,'_bIf-q2GlbLT_cUI1dNpnet_.jpg','Available','5'),(2,'Adidas Originals Trefoil Hoody',' adidas originals\r\n- Best for lifestyle\r\n- adidas brand logo pullover hoodie',70.00,'F_IQj-oYiyNb9b4wcg2rVEk4.jpg','Available','5'),(3,'Timberland','Solid tone high top leather boots\r\n- Waterproof\r\n- Cow leather upper\r\n- Cow leather inner\r\n- Rubber outsole\r\n- Heel height: 4cm',20.00,'NisO1zbBN4oTr2bbcPKIzyMO.jpg','Available','5'),(4,'Adidas Originals PE Rolltop Backpack',' adidas originals\r\n- Best for lifestyle\r\n- Polyester',90.00,'adidas-6709-4779111-1.jpg','Available','5'),(5,'PUMA Men\'s Lifestyle Brief 1 Pack 907404','Your must-have daily essentials from PUMA.\r\n\r\nMinimalistic design\r\nSoft, breathable and elasticated materials',999.99,'puma-9984-5163211-1.jpg','Available','5'),(6,'Utility Front Buttoned Dress','Solid shade button front drawstring waist maxi dress\r\n- Unlined\r\n- Shawl lapel neckline\r\n- Regular fit\r\n- Front button and drawstring waist fastening',70.00,'lubna-3181-1100711-2.jpg','Available','5'),(50,'4','4',4.00,'CtdDFT8KJYWvqf1e_b_LRSYh.png','Unavailable','4'),(51,'Icon for shell','icon',122.00,'bm0G5QbT-MVM4wu_8g2_9b7h.png','Available','5'),(52,'Picture','Picture big mode',111.00,'uBLSnlhpYK9w6Wb66qXtgHmC.jpg','Available','5');
+INSERT INTO `products` VALUES (1,'Nintendo Switch with Gray Joy‑Con - HAC-001(-01)','Play your way with the Nintendo Switch gaming system. Whether you’re at home or on the go, solo or with friends, the Nintendo Switch system is designed to fit your life. Dock your Nintendo Switch to enjoy HD gaming on your TV. Heading out? Just undock your console and keep playing in handheld mode\r\nThis model includes battery life of approximately 4.5 to 9 hours\r\nThe battery life will depend on the games you play. For instance, the battery will last approximately 5.5 hours for The Legend of Zelda: Breath of the Wild (games sold separately)\r\nModel number HAC 001(01)',500.00,'_bIf-q2GlbLT_cUI1dNpnet_.jpg','Available','5'),(2,'Adidas Originals Trefoil Hoody',' adidas originals\r\n- Best for lifestyle\r\n- adidas brand logo pullover hoodie',70.00,'F_IQj-oYiyNb9b4wcg2rVEk4.jpg','Available','5'),(3,'Timberland','Solid tone high top leather boots\r\n- Waterproof\r\n- Cow leather upper\r\n- Cow leather inner\r\n- Rubber outsole\r\n- Heel height: 4cm',20.00,'NisO1zbBN4oTr2bbcPKIzyMO.jpg','Available','5'),(4,'Adidas Originals PE Rolltop Backpack',' adidas originals\r\n- Best for lifestyle\r\n- Polyester',90.00,'adidas-6709-4779111-1.jpg','Available','5'),(5,'PUMA Men\'s Lifestyle Brief 1 Pack 907404','Your must-have daily essentials from PUMA.\r\n\r\nMinimalistic design\r\nSoft, breathable and elasticated materials',999.99,'puma-9984-5163211-1.jpg','Available','5'),(6,'Utility Front Buttoned Dress','Solid shade button front drawstring waist maxi dress\r\n- Unlined\r\n- Shawl lapel neckline\r\n- Regular fit\r\n- Front button and drawstring waist fastening',70.00,'lubna-3181-1100711-2.jpg','Available','5');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1046,7 +1046,7 @@ CREATE TABLE `users` (
   `date_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `type` enum('admin','user') DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1055,7 +1055,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (2,'dinh','$2y$10$iZaWaGyh7hg/7rjYW9bCCOH6olT4MoIvGY75ZTf4mxEbeZdfbmC7i','haiheo','Active','2019-10-25 23:17:44','user'),(4,'khang','$2y$10$JzhpVEUsOUZPvL/OSN9bou3Se0N023qt7ynTnFw7aA658JSMZrqgi','dmm','Active','2019-10-26 23:25:25','admin'),(6,'khang','$2y$10$OGtVh0iXCb7yU83VhAy5qeFikFn8Fx17A08RJCYKRPQaii7/XkN1u','haiheo','Active','2019-10-26 23:47:10','user'),(7,'admin','$2y$10$sVW3pzg0t0kE1nQVSrXPNuDROxj/zAvb5qzYkGyJA0DvpuNQBjtae','haiheo','Active','2019-10-27 00:01:50','admin'),(8,'dinh','$2y$10$FOh4QrNaNScBdINCbOc9XOvx2Ld4ujjqCAnLAPtCv0j45wnHc9KGK','haiheo','Active','2019-10-27 00:02:35','admin'),(9,'dinh1','$2y$10$GAQVvYWpLe7sj4lEHWtLYuqEN7SOpjv0lK2zIgYTHHtvTV9Af2KgK','haiheo','Active','2019-10-27 23:40:27','admin'),(10,NULL,'$2y$10$NIXJC7YtdcqMshcb12t6A.QfJ7lmIdidPw6iKDw50QPWn7706iy2q',NULL,'Active','2019-12-04 16:34:56','user'),(11,'dinh123','$2y$10$gFHx7NHPoYUJmRqT6vuo1Ouidqxs/9yzDsriRTMN/pQkc18kxcuS2','Dinh ku to','Active','2020-03-23 13:11:12','user'),(12,'ccc','$2y$10$lVUNCyDTyPsZuhM64ZA8zu19A58smRJ6GI8YYRhi.VeHO4dDIK7Ie','Dinh ku to','Active','2020-03-23 13:16:07','user'),(13,'dddd','$2y$10$sle3i8jTQKMENfIJAC/FhOMozBYbBFb4sOuCn9qe4Z.o.UFE35Ejm','Dinh ku to','Active','2020-03-23 13:16:27','user'),(14,'dinh123vvvvss','$2y$10$Anjen/Tm7hY0cgiRTnOghu92BV0/V.WQ5F.RwvIVXDa00/mqPA3bC','Dinh ku to','Active','2020-03-23 13:16:34','user'),(15,'dinhpopinder','$2y$10$cvtVDAtkW4ZdMU7b/hSM2OFyUmmcWcu2P06DzgcKmge3p37oAFjFa','Dinh popinder','Active','2020-03-23 13:17:37','user');
+INSERT INTO `users` VALUES (2,'dinh','$2y$10$iZaWaGyh7hg/7rjYW9bCCOH6olT4MoIvGY75ZTf4mxEbeZdfbmC7i','haiheo','Active','2019-10-25 23:17:44','user'),(4,'khang','$2y$10$JzhpVEUsOUZPvL/OSN9bou3Se0N023qt7ynTnFw7aA658JSMZrqgi','dmm','Active','2019-10-26 23:25:25','admin'),(6,'khang','$2y$10$OGtVh0iXCb7yU83VhAy5qeFikFn8Fx17A08RJCYKRPQaii7/XkN1u','haiheo','Active','2019-10-26 23:47:10','user'),(7,'admin','$2y$10$sVW3pzg0t0kE1nQVSrXPNuDROxj/zAvb5qzYkGyJA0DvpuNQBjtae','haiheo','Active','2019-10-27 00:01:50','admin'),(8,'dinh','$2y$10$FOh4QrNaNScBdINCbOc9XOvx2Ld4ujjqCAnLAPtCv0j45wnHc9KGK','haiheo','Active','2019-10-27 00:02:35','admin'),(9,'dinh1','$2y$10$GAQVvYWpLe7sj4lEHWtLYuqEN7SOpjv0lK2zIgYTHHtvTV9Af2KgK','haiheo','Active','2019-10-27 23:40:27','admin'),(10,NULL,'$2y$10$NIXJC7YtdcqMshcb12t6A.QfJ7lmIdidPw6iKDw50QPWn7706iy2q',NULL,'Active','2019-12-04 16:34:56','user'),(11,'dinh123','$2y$10$gFHx7NHPoYUJmRqT6vuo1Ouidqxs/9yzDsriRTMN/pQkc18kxcuS2','Dinh ku to','Active','2020-03-23 13:11:12','user'),(12,'ccc','$2y$10$lVUNCyDTyPsZuhM64ZA8zu19A58smRJ6GI8YYRhi.VeHO4dDIK7Ie','Dinh ku to','Active','2020-03-23 13:16:07','user'),(13,'dddd','$2y$10$sle3i8jTQKMENfIJAC/FhOMozBYbBFb4sOuCn9qe4Z.o.UFE35Ejm','Dinh ku to','Active','2020-03-23 13:16:27','user'),(14,'dinh123vvvvss','$2y$10$Anjen/Tm7hY0cgiRTnOghu92BV0/V.WQ5F.RwvIVXDa00/mqPA3bC','Dinh ku to','Active','2020-03-23 13:16:34','user'),(15,'dinhpopinder','$2y$10$cvtVDAtkW4ZdMU7b/hSM2OFyUmmcWcu2P06DzgcKmge3p37oAFjFa','Dinh popinder','Active','2020-03-23 13:17:37','user'),(16,'dinh123cc','$2y$10$8o6QZyuprePP7B8rZrdPQeX70/4WHvQMBrfLEIQfvuYXnzP9Xkh.a','Dinh ku to','Active','2020-03-26 16:56:38','user');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1068,4 +1068,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-24 17:10:18
+-- Dump completed on 2020-03-26 17:11:36

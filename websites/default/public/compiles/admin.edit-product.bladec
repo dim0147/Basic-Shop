@@ -42,9 +42,7 @@
  var categoryDelete = [];
  var categoryAdd = {
  '2': 'Killing',
- '6': 'Multiplayer',
- '7': 'Indle',
- '8': 'Nhu cc'
+ '6': 'Multiplayer'
  };
 $('.submit').click(function(e){
  e.preventDefault();

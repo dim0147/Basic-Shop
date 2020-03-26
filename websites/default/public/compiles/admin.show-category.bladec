@@ -42,7 +42,9 @@
 
 
 <?php $this->startSection('javascript'); ?>
-<script type="text/javascript" src="<?php  echo (isset($this->assetDict[('views/admin/css/datatables.min.js')]))?$this->assetDict[('views/admin/css/datatables.min.js')]:$this->baseUrl.'/'.('views/admin/css/datatables.min.js'); ?>"></script>
-<script type="text/javascript" src="<?php  echo (isset($this->assetDict[('views/admin/js/table-show-category.js')]))?$this->assetDict[('views/admin/js/table-show-category.js')]:$this->baseUrl.'/'.('views/admin/js/table-show-category.js'); ?>"></script>
+<?php if(!empty($categorys)): ?>
+ <script type="text/javascript" src="<?php  echo (isset($this->assetDict[('views/admin/css/datatables.min.js')]))?$this->assetDict[('views/admin/css/datatables.min.js')]:$this->baseUrl.'/'.('views/admin/css/datatables.min.js'); ?>"></script>
+ <script type="text/javascript" src="<?php  echo (isset($this->assetDict[('views/admin/js/table-show-category.js')]))?$this->assetDict[('views/admin/js/table-show-category.js')]:$this->baseUrl.'/'.('views/admin/js/table-show-category.js'); ?>"></script>
+<?php endif; ?>
 <?php $this->stopSection(); ?>
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.adminlayout'); } ?>

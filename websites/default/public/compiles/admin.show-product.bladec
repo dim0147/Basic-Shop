@@ -1,0 +1,65 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('css'); ?>
+<link rel="stylesheet" type="text/css" href="<?php  echo (isset($this->assetDict[('views/admin/css/datatables.min.css')]))?$this->assetDict[('views/admin/css/datatables.min.css')]:$this->baseUrl.'/'.('views/admin/css/datatables.min.css'); ?>"/>
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection('content'); ?>
+<style>
+
+
+
+</style>
+<div style="padding: 10px; border: 1px solid #888;">
+<div class="nofi">
+
+</div>
+<h1 class="text-center">Show products</h1>
+<?php if(!empty($products)): ?>
+<table id="table-category" class="display">
+ <thead>
+ <tr>
+ <th style="width: 5%">ID</th>
+ <th style="width: 10%">Image</th>
+ <th style="width: 20%">Name</th>
+ <th style="width: 20%">Description</th>
+ <th style="width: 5%">Price</th>
+ <th style="width: 5%">Status</th>
+ <th style="width: 5%">Rate</th>
+ <th style="width: 5%">Category</th>
+ <th>Action</th>
+ </tr>
+ </thead>
+ <tbody>
+ <?php $__currentLoopData = $products; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <tr>
+ <td><?php echo static::e($product['id']); ?></td>
+ <td> <img style="width: 90px; height: 60px;" src="<?php  echo (isset($this->assetDict[('views/public/image/'.$product['image'])]))?$this->assetDict[('views/public/image/'.$product['image'])]:$this->baseUrl.'/'.('views/public/image/'.$product['image']); ?>"></td>
+ <td><a href="" style="text-decoration: none;color: green; font-weight: bold"><?php echo static::e($product['title']); ?></a></td>
+ <td><?php echo substr($product["description"] , 0, 60); ?> ...</td>
+ <td><p style="color: red;">$<?php echo static::e($product['price']); ?></p></td>
+ <td><?php echo static::e($product['status']); ?></td>
+ <td><?php echo static::e($product['rate']); ?></td>
+ <td><?php echo static::e($product['categorys']); ?></td>
+ <td>
+ <a href="/admin/edit-product?id=<?php echo static::e($product['id']); ?>"><button type="button" class="btn btn-warning editbtn"><i class="fas fa-edit"></i></button></a>
+ <button type="button" class="btn btn-danger rmvbtn"><i class="fa fa-trash" aria-hidden="true"></i></button>
+ </td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </tbody>
+</table>
+</div>
+<?php else: ?>
+<h1 class="text-center"> You currently don't have any category.</h1>
+<?php endif; ?>
+<?php $this->stopSection(); ?>
+
+
+<?php $this->startSection('javascript'); ?>
+<?php if(!empty($products)): ?>
+ <script type="text/javascript" src="<?php  echo (isset($this->assetDict[('views/admin/css/datatables.min.js')]))?$this->assetDict[('views/admin/css/datatables.min.js')]:$this->baseUrl.'/'.('views/admin/css/datatables.min.js'); ?>"></script>
+ <script type="text/javascript" src="<?php  echo (isset($this->assetDict[('views/admin/js/table-show-product.js')]))?$this->assetDict[('views/admin/js/table-show-product.js')]:$this->baseUrl.'/'.('views/admin/js/table-show-product.js'); ?>"></script>
+<?php endif; ?>
+<?php $this->stopSection(); ?>
+<?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.adminlayout'); } ?>

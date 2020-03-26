@@ -19,6 +19,17 @@
             return $result;
         }
 
+        public function getProducts(){
+            $stmt = $this->pdo->prepare("SELECT p.*, GROUP_CONCAT(c.name) AS categorys FROM products p
+                                         LEFT JOIN categorys_link_products cp
+                                                    ON cp.product_id = p.id
+                                         LEFT JOIN categorys c 
+                                                    ON c.id = cp.category_id
+                                        GROUP BY id");
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
         public function getProductWithId($id, $fields = ['products.*', 'images.name']){
             try {
                 if(is_null($this->pdo))
@@ -69,6 +80,53 @@
             }
         }
 
+        public function removeProduct($id){
+            try{
+                $this->pdo->beginTransaction();
+                 //  Get header
+                 $stmt = $this->pdo->prepare('SELECT image FROM products WHERE id = :id');
+                 $stmt->bindParam(':id', $id);
+                 $stmt->execute();
+                 $imgProd = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                 $imgProd = $imgProd[getFirstKey($imgProd)]['image'];
+                //  Get thumbnail
+                $stmt = $this->pdo->prepare('SELECT * FROM images WHERE product_id = :id');
+                $stmt->bindParam(':id', $id);
+                $stmt->execute();
+                $thumbnails = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                $arrNameImg = [];
+                if(!empty($thumbnails)){
+                    foreach($thumbnails as $image){
+                        array_push($arrNameImg, $image['name']);
+                    }
+                }
+                //  Delete category link product
+                $stmt = $this->pdo->prepare('DELETE FROM categorys_link_products WHERE product_id = :id');
+                $stmt->bindParam(':id', $id);
+                $stmt->execute();
+                 //  Delete cart_item in cart in orders
+                 $stmt = $this->pdo->prepare('DELETE FROM cart_item WHERE product_id = :id');
+                 $stmt->bindParam(':id', $id);
+                 $stmt->execute();
+                 //  Delete image (thumbnail)
+                 $stmt = $this->pdo->prepare('DELETE FROM images WHERE product_id = :id');
+                 $stmt->bindParam(':id', $id);
+                 $stmt->execute();
+                 //  Delete product
+                 $stmt = $this->pdo->prepare('DELETE FROM products WHERE id = :id');
+                 $stmt->bindParam(':id', $id);
+                 $stmt->execute();
+                 $this->pdo->commit();
+                 removeFiles($arrNameImg, PATH_IMAGE_UPLOAD);
+                 removeFiles([$imgProd], PATH_IMAGE_UPLOAD);
+                 return true;
+            }
+            catch(PDOException $err){
+                $this->pdo->rollBack();
+                die($err);
+            }
+        }
+
         public function deleteThumbnail($listID){
             try{
                 if(is_null($this->pdo))
@@ -81,7 +139,7 @@
                 die($err);
             }
 
-
         }
+
     }
 ?>

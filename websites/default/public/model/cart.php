@@ -29,7 +29,20 @@ class CartModel extends database{
         // Merge all items from DB
         $allOrders = null;
             foreach ($orders as $order) {
-                if (empty($allOrders)){
+                if (empty($allOrders) && count($orders) == 1){
+                    $allOrders['order_id'][0] = $orders[0]['order_id'];
+                    $allOrders['product_id'][0] = $orders[0]['product_id'];
+                    $allOrders['image'][0] = $orders[0]['image'];
+                    $allOrders['quantity'][0] = $orders[0]['quantity'];
+                    $allOrders['title'][0] = $orders[0]['title'];
+                    $allOrders['price'][0] = $orders[0]['price'];
+                    $allOrders['address'][0] = $orders[0]['address'];
+                    $allOrders['email'][0] = $orders[0]['email'];
+                    $allOrders['status'][0] = $orders[0]['status'];
+                    $allOrders['paymentID'][0] = $orders[0]['paymentID'];
+                    continue;
+                }
+                else if (empty($allOrders)){
                     $allOrders = $order;
                     continue;
                 }

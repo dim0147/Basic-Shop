@@ -42,6 +42,8 @@
 
 
 @section('javascript')
-<script type="text/javascript" src="@asset('views/admin/css/datatables.min.js')"></script>
-<script type="text/javascript" src="@asset('views/admin/js/table-show-category.js')"></script>
+@if(!empty($categorys))
+    <script type="text/javascript" src="@asset('views/admin/css/datatables.min.js')"></script>
+    <script type="text/javascript" src="@asset('views/admin/js/table-show-category.js')"></script>
+@endif
 @endsection

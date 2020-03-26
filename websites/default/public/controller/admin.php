@@ -10,6 +10,7 @@
             $this->cateModel = new CategoryModel();
             $this->model = new UserModel();
             $this->fileRender = [
+                'show-product' => 'admin.show-product',
                 'add-product' => 'admin.add-product',
                 'show-category' => 'admin.show-category',
                 'edit-product' => 'admin.edit-product',
@@ -249,6 +250,11 @@
              return;
         }
 
+        public function showProductIndex(){
+            $products = $this->prodModel->getProducts();
+            $this->render($this->fileRender['show-product'], ['title' => 'Show All Product', 'products' => $products]);
+        }
+
         public function addProductIndex(){
                 //  Get all category from db
             $categorys = $this->prodModel->select(NULL, '*', 'categorys');
@@ -420,6 +426,26 @@
             }
                 /******** ALL IS SUCCESS  ***********/
             setHTTPCode(200, "Update success!");
+        }
+
+        public function postRemoveProduct(){
+            if(empty($_POST['id'])){
+                setHTTPCode(400, "Not found id to delete");
+                return;
+            }
+            $product = $this->prodModel->select(NULL, ['id' => $_POST['id']]);
+            if(empty($product)){
+                setHTTPCode(400, "Not found product to delete");
+                return;
+            }
+            $product = $product[getFirstKey($product)];
+            $result = $this->prodModel->removeProduct($product['id']);
+            if($result){
+                setHTTPCode(200, 'Remove success');
+                return;
+            }
+            setHTTPCode(400, 'Remove failed');
+            return;
         }
 
         /**
