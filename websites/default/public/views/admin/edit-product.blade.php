@@ -18,12 +18,12 @@
         @endforeach
         <br>
             
-        @foreach ($prod['categoryName'] as $id => $item)
+        @foreach ($categoryProduct as $id => $item)
             <input class="category" idCategory="{{$id}}" type="checkbox" value='{{$item}}' checked>{{$item}}<br>
         @endforeach
 
         @foreach ($category as $id => $item)
-            <input class="category" idCategory="{{$id}}" type="checkbox" value='{{$item['name']}}'>{{$item['name']}}<br>
+            <input class="category" idCategory="{{$item['id']}}" type="checkbox" value='{{$item['name']}}'>{{$item['name']}}<br>
         @endforeach
     @endforeach
     <br>
@@ -37,13 +37,52 @@
 @section('javascript')
 
 <script>
+    let arrCateOrigin = [];
+    const allCheckedBox = $('.category:checkbox:checked');
+    allCheckedBox.each(function(index){
+        arrCateOrigin.push($(this).attr('idcategory'));
+    });
+
     var imgIdDelete = [];
     var imgNameDelete = [];
     var categoryDelete = [];
     var categoryAdd = {
-        '2': 'Killing',
-        '6': 'Multiplayer'
     };
+
+    $(".category").change(function() {
+    idCategoryAdd = $(this).attr('idcategory');
+    if(this.checked) {
+        if(arrCateOrigin.includes(idCategoryAdd)){
+            const indexToRmv = categoryDelete.indexOf(idCategoryAdd);
+            if (indexToRmv > -1) {
+                categoryDelete.splice(indexToRmv, 1);
+            }
+            console.log('cate del orr ' + categoryDelete);
+            console.log('cate add orr');
+            console.log(categoryAdd);
+            return;
+        }
+        categoryAdd[idCategoryAdd] = $(this).val();
+        console.log('cate del ' + categoryDelete);
+        console.log('cate add');
+        console.log(categoryAdd);
+    }
+    else{
+        if(arrCateOrigin.includes(idCategoryAdd) && !categoryDelete.includes(idCategoryAdd)){
+            categoryDelete.push(idCategoryAdd);
+            console.log('cate del orr' + categoryDelete);
+            console.log('cate add orr');
+            console.log(categoryAdd);
+            return;
+        }
+        delete categoryAdd[idCategoryAdd];
+        console.log('cate del ' + categoryDelete);
+        console.log('cate add' );
+        console.log(categoryAdd);
+
+    }
+});
+
 $('.submit').click(function(e){
     e.preventDefault();
     var data = new FormData($(this).parents('form')[0]);

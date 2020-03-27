@@ -8,7 +8,8 @@
            $this->userModel = new UserModel();
            $this->fileRender = [
                 'index' => 'product.index',
-                'detail' => 'product.detail'
+                'detail' => 'product.detail',
+                'search-product' => 'product.search-product'
             ]; 
         }
 
@@ -28,7 +29,44 @@
                 ]);
             }
         }
+        
+        public function searchProductByString(){
+            if(empty($_GET['s'])){
+                setHTTPCode(400, 'Please enter search string!');
+                redirectBut();
+                return;
+            }
+            $products = $this->model->getProductByString($_GET['s']);
+            if(!empty($products)){
+                //  Merge result identify by id product
+                $products = mergeResult(['category_name', 'name'], ['category_list', 'image_list'], 'id', $products);
+            }
+            $this->render($this->fileRender['search-product'], ['title' => "Search with  '" . $_GET['s']. "'", 
+                                            'products' => $products,
+                                            'searchKey' => "string '" . $_GET['s'] . "'"]);
+        }
 
+        public function searchProductByCategory(){
+            if(empty($_GET['s'])){
+                setHTTPCode(400, 'Please enter category!');
+                redirectBut();
+                return;
+            }
+            $category = $this->model->select(NULL, ['name' => $_GET['s']], 'categorys');
+            if(empty($category)){
+                setHTTPCode(400, 'Not found category!');
+                redirectBut();
+                return;
+            }
+            $products = $this->model->getProductByCategory($_GET['s']);
+            if(!empty($products)){
+                $products = mergeResult(['category_name', 'name'], ['category_list', 'image_list'], 'id', $products);
+            }
+            $this->render($this->fileRender['search-product'], ['title' => "Search by category " . $_GET['s'], 
+                                            'products' => $products,
+                                            'searchKey' => "category " . $_GET['s']]);
+            
+        }
 
 
         public function detail(){

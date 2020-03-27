@@ -1,12 +1,39 @@
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+<div class="row justify-content-center">
+ <div class="col-12 col-md-10 col-lg-8">
+ <form class="card card-sm">
+ <div class="card-body row no-gutters align-items-center">
+ <div class="col-auto">
+ <i class="fas fa-search h4 text-body"></i>
+ </div>
+ <!--end of col-->
+ <div class="col">
+ <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search topics or keywords">
+ </div>
+ <!--end of col-->
+ <div class="col-auto">
+ <button class="btn btn-lg btn-success" type="submit">Search</button>
+ </div>
+ <!--end of col-->
+ </div>
+ </form>
+ </div>
+ <!--end of col-->
+ </div>
+
+
  <div class="container">
+
+ 
  <a class="navbar-brand" href="/product"><i class="fas fa-users"></i> Group Project</a>
  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
  <span class="navbar-toggler-icon"></span>
  </button>
  <div class="collapse navbar-collapse" id="navbarResponsive">
  <ul class="navbar-nav ml-auto">
- <li class="nav-item active">
+ <li class="nav-item">
  <a class="nav-link" href="/product">Home
  <span class="sr-only">(current)</span>
  </a>

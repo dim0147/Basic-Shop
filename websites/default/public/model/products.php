@@ -59,6 +59,39 @@
             }
         }
 
+        public function getProductByString($string){
+            if(is_null($this->pdo))
+                    return NULL;
+                
+
+                $stmt = $this->pdo->prepare("SELECT products.*, images.name, images.product_id, cp.category_name FROM products 
+                LEFT JOIN categorys_link_products cp 
+                ON products.id = cp.product_id
+                LEFT JOIN images
+                on products.id = images.product_id
+                WHERE products.title LIKE CONCAT('%',:string,'%')");
+                $stmt->bindParam(':string', $string);
+                $stmt->execute();
+                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
+        public function getProductByCategory($string){
+            if(is_null($this->pdo))
+                    return NULL;
+                
+                $stmt = $this->pdo->prepare("SELECT products.*, images.name, images.product_id, cp.category_name FROM products 
+                INNER JOIN categorys_link_products cp 
+                ON products.id = cp.product_id
+                INNER JOIN categorys c
+                ON c.id = cp.category_id
+                LEFT JOIN images
+                on products.id = images.product_id
+                WHERE c.name = :string");
+                $stmt->bindParam(':string', $string);
+                $stmt->execute();
+                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
         public function addNewProduct($title, $descr, $price, $imageName, $stat, $rate){
             try{
                 if(is_null($this->pdo))

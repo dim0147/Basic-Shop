@@ -1,0 +1,105 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('css'); ?>
+ <link rel="stylesheet" type="text/css" href='<?php  echo (isset($this->assetDict[('views/public/css/productIndex.css')]))?$this->assetDict[('views/public/css/productIndex.css')]:$this->baseUrl.'/'.('views/public/css/productIndex.css'); ?>'>
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection('content'); ?>
+ <meta name="viewport" content="width=1177"/>
+ <div class="main">
+
+ <div class="body">
+ <div class="parentContainer">
+ <div class="header">
+ <H2>Search By <?php echo static::e($searchKey); ?></H2>
+ </div>
+ <div>
+ <?php if(!empty($products)): ?>
+ <?php $__currentLoopData = $products; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <a href="#" data-toggle="modal" data-target="#exampleModal" class="ch" identify="<?php echo static::e($product['id']); ?>" title="<?php echo static::e($product['title']); ?>" 
+ image="/views/public/image/<?php echo static::e($product['image']); ?>" des="<?php echo static::e($product['description']); ?>">
+ <img class="im" src="<?php  echo (isset($this->assetDict[('views/public/image/'.$product['image'])]))?$this->assetDict[('views/public/image/'.$product['image'])]:$this->baseUrl.'/'.('views/public/image/'.$product['image']); ?>" alt="">
+ <div class="product">
+ <div class="title">
+ <b><?php echo static::e($product['title']); ?></b>
+ </div>
+ <div class="price">
+ <h3>$<?php echo static::e($product['price']); ?></h3>
+ </div>
+ <div class="description">
+ <p><?php echo static::e($product['description']); ?></p>
+ </div>
+ <div class="rating">
+ <span class="fa fa-star checked"></span>
+ <span class="fa fa-star checked"></span>
+ <span class="fa fa-star checked"></span>
+ <span class="fa fa-star"></span>
+ <span class="fa fa-star"></span>
+ </div>
+ </div>
+ </a>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ <?php else: ?>
+ <h1>No result found!</h1>
+ <?php endif; ?>
+ </div>
+ </div>
+ </div>
+
+
+ <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ <div class="modal-dialog modal-lg modal-dialog-centered">
+ <div class="modal-content">
+ <div class="modal-header">
+ <h5 class="modal-title" id="modalTitle"></h5>
+ <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+ <span aria-hidden="true">x</span>
+ </button>
+ </div>
+ <div class="modal-body">
+ <img id="modalImage" alt="blk">
+ <div class="modalContainer">
+ <h5>DESCRIPTION</h5>
+ <div id="modalDescription"></div>
+ </div>
+ <!--<p id="das" class="modalImage" alt="blk"></p>-->
+ </div>
+ <div class="modal-footer">
+ <form class="form" action="/cart/action" method="POST">
+ <div>
+ <input type="hidden" name="id" id="modalID">
+ </div>
+
+ <div>
+ Action:
+ <select name="action" list="ls">
+ <option value="add">Add</option>
+ <option value="remove">Remove</option>
+ <option value="decrease">Decrease</option>
+ </select>
+ </div>
+
+ <div>
+ Quantity:
+ <input type="number" name="quantity" value="1"/>
+ </div>
+
+ <div>
+ <a href="" type="button" class="btn btn-danger show-dt">Show Detail</a>
+ <button type="submit" class="btn btn-info">SUBMIT</button>
+ </div>
+ </form>
+ <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cart</button>
+ <button type="button" class="btn btn-primary">BUY</button>-->
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ <?php $this->stopSection(); ?>
+ <?php $this->startSection('javascript'); ?>
+ <script src="<?php  echo (isset($this->assetDict[('views/product/js/javascript.js')]))?$this->assetDict[('views/product/js/javascript.js')]:$this->baseUrl.'/'.('views/product/js/javascript.js'); ?>"></script>
+ <?php $this->stopSection(); ?>
+
+
+<?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

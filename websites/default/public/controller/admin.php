@@ -339,8 +339,15 @@
             }
                 //  Merge many records result to one
             $product = mergeResult(['name', 'category_name'], ['listImage', 'categoryName'], 'id', $product, ['name' => 'image_id', 'category_name' => 'category_id']);
-                //  Get All category product
-            $listCategoryProduct = array_values($product)[0]['categoryName'];
+            $listCategoryPd = $this->cateModel->getCategoryOfProduct($product[getFirstKey($product)]['id']);
+            $listCategoryProduct = [];
+            if(!empty($listCategoryPd)){
+                foreach($listCategoryPd as $cate){
+                    $nameCate = $cate['name'];
+                    $idCate = $cate['id'];
+                    $listCategoryProduct[$idCate] = $nameCate;
+                }
+            }
             $categorys = $this->prodModel->select(NULL, '*', 'categorys');
                 // Remove category of product to $categorys Array (contain all category include category of product, we go to remove them out)
                 // If product category not empty    
@@ -359,10 +366,10 @@
                 // product category is empty, set key categoryName of product equal null array
                 $product[getFirstKey($product)]['categoryName'] = [];
             }
-        
             $this->render($this->fileRender['edit-product'], [
                 'product' => $product,
                 'category' => $categorys,
+                'categoryProduct' => $listCategoryProduct,
                 'title' => "Edit Product"
             ]);
             return;

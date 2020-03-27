@@ -18,12 +18,12 @@
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  <br>
  
- <?php $__currentLoopData = $prod['categoryName']; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <?php $__currentLoopData = $categoryProduct; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
  <input class="category" idCategory="<?php echo static::e($id); ?>" type="checkbox" value='<?php echo static::e($item); ?>' checked><?php echo static::e($item); ?><br>
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
 
  <?php $__currentLoopData = $category; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $item): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
- <input class="category" idCategory="<?php echo static::e($id); ?>" type="checkbox" value='<?php echo static::e($item['name']); ?>'><?php echo static::e($item['name']); ?><br>
+ <input class="category" idCategory="<?php echo static::e($item['id']); ?>" type="checkbox" value='<?php echo static::e($item['name']); ?>'><?php echo static::e($item['name']); ?><br>
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
  <br>
@@ -37,13 +37,52 @@
 <?php $this->startSection('javascript'); ?>
 
 <script>
+ let arrCateOrigin = [];
+ const allCheckedBox = $('.category:checkbox:checked');
+ allCheckedBox.each(function(index){
+ arrCateOrigin.push($(this).attr('idcategory'));
+ });
+
  var imgIdDelete = [];
  var imgNameDelete = [];
  var categoryDelete = [];
  var categoryAdd = {
- '2': 'Killing',
- '6': 'Multiplayer'
  };
+
+ $(".category").change(function() {
+ idCategoryAdd = $(this).attr('idcategory');
+ if(this.checked) {
+ if(arrCateOrigin.includes(idCategoryAdd)){
+ const indexToRmv = categoryDelete.indexOf(idCategoryAdd);
+ if (indexToRmv > -1) {
+ categoryDelete.splice(indexToRmv, 1);
+ }
+ console.log('cate del orr ' + categoryDelete);
+ console.log('cate add orr');
+ console.log(categoryAdd);
+ return;
+ }
+ categoryAdd[idCategoryAdd] = $(this).val();
+ console.log('cate del ' + categoryDelete);
+ console.log('cate add');
+ console.log(categoryAdd);
+ }
+ else{
+ if(arrCateOrigin.includes(idCategoryAdd) && !categoryDelete.includes(idCategoryAdd)){
+ categoryDelete.push(idCategoryAdd);
+ console.log('cate del orr' + categoryDelete);
+ console.log('cate add orr');
+ console.log(categoryAdd);
+ return;
+ }
+ delete categoryAdd[idCategoryAdd];
+ console.log('cate del ' + categoryDelete);
+ console.log('cate add' );
+ console.log(categoryAdd);
+
+ }
+});
+
 $('.submit').click(function(e){
  e.preventDefault();
  var data = new FormData($(this).parents('form')[0]);
