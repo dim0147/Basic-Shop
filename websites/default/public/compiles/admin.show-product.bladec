@@ -39,7 +39,7 @@
  <td><?php echo substr($product["description"] , 0, 60); ?> ...</td>
  <td><p style="color: red;">$<?php echo static::e($product['price']); ?></p></td>
  <td><?php echo static::e($product['status']); ?></td>
- <td><?php echo static::e($product['rate']); ?></td>
+ <td><?php echo static::e($product['rate']); ?> <span class="fa fa-star checked"></span></td>
  <td><?php echo static::e($product['categorys']); ?></td>
  <td>
  <a href="/admin/edit-product?id=<?php echo static::e($product['id']); ?>"><button type="button" class="btn btn-warning editbtn"><i class="fas fa-edit"></i></button></a>

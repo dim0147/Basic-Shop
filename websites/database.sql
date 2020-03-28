@@ -928,7 +928,7 @@ CREATE TABLE `categorys_link_products` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `categorys_link_products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categorys` (`id`),
   CONSTRAINT `categorys_link_products_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -937,7 +937,7 @@ CREATE TABLE `categorys_link_products` (
 
 LOCK TABLES `categorys_link_products` WRITE;
 /*!40000 ALTER TABLE `categorys_link_products` DISABLE KEYS */;
-INSERT INTO `categorys_link_products` VALUES (70,1,2,'Killing','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(72,1,6,'Multiplayer','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(75,2,2,'Killing','AdidasAdidas Originals Trefoil Hoody'),(76,2,6,'Multiplayer','AdidasAdidas Originals Trefoil Hoody'),(88,3,6,'Multiplayer','Timberland'),(98,4,2,'Killing','Adidas Originals PE Rolltop Backpack'),(99,4,6,'Multiplayer','Adidas Originals PE Rolltop Backpack'),(100,6,2,'Killing','Utility Front Buttoned Dress'),(101,6,6,'Multiplayer','Utility Front Buttoned Dress'),(102,6,3,'Football','Utility Front Buttoned Dress'),(105,1,3,'Football','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(107,5,16,'India','PUMA Men\'s Lifestyle Brief 1 Pack 907404'),(108,5,17,'Single Player','PUMA Men\'s Lifestyle Brief 1 Pack 907404'),(109,3,1,'Như cc','Timberland'),(110,3,2,'Killing','Timberland'),(111,3,3,'Football','Timberland');
+INSERT INTO `categorys_link_products` VALUES (70,1,2,'Killing','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(72,1,6,'Multiplayer','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(75,2,2,'Killing','AdidasAdidas Originals Trefoil Hoody'),(76,2,6,'Multiplayer','AdidasAdidas Originals Trefoil Hoody'),(98,4,2,'Killing','Adidas Originals PE Rolltop Backpack'),(99,4,6,'Multiplayer','Adidas Originals PE Rolltop Backpack'),(100,6,2,'Killing','Utility Front Buttoned Dress'),(101,6,6,'Multiplayer','Utility Front Buttoned Dress'),(102,6,3,'Football','Utility Front Buttoned Dress'),(105,1,3,'Football','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(107,5,16,'India','PUMA Men\'s Lifestyle Brief 1 Pack 907404'),(108,5,17,'Single Player','PUMA Men\'s Lifestyle Brief 1 Pack 907404'),(112,3,16,'India','Timberland'),(113,3,17,'Single Player','Timberland'),(114,3,2,'Killing','Timberland'),(115,3,3,'Football','Timberland'),(116,3,6,'Multiplayer','Timberlandddd');
 /*!40000 ALTER TABLE `categorys_link_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -957,7 +957,7 @@ CREATE TABLE `images` (
   PRIMARY KEY (`image_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=163 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -966,7 +966,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
-INSERT INTO `images` VALUES (61,1,'thumbnail','dPoRIFVnF95W2FQsueTuGoGD.jpg','2019-10-24 14:12:51'),(62,1,'thumbnail','LCBUWwJJ6JKOYvWpSXjdQb54.jpg','2019-10-24 14:12:51'),(65,1,'thumbnail','9ApiKarz6p2s6kzRADwARkz7.jpg','2019-10-24 14:42:24'),(66,1,'thumbnail','diYxhTVB4dGPCTD-ngy-zfZc.jpg','2019-10-24 14:42:24'),(67,1,'thumbnail','j2VMIeOVeinmmoAd4kM4cXUB.jpg','2019-10-24 14:43:02'),(68,1,'thumbnail','o_2nXjYFmG9rNEqPokRCFMG2.jpg','2019-10-24 14:43:02'),(71,1,'thumbnail','h7nX_QSxHXgRPPtRXKSRjN86.jpg','2019-10-24 23:53:14'),(161,4,'thumbnail','qxI7VyItdeyhymvAJtikm7z6.jpg','2020-03-26 17:07:15');
+INSERT INTO `images` VALUES (61,1,'thumbnail','dPoRIFVnF95W2FQsueTuGoGD.jpg','2019-10-24 14:12:51'),(62,1,'thumbnail','LCBUWwJJ6JKOYvWpSXjdQb54.jpg','2019-10-24 14:12:51'),(65,1,'thumbnail','9ApiKarz6p2s6kzRADwARkz7.jpg','2019-10-24 14:42:24'),(66,1,'thumbnail','diYxhTVB4dGPCTD-ngy-zfZc.jpg','2019-10-24 14:42:24'),(67,1,'thumbnail','j2VMIeOVeinmmoAd4kM4cXUB.jpg','2019-10-24 14:43:02'),(68,1,'thumbnail','o_2nXjYFmG9rNEqPokRCFMG2.jpg','2019-10-24 14:43:02'),(71,1,'thumbnail','h7nX_QSxHXgRPPtRXKSRjN86.jpg','2019-10-24 23:53:14'),(161,4,'thumbnail','qxI7VyItdeyhymvAJtikm7z6.jpg','2020-03-26 17:07:15'),(180,3,'thumbnail','zL2EYgNE6ggfCwCCn08-95aL.jpg','2020-03-28 15:46:54');
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1017,7 +1017,7 @@ CREATE TABLE `products` (
   `status` enum('Available','Out of stock','Coming Soon','Unavailable') DEFAULT NULL,
   `rate` enum('1','2','3','4','5') DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1026,7 +1026,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'Nintendo Switch with Gray Joy‑Con - HAC-001(-01)','Play your way with the Nintendo Switch gaming system. Whether you’re at home or on the go, solo or with friends, the Nintendo Switch system is designed to fit your life. Dock your Nintendo Switch to enjoy HD gaming on your TV. Heading out? Just undock your console and keep playing in handheld mode\r\nThis model includes battery life of approximately 4.5 to 9 hours\r\nThe battery life will depend on the games you play. For instance, the battery will last approximately 5.5 hours for The Legend of Zelda: Breath of the Wild (games sold separately)\r\nModel number HAC 001(01)',500.00,'_bIf-q2GlbLT_cUI1dNpnet_.jpg','Available','5'),(2,'Adidas Originals Trefoil Hoody',' adidas originals\r\n- Best for lifestyle\r\n- adidas brand logo pullover hoodie',70.00,'F_IQj-oYiyNb9b4wcg2rVEk4.jpg','Available','5'),(3,'Timberland','Solid tone high top leather boots\r\n- Waterproof\r\n- Cow leather upper\r\n- Cow leather inner\r\n- Rubber outsole\r\n- Heel height: 4cm',20.00,'NisO1zbBN4oTr2bbcPKIzyMO.jpg','Available','5'),(4,'Adidas Originals PE Rolltop Backpack',' adidas originals\r\n- Best for lifestyle\r\n- Polyester',90.00,'adidas-6709-4779111-1.jpg','Available','5'),(5,'PUMA Men\'s Lifestyle Brief 1 Pack 907404','Your must-have daily essentials from PUMA.\r\n\r\nMinimalistic design\r\nSoft, breathable and elasticated materials',999.00,'puma-9984-5163211-1.jpg','Available','5'),(6,'Utility Front Buttoned Dress','Solid shade button front drawstring waist maxi dress\r\n- Unlined\r\n- Shawl lapel neckline\r\n- Regular fit\r\n- Front button and drawstring waist fastening',70.00,'lubna-3181-1100711-2.jpg','Available','5');
+INSERT INTO `products` VALUES (1,'Nintendo Switch with Gray Joy‑Con - HAC-001(-01)','Play your way with the Nintendo Switch gaming system. Whether you’re at home or on the go, solo or with friends, the Nintendo Switch system is designed to fit your life. Dock your Nintendo Switch to enjoy HD gaming on your TV. Heading out? Just undock your console and keep playing in handheld mode\r\nThis model includes battery life of approximately 4.5 to 9 hours\r\nThe battery life will depend on the games you play. For instance, the battery will last approximately 5.5 hours for The Legend of Zelda: Breath of the Wild (games sold separately)\r\nModel number HAC 001(01)',500.00,'_bIf-q2GlbLT_cUI1dNpnet_.jpg','Available','5'),(2,'Adidas Originals Trefoil Hoody',' adidas originals\r\n- Best for lifestyle\r\n- adidas brand logo pullover hoodie',70.00,'F_IQj-oYiyNb9b4wcg2rVEk4.jpg','Available','2'),(3,'Timberland','Solid tone high top leather boots\r\n- Waterproof\r\n- Cow leather upper\r\n- Cow leather inner\r\n- Rubber outsole\r\n- Heel height: 4cm\r\n- Gender: Male\r\n- Must Dry',90.00,'9lh2yZubN7JD0v3nLDWBIJir.jpg','Available','3'),(4,'Adidas Originals PE Rolltop Backpack',' adidas originals\r\n- Best for lifestyle\r\n- Polyester',90.00,'adidas-6709-4779111-1.jpg','Available','5'),(5,'PUMA Men\'s Lifestyle Brief 1 Pack 907404','Your must-have daily essentials from PUMA.\r\n\r\nMinimalistic design\r\nSoft, breathable and elasticated materials',999.00,'puma-9984-5163211-1.jpg','Available','5'),(6,'Utility Front Buttoned Dress','Solid shade button front drawstring waist maxi dress\r\n- Unlined\r\n- Shawl lapel neckline\r\n- Regular fit\r\n- Front button and drawstring waist fastening',70.00,'lubna-3181-1100711-2.jpg','Available','5');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1046,7 +1046,7 @@ CREATE TABLE `users` (
   `date_create` datetime DEFAULT CURRENT_TIMESTAMP,
   `type` enum('admin','user') DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1055,7 +1055,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (2,'dinh','$2y$10$iZaWaGyh7hg/7rjYW9bCCOH6olT4MoIvGY75ZTf4mxEbeZdfbmC7i','haiheo','Active','2019-10-25 23:17:44','user'),(4,'khang','$2y$10$JzhpVEUsOUZPvL/OSN9bou3Se0N023qt7ynTnFw7aA658JSMZrqgi','dmm','Active','2019-10-26 23:25:25','admin'),(6,'khang','$2y$10$OGtVh0iXCb7yU83VhAy5qeFikFn8Fx17A08RJCYKRPQaii7/XkN1u','haiheo','Active','2019-10-26 23:47:10','user'),(7,'admin','$2y$10$sVW3pzg0t0kE1nQVSrXPNuDROxj/zAvb5qzYkGyJA0DvpuNQBjtae','haiheo','Active','2019-10-27 00:01:50','admin'),(8,'dinh','$2y$10$FOh4QrNaNScBdINCbOc9XOvx2Ld4ujjqCAnLAPtCv0j45wnHc9KGK','haiheo','Active','2019-10-27 00:02:35','admin'),(9,'dinh1','$2y$10$GAQVvYWpLe7sj4lEHWtLYuqEN7SOpjv0lK2zIgYTHHtvTV9Af2KgK','haiheo','Active','2019-10-27 23:40:27','admin'),(10,NULL,'$2y$10$NIXJC7YtdcqMshcb12t6A.QfJ7lmIdidPw6iKDw50QPWn7706iy2q',NULL,'Active','2019-12-04 16:34:56','user'),(11,'dinh123','$2y$10$gFHx7NHPoYUJmRqT6vuo1Ouidqxs/9yzDsriRTMN/pQkc18kxcuS2','Dinh ku to','Active','2020-03-23 13:11:12','user'),(12,'ccc','$2y$10$lVUNCyDTyPsZuhM64ZA8zu19A58smRJ6GI8YYRhi.VeHO4dDIK7Ie','Dinh ku to','Active','2020-03-23 13:16:07','user'),(13,'dddd','$2y$10$sle3i8jTQKMENfIJAC/FhOMozBYbBFb4sOuCn9qe4Z.o.UFE35Ejm','Dinh ku to','Active','2020-03-23 13:16:27','user'),(14,'dinh123vvvvss','$2y$10$Anjen/Tm7hY0cgiRTnOghu92BV0/V.WQ5F.RwvIVXDa00/mqPA3bC','Dinh ku to','Active','2020-03-23 13:16:34','user'),(15,'dinhpopinder','$2y$10$cvtVDAtkW4ZdMU7b/hSM2OFyUmmcWcu2P06DzgcKmge3p37oAFjFa','Dinh popinder','Active','2020-03-23 13:17:37','user'),(16,'dinh123cc','$2y$10$8o6QZyuprePP7B8rZrdPQeX70/4WHvQMBrfLEIQfvuYXnzP9Xkh.a','Dinh ku to','Active','2020-03-26 16:56:38','user');
+INSERT INTO `users` VALUES (2,'dinh','$2y$10$iZaWaGyh7hg/7rjYW9bCCOH6olT4MoIvGY75ZTf4mxEbeZdfbmC7i','haiheo','Active','2019-10-25 23:17:44','user'),(4,'khang','$2y$10$JzhpVEUsOUZPvL/OSN9bou3Se0N023qt7ynTnFw7aA658JSMZrqgi','dmm','Active','2019-10-26 23:25:25','admin'),(6,'khang','$2y$10$OGtVh0iXCb7yU83VhAy5qeFikFn8Fx17A08RJCYKRPQaii7/XkN1u','haiheo','Active','2019-10-26 23:47:10','user'),(7,'admin','$2y$10$sVW3pzg0t0kE1nQVSrXPNuDROxj/zAvb5qzYkGyJA0DvpuNQBjtae','haiheo','Active','2019-10-27 00:01:50','admin'),(8,'dinh','$2y$10$FOh4QrNaNScBdINCbOc9XOvx2Ld4ujjqCAnLAPtCv0j45wnHc9KGK','haiheo','Active','2019-10-27 00:02:35','admin'),(9,'dinh1','$2y$10$GAQVvYWpLe7sj4lEHWtLYuqEN7SOpjv0lK2zIgYTHHtvTV9Af2KgK','haiheo','Active','2019-10-27 23:40:27','admin'),(10,NULL,'$2y$10$NIXJC7YtdcqMshcb12t6A.QfJ7lmIdidPw6iKDw50QPWn7706iy2q',NULL,'Active','2019-12-04 16:34:56','user'),(11,'dinh123','$2y$10$gFHx7NHPoYUJmRqT6vuo1Ouidqxs/9yzDsriRTMN/pQkc18kxcuS2','Dinh ku to','Active','2020-03-23 13:11:12','user'),(12,'ccc','$2y$10$lVUNCyDTyPsZuhM64ZA8zu19A58smRJ6GI8YYRhi.VeHO4dDIK7Ie','Dinh ku to','Active','2020-03-23 13:16:07','user'),(13,'dddd','$2y$10$sle3i8jTQKMENfIJAC/FhOMozBYbBFb4sOuCn9qe4Z.o.UFE35Ejm','Dinh ku to','Active','2020-03-23 13:16:27','user'),(14,'dinh123vvvvss','$2y$10$Anjen/Tm7hY0cgiRTnOghu92BV0/V.WQ5F.RwvIVXDa00/mqPA3bC','Dinh ku to','Active','2020-03-23 13:16:34','user'),(15,'dinhpopinder','$2y$10$cvtVDAtkW4ZdMU7b/hSM2OFyUmmcWcu2P06DzgcKmge3p37oAFjFa','Dinh popinder','Active','2020-03-23 13:17:37','user'),(16,'dinh123cc','$2y$10$8o6QZyuprePP7B8rZrdPQeX70/4WHvQMBrfLEIQfvuYXnzP9Xkh.a','Dinh ku to','Active','2020-03-26 16:56:38','user'),(17,'dinh333','$2y$10$Vk4mtI1Uj37529pB2GL0cuaWXDLeDmgzOxXpBKJUV2X1cZMnxFZHK','Dinh','Active','2020-03-28 16:19:50','admin');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1068,4 +1068,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-27 17:47:53
+-- Dump completed on 2020-03-28 17:26:34

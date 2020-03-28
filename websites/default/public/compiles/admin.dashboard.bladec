@@ -1,57 +1,124 @@
 <?php $_shouldextend[1]=1; ?>
 
 <?php $this->startSection('content'); ?>
-<div class="card text-center">
+<style>
+table {
+ border-collapse: collapse;
+ width: 100%;
+}
+
+th, td {
+ padding: 8px;
+ text-align: left;
+ border-bottom: 1px solid #ddd;
+}
+</style>
+
+<!-- product -->
+<div class="card text-center" style="margin-bottom: 50px;margin-top: 50px;">
  <div class="card-header">
- Featured
+ <h1>Recent product</h1>
  </div>
  <div class="card-body">
- <h5 class="card-title">Special title treatment</h5>
- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
- <a href="#" class="btn btn-primary">Go somewhere</a>
+ <h5 class="card-title">Product recently added</h5>
+ <?php if(!empty($products)): ?>
+ <p class="card-text">Showing recently product has been added.</p>
+ <table>
+ <tr>
+ <th>ID</th>
+ <th>Image</th>
+ <th>Name</th>
+ <th>Price</th>
+ <th>Status</th>
+ <th>Categorys</th>
+ </tr>
+ <?php $__currentLoopData = $products; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <tr>
+ <td><?php echo static::e($product['id']); ?></td>
+ <td><img src="<?php  echo (isset($this->assetDict[('views/public/image/'.$product['image'])]))?$this->assetDict[('views/public/image/'.$product['image'])]:$this->baseUrl.'/'.('views/public/image/'.$product['image']); ?>" style="width: 50px; height: 80px"></td>
+ <td><a href="/product/detail?id=<?php echo static::e($product['id']); ?>" style="text-decoration: none;color: green; font-weight: bold"><?php echo static::e($product['title']); ?></a></td>
+ <td><?php echo static::e($product['price']); ?></td>
+ <td><?php echo static::e($product['status']); ?></td>
+ <td><?php echo static::e($product['categorys']); ?></td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+</table>
+<br>
+ <a href="/admin/show-product" class="btn btn-primary">Show more</a>
+ <?php else: ?>
+ <p class="card-text">No product was recently added.</p>
+ <?php endif; ?>
  </div>
  <div class="card-footer text-muted">
- 2 days ago
+ Update recently
  </div>
 </div>
  
-
+<!-- orders -->
 <div class="row">
  <div class="col-sm-6">
  <div class="card">
  <div class="card-body">
- <h5 class="card-title">Special title treatment</h5>
- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
- <a href="#" class="btn btn-primary">Go somewhere</a>
+ <h5 class="card-title">Order recently placed</h5>
+ <?php if(!empty($orders)): ?>
+ <p class="card-text">Showing recently order has been placed.</p>
+ <table>
+ <tr>
+ <th>ID</th>
+ <th>Name User</th>
+ <th>Status</th>
+ <th>Email</th>
+ <th>Address</th>
+ <th>PaymentID</th>
+ </tr>
+ <?php $__currentLoopData = $orders; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <tr>
+ <td><?php echo static::e($order['order_id']); ?></td>
+ <td><?php echo static::e($order['user_name']); ?></td>
+ <td><?php echo static::e($order['status']); ?></a></td>
+ <td><?php echo static::e($order['email']); ?></td>
+ <td><?php echo static::e($order['address']); ?></td>
+ <td><?php echo static::e($order['paymentID']); ?></td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+</table>
+<?php else: ?>
+<p class="card-text">No orders recently placed.</p>
+<?php endif; ?>
  </div>
  </div>
  </div>
+
+<!-- user -->
  <div class="col-sm-6">
  <div class="card">
  <div class="card-body">
- <h5 class="card-title">Special title treatment</h5>
- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
- <a href="#" class="btn btn-primary">Go somewhere</a>
+ <h5 class="card-title">User recently join</h5>
+ <?php if(!empty($users)): ?>
+ <p class="card-text">Showing recently user has joined.</p>
+ <table>
+ <tr>
+ <th>ID</th>
+ <th>Name User</th>
+ <th>Status</th>
+ <th>Date join</th>
+ </tr>
+ <?php $__currentLoopData = $users; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
+ <tr>
+ <td><?php echo static::e($user['user_id']); ?></td>
+ <td><?php echo static::e($user['name']); ?></td>
+ <td><?php echo static::e($user['status']); ?></a></td>
+ <td><?php echo static::e($user['date_create']); ?></td>
+ </tr>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+</table>
+<?php else: ?>
+<p class="card-text">No user recently join.</p>
+<?php endif; ?>
  </div>
  </div>
  </div>
 </div>
 
-
-<div class="card w-75">
- <div class="card-body">
- <h5 class="card-title">Card title</h5>
- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
- <a href="#" class="btn btn-primary">Button</a>
- </div>
-</div>
-
-<div class="card w-50">
- <div class="card-body">
- <h5 class="card-title">Card title</h5>
- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
- <a href="#" class="btn btn-primary">Button</a>
- </div>
-</div>
 <?php $this->stopSection(); ?>
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.adminlayout'); } ?>

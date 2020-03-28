@@ -1,10 +1,14 @@
 $(document).ready( function () {
     const dataTable = $('#table-category').DataTable({});
     $('.rmvbtn').click(function(){
+        let confirmDel = confirm('Are you sure want to delete this product?');
+        if(!confirmDel)
+            return;
         const row = dataTable.row($(this).parents('tr'));
         const dataRow = row.data();
         if(!Array.isArray(dataRow) || dataRow.length !== 4){
             showError('Incorrect data!');
+            return;
         }
         idProduct = dataRow[0];
         $.ajax({

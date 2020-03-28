@@ -39,7 +39,7 @@
             <td>{!! substr($product["description"] , 0, 60) !!} ...</td>
             <td><p style="color: red;">${{$product['price']}}</p></td>
             <td>{{$product['status']}}</td>
-            <td>{{$product['rate']}}</td>
+            <td>{{$product['rate']}} <span class="fa fa-star checked"></span></td>
             <td>{{$product['categorys']}}</td>
             <td>
                 <a href="/admin/edit-product?id={{$product['id']}}"><button type="button" class="btn btn-warning editbtn"><i class="fas fa-edit"></i></button></a>

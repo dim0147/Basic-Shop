@@ -13,6 +13,13 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
+        @if (!empty($_SESSION['username']))
+        <li class="nav-item">
+            <a class="nav-link" href="#">Welcome back, {{$_SESSION['username']}}
+            </a>
+          </li>
+        @endif
+          
           <li class="nav-item">
             <a class="nav-link" href="/product">Home
               <span class="sr-only">(current)</span>
@@ -31,7 +38,7 @@
           <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
           </li>
-          @if (!empty($_SESSION['username']))
+          @if (!empty($_SESSION['user']))
           <li class="nav-item">
             <a class="nav-link" href="/user/profile">Profile</a>
           </li>

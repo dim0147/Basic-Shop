@@ -10,6 +10,8 @@
             $this->cateModel = new CategoryModel();
             $this->model = new UserModel();
             $this->fileRender = [
+                'login' => 'admin.login',
+                'register' => 'admin.register',
                 'show-product' => 'admin.show-product',
                 'add-product' => 'admin.add-product',
                 'show-category' => 'admin.show-category',
@@ -236,7 +238,15 @@
         }
     
         public function dashboard(){
-            $this->render($this->fileRender['dashboard'], ['title' => 'Dashboard']);
+            $recentProducts = $this->prodModel->getRecentProduct();
+            $recentOrders = $this->prodModel->getRecentOrders();
+            $recentUsers = $this->prodModel->getRecentUsers();
+            $this->render($this->fileRender['dashboard'], [
+                                                            'title' => 'Dashboard',
+                                                            'products' => $recentProducts,
+                                                            'orders' => $recentOrders,
+                                                            'users' => $recentUsers,
+                                                          ]);
         }
 
         public function showCategoryIndex(){
@@ -455,6 +465,15 @@
             return;
         }
 
+        public function loginIndex(){
+            if(!empty($_SESSION['user'])){
+                setHTTPCode(400, 'You login already!');
+                redirectBut('/admin/dashboard', 'Click here go to Dashboard');
+                return;
+            }
+            $this->render($this->fileRender['login'], ['title' => 'Admin Login']);
+        }
+
         /**
          * ADMIN LOGIN
          * @param {String} $_POST['username']
@@ -472,15 +491,28 @@
                 $result = isset($user[getFirstKey($user)]['password']);
                 if($result && password_verify($password, $user[getFirstKey($user)]['password'])){
                     $_SESSION['user'] = $user[getFirstKey($user)]['user_id'];
+                    $_SESSION['username'] = $user[getFirstKey($user)]['username'];
                     setHTTPCode(200, "Sign In Success!");
+                    redirectBut('/admin/dashboard', 'Click here go to Dashboard');
                     return;
                 }
                 else{
                     setHTTPCode(500, "Username or Password Wrong!");
+                    redirectBut('/admin/login', 'Click here to login again');
                     return;
                 }
             }
             setHTTPCode(500, "Something wrong, please check again!");
+            redirectBut('/admin/login', 'Click here to login again');
+        }
+
+        public function registerIndex(){
+            if(!empty($_SESSION['user'])){
+                setHTTPCode(400, 'You login already!');
+                redirectBut('/admin/dashboard', 'Click here go to Dashboard');
+                return;
+            }
+            $this->render($this->fileRender['register'], ['title' => 'Admin Register']);
         }
 
         /**
@@ -500,18 +532,23 @@
                                                         'type' => 'admin']); 
                 if($checkExist){    //  If yes return
                     setHTTPCode(500, "Username exist!");
+                    redirectBut('/admin/register', 'Click here to register');
                     return;
                 }
                 // Insert new User
                 $password = password_hash($password, PASSWORD_DEFAULT); //  hash password
                 $column = ['username', 'password', 'name', 'status', 'type'];
                 $values = [[$username, $password, $name, 'Active', 'admin']];
-                $this->model->insert($values);
+                $this->model->insert($values, $column);
+                $_SESSION['user'] = $this->model->getLastInsertId();
+                $_SESSION['username'] = $name;
                 setHTTPCode(200, "Register success!!");
+                redirectBut('/admin/dashboard', 'Click here to go to Dashboard');
                 return;
             }
             else
                 setHTTPCode(500, "Field Empty!!");
+                redirectBut('/admin/register', 'Click here to register');
         }
 
         public function addCateIndex(){
@@ -611,6 +648,21 @@
             //  Delete records from categorys table
             $this->prodModel->delete(['id' => [$_POST['id']]], 'categorys');
             setHTTPCode(200, 'Delete caterogy success!');
+        }
+
+        public function checkAdmin(){
+            if(empty($_SESSION['user'])){
+                echo "You must login first!";
+                redirectBut('/admin/login', 'Click here to login as Admin');
+                return false;
+            }
+            $admin = $this->model->select(NULL, ['type' => 'admin', 'user_id' => $_SESSION['user']]);
+            if(empty($admin)){
+                echo "Unauthorized, you don't have permission to access!";
+                redirectBut('/product', 'Click here to go to home');
+                return false;
+            }
+            return true;
         }
  
     }

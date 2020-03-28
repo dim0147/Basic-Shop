@@ -5,6 +5,40 @@
             $this->connect('products');
         }
 
+        public function getRecentProduct(){
+            $stmt = $this->pdo->prepare("SELECT p.*, GROUP_CONCAT(c.name) AS categorys FROM products p
+                                        LEFT JOIN categorys_link_products cp
+                                                ON cp.product_id = p.id
+                                        LEFT JOIN categorys c 
+                                                ON c.id = cp.category_id
+                                        GROUP BY id
+                                        ORDER BY p.id DESC
+                                        LIMIT 5
+                                        ");
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
+        public function getRecentOrders(){
+            $stmt = $this->pdo->prepare("SELECT o.*, u.name AS user_name FROM orders o
+                                        INNER JOIN users u ON u.user_id = o.user_id
+                                        ORDER BY o.order_id DESC
+                                        LIMIT 5
+                                        ");
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
+        public function getRecentUsers(){
+            $stmt = $this->pdo->prepare("SELECT * FROM users
+                                        WHERE type = 'user'
+                                        ORDER BY user_id DESC
+                                        LIMIT 5
+                                        ");
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
         public function getAllProduct(){
             if(is_null($this->pdo))
                 return NULL;
