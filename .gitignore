@@ -1,2 +1,3 @@
 .vscode/
-**/websites/default/WEBASSIGNMENT2/compiles/*
+/websites/default/WEBASSIGNMENT2/compiles/*
+db.sql

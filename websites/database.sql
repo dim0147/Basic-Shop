@@ -896,7 +896,7 @@ CREATE TABLE `categorys` (
   `name` varchar(30) DEFAULT NULL,
   `description` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -905,7 +905,7 @@ CREATE TABLE `categorys` (
 
 LOCK TABLES `categorys` WRITE;
 /*!40000 ALTER TABLE `categorys` DISABLE KEYS */;
-INSERT INTO `categorys` VALUES (1,'Như cc','BÙI'),(2,'Killing','hehe'),(3,'Football',''),(6,'Multiplayer','');
+INSERT INTO `categorys` VALUES (1,'Như cc','BÙI'),(2,'Killing','hehe'),(3,'Football',''),(6,'Multiplayer',''),(16,'India',''),(17,'Single Player','');
 /*!40000 ALTER TABLE `categorys` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -928,7 +928,7 @@ CREATE TABLE `categorys_link_products` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `categorys_link_products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categorys` (`id`),
   CONSTRAINT `categorys_link_products_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -937,7 +937,7 @@ CREATE TABLE `categorys_link_products` (
 
 LOCK TABLES `categorys_link_products` WRITE;
 /*!40000 ALTER TABLE `categorys_link_products` DISABLE KEYS */;
-INSERT INTO `categorys_link_products` VALUES (70,1,2,'Killing','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(72,1,6,'Multiplayer','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(75,2,2,'Killing','AdidasAdidas Originals Trefoil Hoody'),(76,2,6,'Multiplayer','AdidasAdidas Originals Trefoil Hoody'),(87,3,2,'Killing','Timberland'),(88,3,6,'Multiplayer','Timberland'),(98,4,2,'Killing','Adidas Originals PE Rolltop Backpack'),(99,4,6,'Multiplayer','Adidas Originals PE Rolltop Backpack');
+INSERT INTO `categorys_link_products` VALUES (70,1,2,'Killing','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(72,1,6,'Multiplayer','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(75,2,2,'Killing','AdidasAdidas Originals Trefoil Hoody'),(76,2,6,'Multiplayer','AdidasAdidas Originals Trefoil Hoody'),(88,3,6,'Multiplayer','Timberland'),(98,4,2,'Killing','Adidas Originals PE Rolltop Backpack'),(99,4,6,'Multiplayer','Adidas Originals PE Rolltop Backpack'),(100,6,2,'Killing','Utility Front Buttoned Dress'),(101,6,6,'Multiplayer','Utility Front Buttoned Dress'),(102,6,3,'Football','Utility Front Buttoned Dress'),(105,1,3,'Football','Nintendo Switch with Gray Joy‑Con - HAC-001(-01)'),(107,5,16,'India','PUMA Men\'s Lifestyle Brief 1 Pack 907404'),(108,5,17,'Single Player','PUMA Men\'s Lifestyle Brief 1 Pack 907404'),(109,3,1,'Như cc','Timberland'),(110,3,2,'Killing','Timberland'),(111,3,3,'Football','Timberland');
 /*!40000 ALTER TABLE `categorys_link_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -966,7 +966,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
-INSERT INTO `images` VALUES (61,1,'thumbnail','dPoRIFVnF95W2FQsueTuGoGD.jpg','2019-10-24 14:12:51'),(62,1,'thumbnail','LCBUWwJJ6JKOYvWpSXjdQb54.jpg','2019-10-24 14:12:51'),(65,1,'thumbnail','9ApiKarz6p2s6kzRADwARkz7.jpg','2019-10-24 14:42:24'),(66,1,'thumbnail','diYxhTVB4dGPCTD-ngy-zfZc.jpg','2019-10-24 14:42:24'),(67,1,'thumbnail','j2VMIeOVeinmmoAd4kM4cXUB.jpg','2019-10-24 14:43:02'),(68,1,'thumbnail','o_2nXjYFmG9rNEqPokRCFMG2.jpg','2019-10-24 14:43:02'),(71,1,'thumbnail','h7nX_QSxHXgRPPtRXKSRjN86.jpg','2019-10-24 23:53:14'),(152,3,'thumbnail','XuoKv31G02Zo35lQAroW81U_.png','2019-12-16 18:00:52'),(161,4,'thumbnail','qxI7VyItdeyhymvAJtikm7z6.jpg','2020-03-26 17:07:15');
+INSERT INTO `images` VALUES (61,1,'thumbnail','dPoRIFVnF95W2FQsueTuGoGD.jpg','2019-10-24 14:12:51'),(62,1,'thumbnail','LCBUWwJJ6JKOYvWpSXjdQb54.jpg','2019-10-24 14:12:51'),(65,1,'thumbnail','9ApiKarz6p2s6kzRADwARkz7.jpg','2019-10-24 14:42:24'),(66,1,'thumbnail','diYxhTVB4dGPCTD-ngy-zfZc.jpg','2019-10-24 14:42:24'),(67,1,'thumbnail','j2VMIeOVeinmmoAd4kM4cXUB.jpg','2019-10-24 14:43:02'),(68,1,'thumbnail','o_2nXjYFmG9rNEqPokRCFMG2.jpg','2019-10-24 14:43:02'),(71,1,'thumbnail','h7nX_QSxHXgRPPtRXKSRjN86.jpg','2019-10-24 23:53:14'),(161,4,'thumbnail','qxI7VyItdeyhymvAJtikm7z6.jpg','2020-03-26 17:07:15');
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1026,7 +1026,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'Nintendo Switch with Gray Joy‑Con - HAC-001(-01)','Play your way with the Nintendo Switch gaming system. Whether you’re at home or on the go, solo or with friends, the Nintendo Switch system is designed to fit your life. Dock your Nintendo Switch to enjoy HD gaming on your TV. Heading out? Just undock your console and keep playing in handheld mode\r\nThis model includes battery life of approximately 4.5 to 9 hours\r\nThe battery life will depend on the games you play. For instance, the battery will last approximately 5.5 hours for The Legend of Zelda: Breath of the Wild (games sold separately)\r\nModel number HAC 001(01)',500.00,'_bIf-q2GlbLT_cUI1dNpnet_.jpg','Available','5'),(2,'Adidas Originals Trefoil Hoody',' adidas originals\r\n- Best for lifestyle\r\n- adidas brand logo pullover hoodie',70.00,'F_IQj-oYiyNb9b4wcg2rVEk4.jpg','Available','5'),(3,'Timberland','Solid tone high top leather boots\r\n- Waterproof\r\n- Cow leather upper\r\n- Cow leather inner\r\n- Rubber outsole\r\n- Heel height: 4cm',20.00,'NisO1zbBN4oTr2bbcPKIzyMO.jpg','Available','5'),(4,'Adidas Originals PE Rolltop Backpack',' adidas originals\r\n- Best for lifestyle\r\n- Polyester',90.00,'adidas-6709-4779111-1.jpg','Available','5'),(5,'PUMA Men\'s Lifestyle Brief 1 Pack 907404','Your must-have daily essentials from PUMA.\r\n\r\nMinimalistic design\r\nSoft, breathable and elasticated materials',999.99,'puma-9984-5163211-1.jpg','Available','5'),(6,'Utility Front Buttoned Dress','Solid shade button front drawstring waist maxi dress\r\n- Unlined\r\n- Shawl lapel neckline\r\n- Regular fit\r\n- Front button and drawstring waist fastening',70.00,'lubna-3181-1100711-2.jpg','Available','5');
+INSERT INTO `products` VALUES (1,'Nintendo Switch with Gray Joy‑Con - HAC-001(-01)','Play your way with the Nintendo Switch gaming system. Whether you’re at home or on the go, solo or with friends, the Nintendo Switch system is designed to fit your life. Dock your Nintendo Switch to enjoy HD gaming on your TV. Heading out? Just undock your console and keep playing in handheld mode\r\nThis model includes battery life of approximately 4.5 to 9 hours\r\nThe battery life will depend on the games you play. For instance, the battery will last approximately 5.5 hours for The Legend of Zelda: Breath of the Wild (games sold separately)\r\nModel number HAC 001(01)',500.00,'_bIf-q2GlbLT_cUI1dNpnet_.jpg','Available','5'),(2,'Adidas Originals Trefoil Hoody',' adidas originals\r\n- Best for lifestyle\r\n- adidas brand logo pullover hoodie',70.00,'F_IQj-oYiyNb9b4wcg2rVEk4.jpg','Available','5'),(3,'Timberland','Solid tone high top leather boots\r\n- Waterproof\r\n- Cow leather upper\r\n- Cow leather inner\r\n- Rubber outsole\r\n- Heel height: 4cm',20.00,'NisO1zbBN4oTr2bbcPKIzyMO.jpg','Available','5'),(4,'Adidas Originals PE Rolltop Backpack',' adidas originals\r\n- Best for lifestyle\r\n- Polyester',90.00,'adidas-6709-4779111-1.jpg','Available','5'),(5,'PUMA Men\'s Lifestyle Brief 1 Pack 907404','Your must-have daily essentials from PUMA.\r\n\r\nMinimalistic design\r\nSoft, breathable and elasticated materials',999.00,'puma-9984-5163211-1.jpg','Available','5'),(6,'Utility Front Buttoned Dress','Solid shade button front drawstring waist maxi dress\r\n- Unlined\r\n- Shawl lapel neckline\r\n- Regular fit\r\n- Front button and drawstring waist fastening',70.00,'lubna-3181-1100711-2.jpg','Available','5');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1068,4 +1068,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-26 17:11:36
+-- Dump completed on 2020-03-27 17:47:53
