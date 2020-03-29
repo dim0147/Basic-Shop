@@ -19,6 +19,7 @@
                 'edit-product' => 'admin.edit-product',
                 'add-category' => 'admin.add-category',
                 'edit-category' => 'admin.edit-category',
+                'show-user' => 'admin.show-user',
                 'dashboard' => 'admin.dashboard'
             ];
         }
@@ -267,6 +268,11 @@
         public function showProductIndex(){
             $products = $this->prodModel->getProducts();
             $this->render($this->fileRender['show-product'], ['title' => 'Show All Product', 'products' => $products]);
+        }
+
+        public function showUserIndex(){
+            $users = $this->model->select(NULL, '*');
+            $this->render($this->fileRender['show-user'], ['title' => 'Show All User', 'users' => $users]);
         }
 
         public function addProductIndex(){

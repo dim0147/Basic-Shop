@@ -47,6 +47,7 @@
     <h1 class="panel-title">Orders</h1>
   </div>
   <div class="panel-body">
+@if(!empty($orders))
 @foreach ($orders as $orderId => $order)
 <div class="card text-center">
   <div class="card-header">
@@ -83,6 +84,9 @@
 </div>
 <br>
 @endforeach
+@else
+		<h1 class="text-center">You don't have any oder!</h1>
+	@endif
 </div>
 </div>
 </div>

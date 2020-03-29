@@ -83,6 +83,15 @@ route('/admin/show-product', function ()
     $adminController->showProductIndex();
 });
 
+
+route('/admin/show-user', function ()
+{
+    global $adminController;
+    $isAdmin = $adminController->checkAdmin();
+    if (!$isAdmin) return;
+    $adminController->showUserIndex();
+});
+
 route('/admin/edit-product?{id}', function ()
 {
     global $adminController;

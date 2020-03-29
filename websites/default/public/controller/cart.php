@@ -87,7 +87,7 @@ class CartController extends Controller
     //  CART
     public function action()
     {
-        if (!isset($_POST['action']))
+        if (empty($_POST['action']))
         {
             setHTTPCode(400, "Invalid action");
             redirectBut();
@@ -100,7 +100,7 @@ class CartController extends Controller
             return;
         }
         //  Without checking quantity, NOTE: DEBUG
-        if (empty($_POST['quantity']))
+        if (empty($_POST['quantity']) && ($_POST['action'] == 'add' || $_POST['action'] == 'decrease'))
         {
             setHTTPCode(400, "Invalid quantity");
             redirectBut();

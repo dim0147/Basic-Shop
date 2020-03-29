@@ -25,6 +25,9 @@
         <li class="nav-item">
             <a href="/admin/show-category"><button class="btn btn-outline-primary" type="button"><i class="fas fa-edit"></i> Edit Category</button></a>
         </li>
+        <li class="nav-item">
+            <a href="/admin/show-user"><button class="btn btn-outline-warning" type="button"><i class="fas fa-user"></i> Show User</button></a>
+        </li>
 
         @if(!empty($_SESSION['user']))
         <li class="nav-item">

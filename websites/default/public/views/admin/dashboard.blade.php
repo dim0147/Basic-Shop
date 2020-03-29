@@ -11,6 +11,7 @@ th, td {
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  max-width: 744px;
 }
 </style>
 
@@ -62,7 +63,7 @@ th, td {
         <h5 class="card-title">Order recently placed</h5>
         @if(!empty($orders))
         <p class="card-text">Showing recently order has been placed.</p>
-    <table>
+    <table style="table-layout: fixed;">
   <tr>
     <th>ID</th>
     <th>Name User</th>
@@ -96,7 +97,7 @@ th, td {
         <h5 class="card-title">User recently join</h5>
         @if(!empty($users))
         <p class="card-text">Showing recently user has joined.</p>
-    <table>
+    <table style="table-layout: fixed;">
   <tr>
     <th>ID</th>
     <th>Name User</th>

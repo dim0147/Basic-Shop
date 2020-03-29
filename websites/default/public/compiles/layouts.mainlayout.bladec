@@ -3,6 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <title><?php echo static::e($title); ?></title>
+ <link rel="icon" href="<?php  echo (isset($this->assetDict[('views/public/image/favicon.png')]))?$this->assetDict[('views/public/image/favicon.png')]:$this->baseUrl.'/'.('views/public/image/favicon.png'); ?>">
  <link rel="stylesheet" type="text/css" href='<?php  echo (isset($this->assetDict[('views/public/css/bootstrap.min.css')]))?$this->assetDict[('views/public/css/bootstrap.min.css')]:$this->baseUrl.'/'.('views/public/css/bootstrap.min.css'); ?>'>
  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" >
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

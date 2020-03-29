@@ -27,7 +27,7 @@
     <div class="container">
 
    
-      <a class="navbar-brand" href="/product"><i class="fas fa-users"></i> Group Project</a>
+      <a class="navbar-brand" href="/product"><img src="@asset('views/public/image/favicon.png')" style="width:50px;height:40px" alt="">  Shopping Website</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>

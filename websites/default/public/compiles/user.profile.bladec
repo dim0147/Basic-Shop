@@ -47,6 +47,7 @@
  <h1 class="panel-title">Orders</h1>
  </div>
  <div class="panel-body">
+<?php if(!empty($orders)): ?>
 <?php $__currentLoopData = $orders; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $orderId => $order): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
 <div class="card text-center">
  <div class="card-header">
@@ -83,6 +84,9 @@
 </div>
 <br>
 <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+<?php else: ?>
+ <h1 class="text-center">You don't have any oder!</h1>
+	<?php endif; ?>
 </div>
 </div>
 </div>
