@@ -122,6 +122,7 @@
             if(!$idNewProduct && $idNewProduct !== 0){ // check if fail remove header image from storage
                 removeFiles([$imageHeader], PATH_IMAGE_UPLOAD);
                 setHTTPCode(500, 'Error while create new Product');
+                redirectBut('/admin/add-product', 'Click here to retry again');
                 return;
             }
             $_POST['id'] = $idNewProduct;
@@ -219,11 +220,13 @@
             if($type === 1){
                 removeFiles([$images], PATH_IMAGE_UPLOAD);
                 setHTTPCode(500, 'Error while upload header image!');
+                redirectBut('/admin/add-product', 'Click here to retry again');
                 return;
             }
             if($type === 2){
                 removeFiles($images, PATH_IMAGE_UPLOAD);
                 setHTTPCode(500, 'Error while upload thumbnail image!');
+                redirectBut('/admin/add-product', 'Click here to retry again');
                 return;
             }
         }
@@ -288,7 +291,8 @@
          */
         public function postAddProduct(){
             if(empty($_POST['categorys'])){
-                setHTTPCode(500, 'Empty Field!');
+                setHTTPCode(500, 'Empty Category!');
+                redirectBut('/admin/add-product', 'Click here to retry again');
                 return;
             }
                 //  Convert category json get from client to array 
@@ -298,11 +302,18 @@
             if(checkEmptyFile($_FILES['header'], 1) || checkEmptyFile($_FILES['thumbnail'], 2) || checkEmpty([ $_POST['categorys'], $_POST['title'], $_POST['description'], $_POST['price'], $_POST['status'], $_POST['rate']]))
             {
                 setHTTPCode(500, 'Empty Field!');
+                redirectBut('/admin/add-product', 'Click here to retry again');
+                return;
+            }
+            if(strlen($_POST['title']) > 100){
+                setHTTPCode(500, 'Product title cannot above 100 character!');
+                redirectBut('/admin/add-product', 'Click here to retry again');
                 return;
             }
                 //  Check title if exist
             if($this->prodModel->select(NULL, ['title' => $_POST['title']])){   
                 setHTTPCode(500, 'Product exist!');
+                redirectBut('/admin/add-product', 'Click here to retry again');
                 return;
             }
                 //  upload header image to storage, return name header image
@@ -310,6 +321,7 @@
                 //  Check if error remove header image from storage
             if(!$imageHeader){ 
                 setHTTPCode(500, 'Error while upload header image!');
+                redirectBut('/admin/add-product', 'Click here to retry again');
                 return;
             }
                 //  Add product to database, return the id of product when create finish
@@ -321,6 +333,7 @@
                 //  If Error
                 if(!$listImg){
                     setHTTPCode(500, "ERROR while update thumbnail!");
+                    redirectBut('/admin/add-product', 'Click here to retry again');
                     return false;
                 }
                 //  Upload thumbnail image to database, get list of name image from upload local storage
@@ -332,18 +345,21 @@
             }
 
             setHTTPCode(200, "Create successful!");
+            redirectBut('/admin/show-product', 'Click here to see product');
         }
 
         public function editProductIndex(){
                 //  Check if have param
             if(!isset($_GET['id'])){ 
                 setHTTPCode(500, "Please pass parameter!");
+                redirectBut('/admin/show-product', 'Click here to go back');
                 return;
             }
                 // Get Product
             $product = $this->prodModel->getProductWithId($_GET['id'], ['products.*, images.name, images.image_id, cp.category_id, cp.category_name']);
             if(!$product){  // if product not found
                 setHTTPCode(500, "Product not found!");
+                redirectBut('/admin/show-product', 'Click here to go back');
                 return;
             }
                 //  Merge many records result to one
@@ -398,10 +414,17 @@
          * @param {string} $_POST['rate']
          */
         public function postEditProduct(){
-            if(!isset($_POST['imgDel'], $_POST['nameImgDel'], $_POST['cateAdd'], $_POST['cateDel'], $_FILES['header'], $_FILES['thumbnail'], $_POST['price'], $_POST['status'], $_POST['rate'], $_POST['description'])){
+            if(!isset($_POST['title'], $_POST['imgDel'], $_POST['nameImgDel'], $_POST['cateAdd'], $_POST['cateDel'], $_FILES['header'], $_FILES['thumbnail'], $_POST['price'], $_POST['status'], $_POST['rate'], $_POST['description'])){
                 setHTTPCode(400, "Error, empty field!!");
                 return;
             }
+
+            if(strlen($_POST['title']) > 100){
+                setHTTPCode(500, 'Product title cannot above 100 character!');
+                redirectBut('/admin/show-product', 'Click here to go back');
+                return;
+            }
+            
                 //  Get array name & id of image thumbnail need to delete
             $arrRmvImg = getArrFromJSON($_POST['imgDel']);
             $arrNameRmvImg = getArrFromJSON($_POST['nameImgDel']);
@@ -561,11 +584,13 @@
         public function postAddCate(){
             if(empty($_POST['category'])){  //  Check if don't have name category to add
                 setHTTPCode(500, 'Empty Field!!');
+                redirectBut('/admin/add-category', 'Click here to go back');
                 return;
             }
             //  Check if category is exist
             if($this->prodModel->select(NULL, ['name' => $_POST['category']], 'categorys')){
                 setHTTPCode(500, 'Category exist!!!');
+                redirectBut('/admin/add-category', 'Click here to go back');
                 return;
             }
             //  Check if description is require, this is optional
@@ -582,6 +607,7 @@
             ];
             $this->prodModel->insert($value, $column, 'categorys');
             setHTTPCode(200, 'Create successful!');
+            redirectBut('/admin/add-category', 'Click here to go back');
             return;
       
         }  
@@ -593,12 +619,14 @@
         public function editCateIndex(){
             if(empty($_GET['id'])){ //  Check id field if empty
                 setHTTPCode(500, 'Please pass id!');
+                redirectBut('/admin/show-category', 'Click here to go back');
                 return;
             }
             //  Searching This ID in db
             $category = $this->prodModel->select(NULL, ['id' => $_GET['id']], 'categorys');
             if(!$category){ //  If not exist
                 setHTTPCode(500, 'Cannot get category, please pass correct ID!');
+                redirectBut('/admin/show-category', 'Click here to go back');
                 return;
             }
             $category = $category[getFirstKey($category)];  //  Get category return to view
@@ -616,6 +644,7 @@
         public function postEditCate(){
             if(!isset($_POST['category']) || empty($_POST['id']) || !isset($_POST['description'])){
                 setHTTPCode(500, "ERROR, empty field or wrong parameter!");
+                redirectBut('/admin/show-category', 'Click here to go back');
                 return;
             }
             //  Update categorys table
@@ -623,6 +652,7 @@
             //  Update categorys_link_products table
             $this->prodModel->update(['category_name' => $_POST['category']], ['category_id' => $_POST['id']], 'categorys_link_products');
             setHTTPCode(200, 'Success!');
+            redirectBut('/admin/show-category', 'Click here to go back');
         }
 
         /**

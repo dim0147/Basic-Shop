@@ -6,7 +6,7 @@ $(document).ready( function () {
             return;
         const row = dataTable.row($(this).parents('tr'));
         const dataRow = row.data();
-        if(!Array.isArray(dataRow) || dataRow.length !== 4){
+        if(!Array.isArray(dataRow) || dataRow.length !== 9){
             showError('Incorrect data!');
             return;
         }

@@ -35,9 +35,9 @@ th, td {
   @foreach($products as $product)
     <tr>
       <td>{{$product['id']}}</td>
-      <td><img src="@asset('views/public/image/'.$product['image'])" style="width: 50px; height: 80px"></td>
+      <td><img src="@asset('views/public/image/'.$product['image'])" style="width: 90px; height: 60px"></td>
       <td><a href="/product/detail?id={{$product['id']}}" style="text-decoration: none;color: green; font-weight: bold">{{$product['title']}}</a></td>
-      <td>{{$product['price']}}</td>
+      <td style="color:red">${{$product['price']}}</td>
       <td>{{$product['status']}}</td>
       <td>{{$product['categorys']}}</td>
     </tr>

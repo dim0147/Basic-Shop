@@ -47,6 +47,7 @@
                                             ON products.id = cp.product_id
                                             LEFT JOIN images
                                             on products.id = images.product_id
+                                            ORDER BY products.rate DESC
                                         ");
             $stmt->execute();
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);

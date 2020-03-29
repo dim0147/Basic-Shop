@@ -25,8 +25,8 @@
             <th style="width: 20%">Description</th>
             <th style="width: 5%">Price</th>
             <th style="width: 5%">Status</th>
-            <th style="width: 5%">Rate</th>
-            <th style="width: 5%">Category</th>
+            <th style="width: 8%">Rate</th>
+            <th style="width: 20%">Category</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -39,7 +39,14 @@
             <td>{!! substr($product["description"] , 0, 60) !!} ...</td>
             <td><p style="color: red;">${{$product['price']}}</p></td>
             <td>{{$product['status']}}</td>
-            <td>{{$product['rate']}} <span class="fa fa-star checked"></span></td>
+            <td>
+                @for ($i = 0; $i < $product['rate']; $i++)
+                <span class="fa fa-star checked" style="color: yellow"></span>
+                @endfor
+                @for($i = $product['rate']; $i < 5; $i++)
+                <span class="fa fa-star"></span>
+                @endfor
+            </td>
             <td>{{$product['categorys']}}</td>
             <td>
                 <a href="/admin/edit-product?id={{$product['id']}}"><button type="button" class="btn btn-warning editbtn"><i class="fas fa-edit"></i></button></a>
@@ -51,7 +58,7 @@
 </table>
 </div>
 @else
-<h1 class="text-center"> You currently don't have any category.</h1>
+<h1 class="text-center"> You currently don't have any products.</h1>
 @endif
 @endsection
 

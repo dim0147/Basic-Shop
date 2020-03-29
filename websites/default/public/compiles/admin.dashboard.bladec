@@ -35,9 +35,9 @@ th, td {
  <?php $__currentLoopData = $products; $this->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $this->incrementLoopIndices(); $loop = $this->getFirstLoop(); ?>
  <tr>
  <td><?php echo static::e($product['id']); ?></td>
- <td><img src="<?php  echo (isset($this->assetDict[('views/public/image/'.$product['image'])]))?$this->assetDict[('views/public/image/'.$product['image'])]:$this->baseUrl.'/'.('views/public/image/'.$product['image']); ?>" style="width: 50px; height: 80px"></td>
+ <td><img src="<?php  echo (isset($this->assetDict[('views/public/image/'.$product['image'])]))?$this->assetDict[('views/public/image/'.$product['image'])]:$this->baseUrl.'/'.('views/public/image/'.$product['image']); ?>" style="width: 90px; height: 60px"></td>
  <td><a href="/product/detail?id=<?php echo static::e($product['id']); ?>" style="text-decoration: none;color: green; font-weight: bold"><?php echo static::e($product['title']); ?></a></td>
- <td><?php echo static::e($product['price']); ?></td>
+ <td style="color:red">$<?php echo static::e($product['price']); ?></td>
  <td><?php echo static::e($product['status']); ?></td>
  <td><?php echo static::e($product['categorys']); ?></td>
  </tr>
