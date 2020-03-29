@@ -30,11 +30,12 @@
                 <p>{{$product['description']}}</p>
               </div>
               <div class="rating">
+              @for ($i = 0; $i < $product['rate']; $i++)
                 <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
+                @endfor
+                @for($i = $product['rate']; $i < 5; $i++)
                 <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
+                @endfor
               </div>
             </div>
           </a>

@@ -35,7 +35,7 @@
         <tr>
             <td>{{$product['id']}}</td>
             <td> <img style="width: 90px; height: 60px;" src="@asset('views/public/image/'.$product['image'])"></td>
-            <td><a href="" style="text-decoration: none;color: green; font-weight: bold">{{$product['title']}}</a></td>
+            <td><a href="/product/detail?id={{$product['id']}}" style="text-decoration: none;color: green; font-weight: bold">{{$product['title']}}</a></td>
             <td>{!! substr($product["description"] , 0, 60) !!} ...</td>
             <td><p style="color: red;">${{$product['price']}}</p></td>
             <td>{{$product['status']}}</td>

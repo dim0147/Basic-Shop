@@ -241,6 +241,12 @@
             }
         }
 
+        public function getAllCategory(){
+            $stmt = $this->pdo->prepare("SELECT * FROM categorys");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         public function getLastInsertId(){
             return $this->pdo->lastInsertId();
         }

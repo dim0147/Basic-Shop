@@ -1,4 +1,24 @@
+<style>
+/* Styles for wrapping the search box */
 
+/* Bootstrap 4 text input with search icon */
+
+.search-ip .form-control {
+    padding-left: 2.375rem;
+}
+
+.search-ip .feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
 
@@ -6,19 +26,26 @@
 
     <div class="container">
 
-    
+   
       <a class="navbar-brand" href="/product"><i class="fas fa-users"></i> Group Project</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-        @if (!empty($_SESSION['username']))
+
         <li class="nav-item">
-            <a class="nav-link" href="#">Welcome back, {{$_SESSION['username']}}
-            </a>
-          </li>
-        @endif
+        <div class="dropdown show">
+  <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Admin
+  </a>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="/admin/dashboard">Dashboard</a>
+  </div>
+</div>
+        </li>
+        
           
           <li class="nav-item">
             <a class="nav-link" href="/product">Home
@@ -26,7 +53,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/cart/show">Your Cart 
+            <a class="nav-link" href="/cart/show">Cart 
             @if(isset($_SESSION['cart']) && isset($_SESSION['cart']['totalQty']) && !empty($_SESSION['cart']['totalQty']))
             <span class="badge">{{$_SESSION['cart']['totalQty']}}</span>
             @endif
@@ -38,18 +65,55 @@
           <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
           </li>
-          @if (!empty($_SESSION['user']))
-          <li class="nav-item">
-            <a class="nav-link" href="/user/profile">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/user/logout">Logout</a>
-          </li>
+
+        <li class="nav-item">
+        <div class="dropdown show">
+  <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Category
+  </a>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+   @if(!empty($categoryHeader))
+   @foreach($categoryHeader as $category)
+    <a class="dropdown-item" href="/product/search/category?s={{$category['name']}}">{{$category['name']}}</a>
+  @endforeach
+  @else
+    <p>Don't have any category</p>
+  @endif
+  </div>
+</div>
+        </li>
+
+
+        <li class="nav-item" style="margin-right: 20px">
+        @if (!empty($_SESSION['user']))
+
+        <div class="dropdown show">
+  <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  Welcome back, {{$_SESSION['username']}}
+  </a>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+  <a class="dropdown-item" href="/user/profile">Profile</a>
+              <a class="dropdown-item" href="/user/logout">Logout</a>
+  </div>
+</div>
+        </li>
           @else
           <li class="nav-item">
             <a class="nav-link" href="/user/login">Login</a>
           </li>
           @endif
+
+          
+          
+          <li class="nav-item">
+              <div class="form-group search-ip">
+          <span class="fa fa-search feedback"></span>
+          <input type="text" class="form-control" placeholder="Search" id="searchBar">
+        </div>
+          </li>
+          
         </ul>
       </div>
     </div>

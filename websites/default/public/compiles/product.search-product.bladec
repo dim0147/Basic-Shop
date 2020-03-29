@@ -30,11 +30,12 @@
  <p><?php echo static::e($product['description']); ?></p>
  </div>
  <div class="rating">
+ <?php for($i = 0; $i < $product['rate']; $i++): ?>
  <span class="fa fa-star checked"></span>
- <span class="fa fa-star checked"></span>
- <span class="fa fa-star checked"></span>
+ <?php endfor; ?>
+ <?php for($i = $product['rate']; $i < 5; $i++): ?>
  <span class="fa fa-star"></span>
- <span class="fa fa-star"></span>
+ <?php endfor; ?>
  </div>
  </div>
  </a>

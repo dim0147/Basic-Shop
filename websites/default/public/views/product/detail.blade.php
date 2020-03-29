@@ -16,38 +16,55 @@
 <div class="jumbotron">
     <div class="container">
         <h1 class="text-center">{{$product['title']}}</h1>
+        <div class="rating text-center">
+                @for ($i = 0; $i < $product['rate']; $i++)
+                <span class="fa fa-star checked"></span>
+                @endfor
+                @for($i = $product['rate']; $i < 5; $i++)
+                <span class="fa fa-star"></span>
+                @endfor
+                
+              </div>
+
         <div class="panel panel-default">
-            <div class="panel-body">
+            <div class="panel-body text-center">
                 <img src="@asset('views/public/image/'.$product['image'])" alt="..."
-                    style="width: 100%; height: 680px;margin:5px;">
+                    style="width: 475px; height: 380px;margin:5px;">
             </div>
         </div>
+        
+        <div class="alert alert-dark text-center" style="margin: 10px;">
         <h1 class="text-center">Thumbnail</h1>
-        <div class="row">
+        @if(!empty($product['image_list']))
             @foreach($product['image_list'] as $img)
-            <div class="col-xs-6 col-md-3">
-                <img src="@asset('views/public/image/'.$img)" alt="..." style="width: 100%; height: 180px;margin:5px;">
-            </div>
+                <img src="@asset('views/public/image/'.$img)" alt="..." style="width:232px; height: 180px;margin:5px;">
             @endforeach
+        </div>
+        @else
+            <h1>This product don't have any thumbnail</h1>
+        @endif
         </div>
         <br>
 
-        <h4 class="price text-center">Current price: <span>${{$product['price']}}</span></h4>
-
-        <div class="jumbotron">
+        
+        <div class="alert alert-light" role="alert">
         <h1 class="text-center">Description</h1>
             <p>{{$product['description']}}</p>
         </div>
+        <div class="alert alert-primary" role="alert">
+        <h4 class="price text-center">Current price: <span>${{$product['price']}}</span></h4>
+        </div>
 
-        <form action="/cart/action" method="POST" style="padding-left: 40%;">
+        <div class="alert alert-warning" role="alert">
+        <form action="/cart/action" method="POST" style="" class="text-center">
             <input type="hidden" value="{{$product['id']}}" name="id">
             <input type="hidden" value="add" name="action">
-            <span>Quantity: </span>
-            <input type="number" name="quantity" value="1" style="width: 50px; margin-bottom: 15px; margin-left: 5px;">
+            <input type="number" name="quantity" value="1" style="width: 70px; margin-bottom: 15px;">
             <br>
             <button type="submit" class="btn btn-success"> + Add To Cart</button>
 
         </form>
+        </div>
 
     </div>
 </div>

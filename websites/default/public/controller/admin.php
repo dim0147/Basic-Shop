@@ -143,7 +143,6 @@
                     $oldImage = $this->prodModel->select(['image'], ['id' => $_POST['id']]);//  get old image before update new one
                 }
                 $this->prodModel->update($fieldUpdate, ['id' => $_POST['id']]); // If err will die immediately
-                return;
                 if(!empty($oldImage))   //  If not empty, delete old image from storage
                     removeFiles([$oldImage[0]['image']], PATH_IMAGE_UPLOAD);
                 return true;

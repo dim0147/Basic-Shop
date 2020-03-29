@@ -123,10 +123,12 @@ class CartController extends Controller{
 
             $cart = $_SESSION['cart'];
             // printB($cart);
+            $getCategoryHeader = $this->model->getAllCategory();
             $this->render($this->fileRender['cart'],
                 [
                     'title' => 'cart',
-                    'carts' => $cart
+                    'carts' => $cart,
+                    'categoryHeader' => $getCategoryHeader
                 ]);
         }
 
@@ -297,9 +299,11 @@ class CartController extends Controller{
             //  CHECKOUT
         public function checkout(){
             $cart = $_SESSION['cart'];
+            $getCategoryHeader = $this->model->getAllCategory();
             $this->render($this->fileRender['checkout'], [
                 'title' => 'Checkout',
-                'carts' => $cart
+                'carts' => $cart,
+                'categoryHeader' => $getCategoryHeader
             ]);
             return;
         }

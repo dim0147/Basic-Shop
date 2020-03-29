@@ -19,7 +19,7 @@
 	</div>
 
 	<div class="input-group">
-		<button type="submit" name="login.php" class="btn">login</button>
+		<button type="submit" name="login.php" class="btn">Login</button>
 	
 	</div>
 	<p>

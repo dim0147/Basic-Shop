@@ -13,71 +13,6 @@
                     'change-password' => 'user.change-password'              
                 ];
         }
-            //  Get Profile
-        public function index(){
-                //  Check user
-            if(empty($_SESSION['user'])){
-                setHTTPCode(400, "User not found!");
-                redirectBut();
-                return;
-            }
-
-                //  Get Profile user, include orders
-            $user = $this->model->select(['user_id', 'username', 'name'], ['user_id' => $_SESSION['user'],
-                'type' => 'user']);
-            if(!$user){ //  if error
-                setHTTPCode(500, "Error, cannot find user!");
-                redirectBut();
-                return;
-            }
-
-                //  Get Order of user
-            $orders = [];
-            $infOrder = $this->model->getOrderUser($_SESSION['user']);
-                //  If Order exist
-            if($infOrder){
-                    //  Merge result, title of product merge to listProduct, make id product as a key,
-                    //  title is value of that key, identify by order ID
-                    //  Example :
-                    //  [1] => "Game Of Throne" (1 is id of product)
-                $orders = mergeResult(['title'], ['listProduct'], 'order_id', $infOrder, ['title' => 'prodID']);
-
-                    //  Merge category , image product, identify by productID
-                $addInfo = mergeResult(['category_name', 'image'], ['listCategory', 'listImg'], 'prodID', $infOrder);
-
-                    //  Loop through all Order
-                foreach($orders as $key => $order){
-
-                        //  Loop through list product of single order
-                    foreach($order['listProduct'] as $idProd => $title){ 
-                        
-                            //  Then loop on addition value for product ( category and image )
-                        foreach($addInfo as $value){
-
-                                //  If  product id of addition value equal to product id of listProduct from order   
-                            if($value['prodID'] == $idProd){
-                                    //  create new element include category, image of this product
-                                $element = array(
-                                    'title' => $title,
-                                    'category' => $value['listCategory'],
-                                    'image' => $value['listImg'][0]
-                                );
-                                    //  Assign product id element in listProduct of order equal that element(include title, category, image)
-                                $orders[$key]['listProduct'][$idProd] = $element;
-                                break;
-                            }
-                        }                
-                    }
-                }
-            }
-                //  Render page  
-            $this->render($this->fileRender['index'],
-                [
-                    'users' => $user,
-                    'orders' => $orders, 
-                    'title' => "Hi" 
-                ]);
-        }
 // {
         public function loginIndex(){
             // Check if login already
@@ -86,8 +21,9 @@
                 redirectBut();
                 return;
             }
+            $getCategoryHeader = $this->model->getAllCategory();
             // Otherwise render login page
-            $this->render($this->fileRender['login'], ['title' => "Login"]);
+            $this->render($this->fileRender['login'], ['title' => "Login", "categoryHeader" =>  $getCategoryHeader]);
         }
 
         public function postLogin(){ 
@@ -129,7 +65,9 @@
                 redirectBut();
                 return;
             }
-            $this->render($this->fileRender['register'], ['title' => 'Register']);
+            $getCategoryHeader = $this->model->getAllCategory();
+            $this->render($this->fileRender['register'], ['title' => 'Register',
+                                                          'categoryHeader' =>  $getCategoryHeader]);
         }
 
         public function postRegister(){
@@ -179,13 +117,20 @@
                 return;
             }
             $user = $user[getFirstKey($user)];
-            $this->render($this->fileRender['profile'], ['title' => 'Orders Detail', 'orders' => $orders, 'user' => $user]);
+            $getCategoryHeader = $this->model->getAllCategory();
+            $this->render($this->fileRender['profile'], ['title' => 'Orders Detail', 'orders' => $orders, 'user' => $user, 'categoryHeader' =>  $getCategoryHeader]);
             // printB($orders);
             
         }
 
         public function changePassword(){
-            $this->render($this->fileRender['change-password'], ['title' => 'Change Password']);
+            if(empty($_SESSION['user'])){
+                setHTTPCode("You no login yet!");
+                redirectBut('/user/login', 'Click here to login');
+                return;
+            }
+            $getCategoryHeader = $this->model->getAllCategory();
+            $this->render($this->fileRender['change-password'], ['title' => 'Change Password', 'categoryHeader' => $getCategoryHeader]);
         }
 
         public function postChangePassword(){

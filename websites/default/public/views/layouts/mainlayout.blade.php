@@ -18,6 +18,7 @@
 <script src="@asset('views/public/js/jquery.min.js')"></script>
 <script src="@asset('views/public/js/bootstrap.min.js')"></script>
 <script src="@asset('views/public/js/bootstrap.bundle.min.js')"></script>
+<script src="@asset('views/public/js/searchBar.js')"></script>
 @yield('javascript')
 </body>
 </html>

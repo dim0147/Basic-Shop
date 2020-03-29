@@ -1,10 +1,5 @@
 <?php
     $userController = new UserController();
-    
-    route('/user', function(){
-        global $userController;
-        $userController->index();
-    });
 
     route('/user/login', function(){
         global $userController;

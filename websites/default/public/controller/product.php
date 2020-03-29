@@ -20,12 +20,13 @@
 
                     //  Merge result identify by id product
                 $products = mergeResult(['category_name', 'name'], ['category_list', 'image_list'], 'id', $products);
-                
+                $getCategoryHeader = $this->model->getAllCategory();
                     //  Render product
                 $this->render($this->fileRender['index'],
                 [
                      'title' => 'Products',
-                     'products' => $products
+                     'products' => $products,
+                     'categoryHeader' => $getCategoryHeader
                 ]);
             }
         }
@@ -41,9 +42,11 @@
                 //  Merge result identify by id product
                 $products = mergeResult(['category_name', 'name'], ['category_list', 'image_list'], 'id', $products);
             }
+            $getCategoryHeader = $this->model->getAllCategory();
             $this->render($this->fileRender['search-product'], ['title' => "Search with  '" . $_GET['s']. "'", 
                                             'products' => $products,
-                                            'searchKey' => "string '" . $_GET['s'] . "'"]);
+                                            'searchKey' => "string '" . $_GET['s'] . "'",
+                                            'categoryHeader' =>  $getCategoryHeader]);
         }
 
         public function searchProductByCategory(){
@@ -62,9 +65,11 @@
             if(!empty($products)){
                 $products = mergeResult(['category_name', 'name'], ['category_list', 'image_list'], 'id', $products);
             }
+            $getCategoryHeader = $this->model->getAllCategory();
             $this->render($this->fileRender['search-product'], ['title' => "Search by category " . $_GET['s'], 
                                             'products' => $products,
-                                            'searchKey' => "category " . $_GET['s']]);
+                                            'searchKey' => "category " . $_GET['s'],
+                                            'categoryHeader' =>  $getCategoryHeader]);
             
         }
 
@@ -88,11 +93,13 @@
             // printB($product);
             if(!is_array($product['image_list']))
                 $product['image_list'] = [];
+            $getCategoryHeader = $this->model->getAllCategory();
                     //  Render Product   
             $this->render($this->fileRender['detail'],
             [
                 'title' => $product['title'],
-                'product' => $product
+                'product' => $product,
+                'categoryHeader' => $getCategoryHeader
             ]);
         }
 
