@@ -19,7 +19,7 @@
 <table id="table-category" class="display">
     <thead>
         <tr>
-            <th style="width: 5%">ID</th>
+            <th style="width: 1%">ID</th>
             <th style="width: 10%">Image</th>
             <th style="width: 20%">Name</th>
             <th style="width: 20%">Description</th>
@@ -27,7 +27,7 @@
             <th style="width: 5%">Status</th>
             <th style="width: 8%">Rate</th>
             <th style="width: 20%">Category</th>
-            <th>Action</th>
+            <th style="width: 60%">Action</th>
         </tr>
     </thead>
     <tbody>

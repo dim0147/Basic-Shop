@@ -17,7 +17,7 @@
  <th style="width: 25%">ID</th>
  <th style="width: 30%">Name</th>
  <th style="width: 35%">Description</th>
- <th>Action</th>
+ <th style="width: 50%">Action</th>
  </tr>
  </thead>
  <tbody>
@@ -47,4 +47,5 @@
  <script type="text/javascript" src="<?php  echo (isset($this->assetDict[('views/admin/js/table-show-category.js')]))?$this->assetDict[('views/admin/js/table-show-category.js')]:$this->baseUrl.'/'.('views/admin/js/table-show-category.js'); ?>"></script>
 <?php endif; ?>
 <?php $this->stopSection(); ?>
+
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.adminlayout'); } ?>

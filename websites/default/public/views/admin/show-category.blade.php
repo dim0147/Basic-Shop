@@ -17,7 +17,7 @@
             <th style="width: 25%">ID</th>
             <th style="width: 30%">Name</th>
             <th style="width: 35%">Description</th>
-            <th>Action</th>
+            <th style="width: 50%">Action</th>
         </tr>
     </thead>
     <tbody>

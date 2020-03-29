@@ -122,4 +122,5 @@
 <h1>You currently don't have any items!!</h1>
 <?php endif; ?>
 <?php $this->stopSection(); ?>
+
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

@@ -19,7 +19,7 @@
 	</div>
 
 	<div class="input-group">
- <button type="submit" name="login.php" class="btn">login</button>
+ <button type="submit" name="login.php" class="btn">Login</button>
 	
 	</div>
 	<p>
@@ -27,4 +27,5 @@
 	</p>
 </form>
 <?php $this->stopSection(); ?>
+
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.adminlayout'); } ?>

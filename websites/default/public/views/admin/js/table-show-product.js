@@ -1,6 +1,7 @@
 $(document).ready( function () {
     const dataTable = $('#table-category').DataTable({});
-    $('.rmvbtn').click(function(){
+
+    $('#table-category tbody').on('click', '.rmvbtn', function () {
         let confirmDel = confirm('Are you sure want to delete this product?');
         if(!confirmDel)
             return;

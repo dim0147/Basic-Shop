@@ -68,4 +68,5 @@
 <?php $this->startSection('javascript'); ?>
 <script src="<?php  echo (isset($this->assetDict[('views/cart/js/wishlist.js')]))?$this->assetDict[('views/cart/js/wishlist.js')]:$this->baseUrl.'/'.('views/cart/js/wishlist.js'); ?>"></script>
 <?php $this->stopSection(); ?>
+
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.mainlayout'); } ?>

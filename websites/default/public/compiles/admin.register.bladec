@@ -33,4 +33,5 @@
 	</p>
 </form>
 <?php $this->stopSection(); ?>
+
 <?php if (@$_shouldextend[1]) { echo $this->runChild('layouts.adminlayout'); } ?>

@@ -1,8 +1,15 @@
 $(document).ready( function () {
-    const dataTable = $('#table-category').DataTable({});
-    $('.rmvbtn').click(function(){
+    const dataTable = $('#table-category').DataTable({
+        select: true
+    });
+    //  NOTE: DEBUG
+    // $('.rmvbtn').click(function(){
+    $('#table-category tbody').on('click', '.rmvbtn', function () {
         const row = dataTable.row($(this).parents('tr'));
         const dataRow = row.data();
+        const cfDel = confirm("Are you sure want to delete this category?");
+        if(!cfDel)
+            return;
         if(!Array.isArray(dataRow) || dataRow.length !== 4){
             showError('Incorrect data!');
         }

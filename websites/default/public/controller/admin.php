@@ -3,12 +3,13 @@
 
         private $prodModel;
         private $cateModel;
-        private $pathUpLoad = PATH_IMAGE_UPLOAD. '/';
+        private $pathUpLoad;
 
         function __construct(){
             $this->prodModel = new ProductModel();
             $this->cateModel = new CategoryModel();
             $this->model = new UserModel();
+            $this->pathUpLoad = PATH_IMAGE_UPLOAD. '/';
             $this->fileRender = [
                 'login' => 'admin.login',
                 'register' => 'admin.register',
@@ -144,8 +145,9 @@
                     $oldImage = $this->prodModel->select(['image'], ['id' => $_POST['id']]);//  get old image before update new one
                 }
                 $this->prodModel->update($fieldUpdate, ['id' => $_POST['id']]); // If err will die immediately
-                if(!empty($oldImage))   //  If not empty, delete old image from storage
-                    removeFiles([$oldImage[0]['image']], PATH_IMAGE_UPLOAD);
+                // NOTE: DEBUG 
+                // if(!empty($oldImage))   //  If not empty, delete old image from storage
+                //     removeFiles([$oldImage[0]['image']], PATH_IMAGE_UPLOAD);
                 return true;
         }
 
@@ -582,11 +584,13 @@
          * @param {String} $_POST['category']
          */
         public function postAddCate(){
-            if(empty($_POST['category'])){  //  Check if don't have name category to add
-                setHTTPCode(500, 'Empty Field!!');
-                redirectBut('/admin/add-category', 'Click here to go back');
-                return;
-            }
+            // NOTE: DEBUG
+            // if(empty($_POST['category'])){  //  Check if don't have name category to add
+            //     setHTTPCode(500, 'Empty Field!!');
+            //     redirectBut('/admin/add-category', 'Click here to go back');
+            //     return;
+            // }
+            // NOTE: DEBUG
             //  Check if category is exist
             if($this->prodModel->select(NULL, ['name' => $_POST['category']], 'categorys')){
                 setHTTPCode(500, 'Category exist!!!');
@@ -642,11 +646,27 @@
          * @param {String} $_POST['description']
          */
         public function postEditCate(){
-            if(!isset($_POST['category']) || empty($_POST['id']) || !isset($_POST['description'])){
+            if(empty($_POST['category']) || empty($_POST['id']) || !isset($_POST['description'])){
                 setHTTPCode(500, "ERROR, empty field or wrong parameter!");
                 redirectBut('/admin/show-category', 'Click here to go back');
                 return;
             }
+            // NOTE: DEBUG
+            // Check category is exist
+            $category = $this->cateModel->select(NULL, ['id' => $_POST['id']]);
+            if(empty($category)){
+                setHTTPCode(500, "ERROR, Category not found!");
+                redirectBut('/admin/show-category', 'Click here to go back');
+                return;
+            }
+            // Check category exist already
+            $category = $this->cateModel->select(NULL, ['name' => $_POST['category']]);
+            if(!empty($category)){
+                setHTTPCode(500, "ERROR, Category exist already!");
+                redirectBut('/admin/show-category', 'Click here to go back');
+                return;
+            }
+
             //  Update categorys table
             $this->prodModel->update(['name' => $_POST['category'],'description' => $_POST['description']], ['id' => $_POST['id']], 'categorys');
             //  Update categorys_link_products table
@@ -660,12 +680,14 @@
          * @param {String} $_POST['id'] (require)
          */
         public function postDeleteCate(){
+            // NOTE: DEBUG
             if(empty($_POST['id'])){
                 setHTTPCode(500, "Error, id is empty!");
                 return;
             }
 
             //  Check Category If not exist
+            // NOTE: DEBUG
             $exist = $this->prodModel->select(NULL, ['id' => $_POST['id']], 'categorys');
             if(!$exist){
                 setHTTPCode(400, 'Not Found Category!');
@@ -673,6 +695,7 @@
             } 
 
             //  Delete records from categorys_link_products table
+            //  NOTE:DEBUG
             $this->prodModel->delete(['category_id' => [$_POST['id']]], 'categorys_link_products');
             //  Delete records from categorys table
             $this->prodModel->delete(['id' => [$_POST['id']]], 'categorys');

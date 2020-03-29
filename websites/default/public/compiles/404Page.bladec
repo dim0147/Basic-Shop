@@ -21,7 +21,7 @@ body { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAA
  </div>
  <div class="error-actions">
  <a href="/product" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
- Go to Home </a><a href="/support" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-envelope"></span> Contact Support </a>
+ Go to Home </a>
  </div>
  </div>
  </div>
