@@ -588,6 +588,7 @@
         /**
          * Add new category
          * @param {String} $_POST['category']
+         * @param {String} $_POST['description']
          */
         public function postAddCate(){
             // NOTE: DEBUG
@@ -665,7 +666,7 @@
                 redirectBut('/admin/show-category', 'Click here to go back');
                 return;
             }
-            // Check category exist already
+            // // Check category exist already
             $category = $this->cateModel->select(NULL, ['name' => $_POST['category']]);
             if(!empty($category)){
                 setHTTPCode(500, "ERROR, Category exist already!");

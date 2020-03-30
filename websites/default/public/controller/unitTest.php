@@ -27,16 +27,17 @@ class unitTest
     public function addCategory()
     {
         $adminController = $this->setUpCategory();
-        $_POST['category'] = null;
+        $_POST['category'] = 'New category';
+        $_POST['description'] = null;
         $adminController->postAddCate();
     }
 
     public function editCategory()
     {
         $adminController = $this->setUpCategory();
-        $_POST['id'] = 40;
-        $_POST['category'] = 'WAD1';
-        $_POST['description'] = 1111111;
+        $_POST['id'] = 42;
+        $_POST['category'] = 'This category will update';
+        $_POST['description'] = 'Nothing';
         $adminController->postEditCate();
     }
 
