@@ -147,8 +147,8 @@
                 }
                 $this->prodModel->update($fieldUpdate, ['id' => $_POST['id']]); // If err will die immediately
                 // NOTE: DEBUG 
-                // if(!empty($oldImage))   //  If not empty, delete old image from storage
-                //     removeFiles([$oldImage[0]['image']], PATH_IMAGE_UPLOAD);
+                if(!empty($oldImage))   //  If not empty, delete old image from storage
+                    removeFiles([$oldImage[0]['image']], PATH_IMAGE_UPLOAD);
                 return true;
         }
 
@@ -591,11 +591,11 @@
          */
         public function postAddCate(){
             // NOTE: DEBUG
-            // if(empty($_POST['category'])){  //  Check if don't have name category to add
-            //     setHTTPCode(500, 'Empty Field!!');
-            //     redirectBut('/admin/add-category', 'Click here to go back');
-            //     return;
-            // }
+            if(empty($_POST['category'])){  //  Check if don't have name category to add
+                setHTTPCode(500, 'Empty Field!!');
+                redirectBut('/admin/add-category', 'Click here to go back');
+                return;
+            }
             // NOTE: DEBUG
             //  Check if category is exist
             if($this->prodModel->select(NULL, ['name' => $_POST['category']], 'categorys')){
