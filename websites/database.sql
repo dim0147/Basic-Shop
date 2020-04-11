@@ -843,7 +843,7 @@ CREATE TABLE `cart` (
   KEY `cart_ibfk_2` (`user_id`),
   CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
   CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -852,7 +852,7 @@ CREATE TABLE `cart` (
 
 LOCK TABLES `cart` WRITE;
 /*!40000 ALTER TABLE `cart` DISABLE KEYS */;
-INSERT INTO `cart` VALUES (33,18,33),(34,19,34),(35,18,35);
+INSERT INTO `cart` VALUES (33,18,33),(34,19,34),(35,18,35),(36,18,36);
 /*!40000 ALTER TABLE `cart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -880,7 +880,7 @@ CREATE TABLE `cart_item` (
 
 LOCK TABLES `cart_item` WRITE;
 /*!40000 ALTER TABLE `cart_item` DISABLE KEYS */;
-INSERT INTO `cart_item` VALUES (33,69,3),(33,84,90),(34,64,4),(34,87,4),(35,70,1);
+INSERT INTO `cart_item` VALUES (33,69,3),(33,84,90),(34,64,4),(34,87,4),(35,70,1),(36,64,1),(36,70,1),(36,72,1);
 /*!40000 ALTER TABLE `cart_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -988,7 +988,7 @@ CREATE TABLE `orders` (
   PRIMARY KEY (`order_id`),
   KEY `cart_ibfk_1` (`user_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -997,7 +997,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (18,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-L2AGLEY94X60348U0880142W',33),(19,'redhil, ',NULL,'yendinhte@gmail.com','approved','PAYID-L2ALJ6I049339685U472301M',34),(18,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-L2BOSSI9RW8681253123963N',35);
+INSERT INTO `orders` VALUES (18,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-L2AGLEY94X60348U0880142W',33),(19,'redhil, ',NULL,'yendinhte@gmail.com','approved','PAYID-L2ALJ6I049339685U472301M',34),(18,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-L2BOSSI9RW8681253123963N',35),(18,'1 Main St, San Jose',NULL,'sb-547n437457828@personal.example.com','approved','PAYID-L2I4IGY47940526YJ064993G',36);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1068,4 +1068,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-31 10:03:04
+-- Dump completed on 2020-04-11 14:26:38
